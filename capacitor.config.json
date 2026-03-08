@@ -1,0 +1,8 @@
+{
+  "appId": "com.selfcare.manager",
+  "appName": "自我管理助手",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  }
+}

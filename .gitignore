@@ -1,0 +1,22 @@
+
+# Dependencies
+node_modules/
+
+# Build outputs
+android/.gradle/
+android/app/build/
+android/build/
+android/capacitor-cordova-android-plugins/build/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local config
+android/local.properties
