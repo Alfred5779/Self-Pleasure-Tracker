@@ -61,7 +61,10 @@ const i18n = {
     start_time: '开始时间',
     duration: '时长(秒)',
     medium: '媒介',
-    notes: '备注'
+    notes: '备注',
+    github: 'GitHub 仓库',
+    share_screenshot: '分享截图',
+    screenshot_saved: '截图已保存！'
   },
   en: {
     tab_add: 'Add',
@@ -125,7 +128,10 @@ const i18n = {
     start_time: 'Start Time',
     duration: 'Duration(sec)',
     medium: 'Medium',
-    notes: 'Notes'
+    notes: 'Notes',
+    github: 'GitHub Repo',
+    share_screenshot: 'Share Screenshot',
+    screenshot_saved: 'Screenshot saved!'
   }
 };
 
@@ -524,6 +530,11 @@ function renderStatsTab() {
   mainContent.innerHTML = `
     <div class="card">
       <h3 class="card-title">${t('stats_title')}</h3>
+      <div style="margin-bottom: 16px;">
+        <button class="btn btn-secondary" id="screenshot-btn" style="width: 100%; padding: 12px 16px;">
+          <span style="margin-right: 8px;">📸</span>${t('share_screenshot')}
+        </button>
+      </div>
       <div class="tab-buttons" style="margin-bottom: 16px;">
         <button class="tab-btn active" data-preset="thisMonth">${t('preset_this_month')}</button>
         <button class="tab-btn" data-preset="lastMonth">${t('preset_last_month')}</button>
@@ -664,6 +675,35 @@ function renderStatsTab() {
   document.getElementById('stat-to').addEventListener('change', () => {
     if (currentPreset === 'custom') calculateStats();
   });
+
+  document.getElementById('screenshot-btn').addEventListener('click', takeScreenshot);
+}
+
+function takeScreenshot() {
+  if (typeof html2canvas === 'undefined') {
+    alert('截图功能需要加载 html2canvas 库，请确保网络连接正常！');
+    return;
+  }
+
+  const element = document.querySelector('#main-content .card');
+  if (!element) return;
+
+  html2canvas(element, {
+    backgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--bg-color') || '#ffffff',
+    scale: window.devicePixelRatio > 1 ? window.devicePixelRatio : 2,
+    useCORS: true,
+    allowTaint: true,
+    logging: false
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = `selfcare-stats-${new Date().toISOString().slice(0,10)}.png`;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    alert(t('screenshot_saved'));
+  }).catch(err => {
+    console.error('Screenshot failed:', err);
+    alert('截图失败，请刷新页面重试！');
+  });
 }
 
 function renderSettingsTab() {
@@ -688,6 +728,12 @@ function renderSettingsTab() {
         <span class="settings-label">版本</span>
         <span class="settings-value">1.2</span>
       </div>
+      <a href="https://github.com/Alfred5779/Self-Pleasure-Tracker?tab=readme-ov-file#mit-license" target="_blank" style="display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-color); margin-top: 12px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span>${t('github')}</span>
+      </a>
     </div>
     <div class="card" style="margin-top: 16px;">
       <h3 class="card-title">数据管理</h3>

@@ -1,12 +1,15 @@
 {
-  "name": "lululu",
-  "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "name": "selfcare-tracker",
+  "version": "1.2.0",
+  "description": "自我管理助手 - Personal Habit Tracker",
+  "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "serve": "npx serve -p 3000",
-    "sync": "npx cap sync"
+    "serve": "npx serve -p 8080",
+    "sync": "npx cap sync",
+    "electron": "electron .",
+    "electron:build": "electron-builder",
+    "electron:build:win": "electron-builder --win"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +21,28 @@
     "@capacitor/core": "^8.2.0"
   },
   "devDependencies": {
-    "serve": "^14.2.1"
+    "serve": "^14.2.1",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.selfcare.tracker",
+    "productName": "自我管理助手",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "**/*",
+      "!**/node_modules/**/*",
+      "!dist/**",
+      "!android/**",
+      "!错误报告/**",
+      "!.git/**"
+    ],
+    "asar": false,
+    "win": {
+      "target": ["portable"],
+      "sign": null
+    }
   }
 }
