@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">自我管理助手</string>
-    <string name="title_activity_main">自我管理助手</string>
-    <string name="package_name">com.selfcare.manager</string>
-    <string name="custom_url_scheme">com.selfcare.manager</string>
-</resources>
