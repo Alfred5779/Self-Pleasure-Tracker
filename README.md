@@ -132,17 +132,17 @@ Usage Guides
 
 For detailed usage guides, please refer to the corresponding version documents:
 
-- 📱 [APK 使用指南](docs/v0.91/APK使用指南.md) - Android 版本安装和使用
-- [APK Usage Guide](docs/v0.91/APK使用指南.md) - Android version installation and usage
+- 📱 [APK 使用指南](docs/v0.91.6/APK使用指南.md) - Android 版本安装和使用
+- [APK Usage Guide](docs/v0.91.6/APK使用指南.md) - Android version installation and usage
 
-- 💻 [Windows 使用指南](docs/v0.91/Windows使用指南.md) - Windows 桌面版本使用
-- [Windows Usage Guide](docs/v0.91/Windows使用指南.md) - Windows desktop version usage
+- 💻 [Windows 使用指南](docs/v0.91.6/Windows使用指南.md) - Windows 桌面版本使用
+- [Windows Usage Guide](docs/v0.91.6/Windows使用指南.md) - Windows desktop version usage
 
-- 🌐 [Web 使用指南](docs/v0.91/Web使用指南.md) - Web 浏览器版本使用
-- [Web Usage Guide](docs/v0.91/Web使用指南.md) - Web browser version usage
+- 🌐 [Web 使用指南](docs/v0.91.6/Web使用指南.md) - Web 浏览器版本使用
+- [Web Usage Guide](docs/v0.91.6/Web使用指南.md) - Web browser version usage
 
-- 🔧 [开发指南](docs/v0.91/开发指南.md) - 开发者使用和构建指南
-- [Development Guide](docs/v0.91/开发指南.md) - Developer usage and build guide
+- 🔧 [开发指南](docs/v0.91.6/开发指南.md) - 开发者使用和构建指南
+- [Development Guide](docs/v0.91.6/开发指南.md) - Developer usage and build guide
 
 ---
 
