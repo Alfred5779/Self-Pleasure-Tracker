@@ -3611,10 +3611,6 @@ function renderAbout() {
       </div>
       
       <div style="margin-bottom: 24px; padding: 16px; background: var(--border-color); border-radius: 12px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <span style="font-weight: 600; color: var(--text-primary);">${t('version')}</span>
-          <span style="color: var(--primary-color); font-weight: 700;">0.91.6</span>
-        </div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('developer')}</span>
           <span style="color: var(--primary-color); font-weight: 700;">${t('developer_name')} (${t('developer_name_en')})</span>
