@@ -1,6 +1,7 @@
 @echo off
-title 起飞助手 - Web 服务器
 chcp 65001 >nul
+title 起飞助手 - Web 服务器
+
 echo ====================================
 echo    起飞助手 - Web 版本
 echo    Self-Care Tracker - Web Version
@@ -11,51 +12,80 @@ REM 获取脚本所在目录
 set "SCRIPT_DIR=%~dp0"
 cd /d "%SCRIPT_DIR%"
 
-REM 方法1：优先尝试直接用浏览器打开index.html
-echo [方法1/4] 尝试直接打开index.html...
-echo [Method 1/4] Trying to open index.html directly...
+echo 正在启动...
+echo Starting...
+echo.
+
+REM 方法1：直接打开index.html
+echo [1/4] 打开 index.html...
+echo [1/4] Opening index.html...
 start "" "%SCRIPT_DIR%index.html"
 echo.
-echo 如果直接打开无法正常使用，请保持此窗口打开，我们将尝试启动本地服务器
-echo If direct open doesn't work, keep this window open, we'll try local server
+echo 如果直接打开可以正常使用，就可以关闭这个窗口了
+echo If direct open works, you can close this window
 echo.
-timeout /t 2 >nul
+echo 正在尝试启动本地服务器...
+echo Trying to start local server...
+echo.
 
-REM 方法2：尝试使用PowerShell启动我们的专用服务器
-echo [方法2/4] 尝试使用PowerShell启动服务器...
-echo [Method 2/4] Trying to start server with PowerShell...
-if exist "%SCRIPT_DIR%server.ps1" (
-    echo 找到PowerShell服务器脚本，正在启动...
-    echo Found PowerShell server script, starting...
+REM 检查PowerShell是否可用
+echo [2/4] 检查 PowerShell...
+echo [2/4] Checking PowerShell...
+where powershell >nul 2>&1
+if %errorlevel% equ 0 (
+    echo 找到 PowerShell
+    echo PowerShell found
+    echo.
+    echo 正在启动服务器...
+    echo Starting server...
+    echo.
+    echo 访问地址 / Access URL:
+    echo http://localhost:8000
+    echo.
+    echo 按 Ctrl+C 停止服务器
+    echo Press Ctrl+C to stop server
+    echo.
     start "" http://localhost:8000
     powershell -ExecutionPolicy Bypass -File "%SCRIPT_DIR%server.ps1"
-    if %errorlevel% equ 0 (
-        goto :end
-    )
+    goto :end
 )
 
-REM 方法3：检查Python是否可用，启动Python HTTP服务器
-echo [方法3/4] 检查Python...
-echo [Method 3/4] Checking Python...
+REM 检查Python
+echo [3/4] 检查 Python...
+echo [3/4] Checking Python...
 python --version >nul 2>&1
 if %errorlevel% equ 0 (
-    echo 找到Python，正在启动HTTP服务器...
-    echo Found Python, starting HTTP server...
-    echo 访问地址: http://localhost:8000
-    echo 按 Ctrl+C 可停止服务器
+    echo 找到 Python
+    echo Python found
+    echo.
+    echo 正在启动服务器...
+    echo Starting server...
+    echo.
+    echo 访问地址 / Access URL:
+    echo http://localhost:8000
+    echo.
+    echo 按 Ctrl+C 停止服务器
+    echo Press Ctrl+C to stop server
     echo.
     start "" http://localhost:8000
     python -m http.server 8000
     goto :end
 )
 
-REM 方法4：检查Python3是否可用
+REM 检查Python3
 python3 --version >nul 2>&1
 if %errorlevel% equ 0 (
-    echo 找到Python3，正在启动HTTP服务器...
-    echo Found Python3, starting HTTP server...
-    echo 访问地址: http://localhost:8000
-    echo 按 Ctrl+C 可停止服务器
+    echo 找到 Python3
+    echo Python3 found
+    echo.
+    echo 正在启动服务器...
+    echo Starting server...
+    echo.
+    echo 访问地址 / Access URL:
+    echo http://localhost:8000
+    echo.
+    echo 按 Ctrl+C 停止服务器
+    echo Press Ctrl+C to stop server
     echo.
     start "" http://localhost:8000
     python3 -m http.server 8000
@@ -64,25 +94,14 @@ if %errorlevel% equ 0 (
 
 echo.
 echo ====================================
-echo 无法自动启动服务器！
-echo Cannot auto-start server!
+echo 无法启动服务器！
+echo Cannot start server!
 echo ====================================
 echo.
-echo 请尝试以下方法：
-echo Please try the following methods:
-echo.
-echo 1. 直接双击 index.html 使用
-echo    Double-click index.html directly
-echo.
-echo 2. 右键点击 server.ps1，选择"使用PowerShell运行"
-echo    Right-click server.ps1, select "Run with PowerShell"
-echo.
-echo 3. 如果安装了Python，运行: python -m http.server 8000
-echo    If Python is installed, run: python -m http.server 8000
+echo 请直接使用 index.html
+echo Please use index.html directly
 echo.
 
 :end
 echo.
-echo 按任意键退出...
-echo Press any key to exit...
-pause >nul
+pause
