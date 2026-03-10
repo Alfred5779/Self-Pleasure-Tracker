@@ -149,6 +149,34 @@ For detailed usage guides, please refer to the corresponding version documents:
 ## 版本历史
 Version History
 
+### v0.91.6
+- ✨ 优化手机版柱状图显示，增加柱间距，避免日期重叠
+- Optimized mobile bar chart display, increased bar spacing, avoid date overlapping
+
+- ✨ 在记录界面显示每条记录与上一条的时长差异
+- Show duration difference compared to previous record in records page
+
+- ✨ 快了用红色显示，慢了用绿色显示
+- Faster shown in red, slower shown in green
+
+- ✨ 实现外观设置整体导入导出功能
+- Implemented appearance settings import/export
+
+- ✨ 允许自定义外观保存为预设
+- Allow saving custom appearance as preset
+
+- ✨ 将导入导出按钮移到外观管理顶部
+- Moved import/export buttons to top of appearance management
+
+- ✨ 在自定义主题区域添加保存按钮
+- Added save button to custom theme section
+
+- ✨ 将分析界面的纵向柱状图改为横向
+- Changed vertical bar chart to horizontal in analytics page
+
+- 📱 版本号更新为 0.91.6
+- Version updated to 0.91.6
+
 ### v0.91
 - ✨ 添加性癖管理功能，与媒介管理并列
 - Added fetish management, parallel to medium management
