@@ -2827,9 +2827,9 @@ function renderAppearanceManagement() {
         <h4 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">🔄 ${t('nav_order')}</h4>
         <div id="nav-order-list">
           ${uiConfig.navOrder.map((tab, index) => `
-            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding: 8px; background: var(--border-color); border-radius: 8px;">
-              <span style="flex: 1; font-weight: 500;">${t('tab_' + tab)}</span>
-              <button class="btn btn-secondary" id="move-up-${index}" style="flex: 0 0 auto; padding: 6px 12px; ${index === 0 ? 'opacity: 0.5; pointer-events: none;' : ''}" data-index="${index}">↑</button>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 10px; padding: 12px 16px; background: var(--border-color); border-radius: 12px;">
+              <span style="flex: 1; font-weight: 600; color: var(--text-primary); white-space: nowrap;">${t('tab_' + tab)}</span>
+              <button class="btn btn-secondary" id="move-up-${index}" style="padding: 8px 16px; min-width: 44px; ${index === 0 ? 'opacity: 0.4; pointer-events: none;' : ''}" data-index="${index}">↑</button>
             </div>
           `).join('')}
         </div>
