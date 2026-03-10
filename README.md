@@ -97,7 +97,7 @@ Project Structure
 ```
 lululu/
 ├── docs/                 # 使用指南和文档
-│   └── v0.91/            # v0.91 版本文档
+│   └── v0.91.6/          # v0.91.6 版本文档
 │       ├── APK使用指南.md      # Android 使用指南
 │       ├── Windows使用指南.md  # Windows 使用指南
 │       ├── Web使用指南.md      # Web 使用指南
@@ -134,9 +134,6 @@ For detailed usage guides, please refer to the corresponding version documents:
 
 - 📱 [APK 使用指南](docs/v0.91.6/APK使用指南.md) - Android 版本安装和使用
 - [APK Usage Guide](docs/v0.91.6/APK使用指南.md) - Android version installation and usage
-
-- 💻 [Windows 使用指南](docs/v0.91.6/Windows使用指南.md) - Windows 桌面版本使用
-- [Windows Usage Guide](docs/v0.91.6/Windows使用指南.md) - Windows desktop version usage
 
 - 🌐 [Web 使用指南](docs/v0.91.6/Web使用指南.md) - Web 浏览器版本使用
 - [Web Usage Guide](docs/v0.91.6/Web使用指南.md) - Web browser version usage
@@ -176,6 +173,95 @@ Version History
 
 - 📱 版本号更新为 0.91.6
 - Version updated to 0.91.6
+
+### v0.91.5
+- ✨ 实现视觉风格自定义：圆角、阴影、动画开关
+- Implemented visual style customization: corner radius, shadow, animation toggle
+
+- ✨ 实现颜色增强自定义：背景、卡片、文字、边框
+- Implemented enhanced color customization: background, card, text, border
+
+- ✨ 实现布局和尺寸自定义：字体大小、间距
+- Implemented layout and size customization: font size, spacing
+
+- ✨ 新增更多主题预设：渐变色、高对比度、单色、节日
+- Added more theme presets: gradient, high contrast, monochrome, holiday
+
+- ✨ 实现功能开关：统计指标显示、导航栏位置、震动反馈
+- Implemented function toggles: stats indicators, nav position, vibration
+
+- ✨ 实现首页设置和底部按钮顺序自定义
+- Implemented home page and nav button order customization
+
+- ✨ 实现数据分析界面自定义：排序、按钮位置
+- Implemented analytics page customization: sort order, button position
+
+- 📱 版本号更新为 0.91.5
+- Version updated to 0.91.5
+
+### v0.91.4
+- ✨ 实现完整的高级主题自定义功能
+- Implemented complete advanced theme customization
+
+- ✨ 新增多个主题预设
+- Added multiple theme presets
+
+- ✨ 支持自定义每个颜色
+- Support customizing each color
+
+- 📱 版本号更新为 0.91.4
+- Version updated to 0.91.4
+
+### v0.91.3
+- ✨ 优化导出数据模块，将设置和记录分开导出
+- Optimized export data module, separate settings and records export
+
+- ✨ 为记录导出添加自定义输出范围功能
+- Added custom output range for records export
+
+- 📱 版本号更新为 0.91.3
+- Version updated to 0.91.3
+
+### v0.91.2
+- ✨ 高度自定义分析功能，可控制统计指标显示
+- Highly customizable analytics feature, control which stats to display
+
+- ✨ 新增时间分组粒度选择（按日/周/月/季度）
+- Added time grouping granularity selection (day/week/month/quarter)
+
+- ✨ 新增数据排序方式选择（按次数/名称）
+- Added data sorting selection (by count/name)
+
+- ✨ 新增分析模板保存和加载功能
+- Added analytics template save and load feature
+
+- ✨ 新增周对比、月对比、年度总结预设模板
+- Added preset templates: week compare, month compare, year summary
+
+- 📱 版本号更新为 0.91.2
+- Version updated to 0.91.2
+
+### v0.91.1
+- ✨ 每周起算日支持周一到周日全部7天
+- Added support for all 7 days as week start day (Monday to Sunday)
+
+- ✨ 专属时间分组配置：本周→日，本月/上月→周/日，今年→日/周/月/季
+- Added dedicated time grouping: This Week→Day, This/Last Month→Week/Day, This Year→Day/Week/Month/Quarter
+
+- ✨ 新增分析管理功能，可自定义分析界面显示的时间范围按钮
+- Added stats management feature, customizable time range buttons in analytics page
+
+- ✨ 新增时间同步功能，自动同步系统时间
+- Added time sync feature, auto sync system time
+
+- ✨ 优化柱状图：增加柱间距、清晰显示数字、避免横坐标重叠
+- Optimized bar chart: increased bar spacing, clear number display, avoid overlapping x-axis labels
+
+- ✨ 删除Windows桌面版本，推荐使用Web/PWA版本
+- Removed Windows desktop version, recommend Web/PWA version
+
+- 📱 版本号更新为 0.91.1
+- Version updated to 0.91.1
 
 ### v0.91
 - ✨ 添加性癖管理功能，与媒介管理并列
