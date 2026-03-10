@@ -2475,10 +2475,6 @@ function renderSettingsTab() {
           <option value="en" ${currentLang === 'en' ? 'selected' : ''}>${t('english')}</option>
         </select>
       </div>
-      <div class="settings-item">
-        <span class="settings-label">${t('version')}</span>
-        <span class="settings-value">0.91.5</span>
-      </div>
       <div style="display: flex; gap: 8px; margin-top: 12px;">
         <a href="https://github.com/Alfred5779/Self-Pleasure-Tracker?tab=readme-ov-file#mit-license" target="_blank" style="flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px; background: var(--card-bg); border-radius: 12px; text-decoration: none; color: var(--text-color);">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
@@ -3611,6 +3607,10 @@ function renderAbout() {
       </div>
       
       <div style="margin-bottom: 24px; padding: 16px; background: var(--border-color); border-radius: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+          <span style="font-weight: 600; color: var(--text-primary);">${t('version')}</span>
+          <span style="color: var(--primary-color); font-weight: 700;">0.91.6</span>
+        </div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('developer')}</span>
           <span style="color: var(--primary-color); font-weight: 700;">${t('developer_name')} (${t('developer_name_en')})</span>
