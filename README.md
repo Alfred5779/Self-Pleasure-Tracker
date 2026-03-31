@@ -146,6 +146,34 @@ For detailed usage guides, please refer to the corresponding version documents:
 ## 版本历史
 Version History
 
+### v0.91.7
+- ✨ 修复分析界面功能缺失，添加折线图数据可视化组件
+- Fixed analytics page functionality, added line chart data visualization component
+
+- ✨ 优化折线图实现，使用Canvas API替代DOM操作，解决线条异常波动问题
+- Optimized line chart implementation using Canvas API instead of DOM operations, fixing line fluctuation issues
+
+- ✨ 简化折线图视觉效果，移除柱状图部分，只保留折线和数据点
+- Simplified line chart visual effect, removed bar chart part, only kept lines and data points
+
+- ✨ 确保添加界面满意度评分模块正确实现
+- Ensured satisfaction rating module is correctly implemented in add page
+
+- ✨ 修复计时状态异常BUG，确保界面切换后状态正确保持
+- Fixed timer state anomaly BUG, ensuring state is correctly maintained after switching interfaces
+
+- ✨ 添加全部数据视图，可查看所有记录的统计分析
+- Added all data view for analyzing all records
+
+- ✨ 实现全部数据视图的分组选项设置
+- Implemented grouping options for all data view
+
+- ✨ 确保全部数据视图正确响应分析管理界面的分组设置
+- Ensured all data view correctly responds to grouping settings in stats management
+
+- 📱 版本号更新为 0.91.7
+- Version updated to 0.91.7
+
 ### v0.91.6
 - ✨ 优化手机版柱状图显示，增加柱间距，避免日期重叠
 - Optimized mobile bar chart display, increased bar spacing, avoid date overlapping

@@ -210,6 +210,7 @@ const i18n = {
     group_by_week: '按周',
     group_by_month: '按月',
     group_by_quarter: '按季度',
+    group_by_year: '按年',
     sort_by: '排序方式',
     sort_by_count: '按次数',
     sort_by_name: '按名称',
@@ -302,6 +303,11 @@ const i18n = {
     cl_v0916_7: '✨ 在自定义主题区域添加保存按钮',
     cl_v0916_8: '✨ 将分析界面的纵向柱状图改为横向',
     cl_v0916_9: '✨ 版本号更新为 0.91.6',
+    cl_v0917_title: 'v0.91.7',
+    cl_v0917_1: '✨ 修复分析界面功能缺失，添加折线图数据可视化组件',
+    cl_v0917_2: '✨ 确保添加界面满意度评分模块正确实现',
+    cl_v0917_3: '✨ 修复计时状态异常BUG，确保界面切换后状态正确保持',
+    cl_v0917_4: '📱 版本号更新为 0.91.7',
     appearance_management: '外观管理',
     advanced_settings: '高级设置',
     visual_style: '视觉风格',
@@ -361,7 +367,13 @@ const i18n = {
     sort_asc: '升序',
     stats_buttons_position: '时间范围按钮位置',
     buttons_top: '顶部',
-    buttons_bottom: '底部'
+    buttons_bottom: '底部',
+    duration_chart_count: '时间次数图表显示次数',
+    duration_trend: '时间次数趋势',
+    satisfaction_rating: '满意度评分',
+    satisfaction_hint: '0-10分，0分最低，10分最高',
+    show_duration_diff: '显示时长差异',
+    show_duration_diff_desc: '在记录界面显示与上一条记录的时长差异'
   },
   en: {
     tab_add: 'Add',
@@ -666,6 +678,11 @@ const i18n = {
     cl_v0916_7: '✨ Added save button to custom theme section',
     cl_v0916_8: '✨ Changed vertical bar chart to horizontal in analytics page',
     cl_v0916_9: '✨ Version updated to 0.91.6',
+    cl_v0917_title: 'v0.91.7',
+    cl_v0917_1: '✨ Fixed analytics page functionality, added line chart data visualization component',
+    cl_v0917_2: '✨ Ensured satisfaction rating module is correctly implemented in add page',
+    cl_v0917_3: '✨ Fixed timer state anomaly BUG, ensuring state is correctly maintained after switching interfaces',
+    cl_v0917_4: '📱 Version updated to 0.91.7',
     appearance_management: 'Appearance Management',
     advanced_settings: 'Advanced Settings',
     visual_style: 'Visual Style',
@@ -725,7 +742,13 @@ const i18n = {
     sort_asc: 'Ascending',
     stats_buttons_position: 'Time Range Buttons',
     buttons_top: 'Top',
-    buttons_bottom: 'Bottom'
+    buttons_bottom: 'Bottom',
+    duration_chart_count: 'Duration Chart Count',
+    duration_trend: 'Duration Trend',
+    satisfaction_rating: 'Satisfaction Rating',
+    satisfaction_hint: '0-10 points, 0 lowest, 10 highest',
+    show_duration_diff: 'Show Duration Difference',
+    show_duration_diff_desc: 'Show duration difference compared to previous record in records page'
   }
 };
 
@@ -780,12 +803,16 @@ function init() {
   if (!storage.statsConfig.showAvgDuration) storage.statsConfig.showAvgDuration = true;
   if (!storage.statsConfig.showMinDuration) storage.statsConfig.showMinDuration = true;
   if (!storage.statsConfig.showMaxDuration) storage.statsConfig.showMaxDuration = true;
+  if (!storage.statsConfig.durationChartCount) storage.statsConfig.durationChartCount = 5;
+  if (!storage.statsConfig.showDurationDiff) storage.statsConfig.showDurationDiff = true;
   
   if (!storage.statsConfig.timeGroupingWeek) storage.statsConfig.timeGroupingWeek = 'day';
   if (!storage.statsConfig.timeGroupingMonth) storage.statsConfig.timeGroupingMonth = 'week';
   if (!storage.statsConfig.timeGroupingYear) storage.statsConfig.timeGroupingYear = 'month';
   if (!storage.statsConfig.sortBy) storage.statsConfig.sortBy = 'count';
   if (!storage.statsConfig.chartType) storage.statsConfig.chartType = 'bar';
+  if (!storage.statsConfig.showAllCountAnalysis) storage.statsConfig.showAllCountAnalysis = false;
+  if (!storage.statsConfig.allDataGrouping) storage.statsConfig.allDataGrouping = 'year';
 
   if (!storage.uiConfig.cornerRadius) storage.uiConfig.cornerRadius = 'medium';
   if (!storage.uiConfig.shadowIntensity) storage.uiConfig.shadowIntensity = 'medium';
@@ -893,6 +920,8 @@ const themePresets = {
 
 const mainContent = document.getElementById('main-content');
 const bottomNav = document.getElementById('bottom-nav');
+
+
 
 function t(key) {
   return i18n[currentLang][key] || key;
@@ -1100,6 +1129,9 @@ function initApp() {
   }
 }
 
+
+
+
 function loadExternalLibraries() {
   if (!isWeb()) return;
   
@@ -1230,6 +1262,10 @@ function renderAddTab() {
           <label class="form-label">${t('notes')}</label>
           <input type="text" class="form-input" id="timer-notes" placeholder="">
         </div>
+        <div class="form-group">
+          <label class="form-label">${t('satisfaction_rating')}</label>
+          <input type="number" class="form-input" id="timer-satisfaction" min="0" max="10" step="1" value="6" placeholder="${t('satisfaction_hint')}">
+        </div>
       </div>
     </div>
     <div id="manual-section" class="hidden">
@@ -1267,6 +1303,10 @@ function renderAddTab() {
           <label class="form-label">${t('notes')}</label>
           <input type="text" class="form-input" id="manual-notes" placeholder="">
         </div>
+        <div class="form-group">
+          <label class="form-label">${t('satisfaction_rating')}</label>
+          <input type="number" class="form-input" id="manual-satisfaction" min="0" max="10" step="1" value="6" placeholder="${t('satisfaction_hint')}">
+        </div>
         <button class="btn btn-primary" id="save-manual-btn">${t('save_record')}</button>
       </div>
     </div>
@@ -1296,6 +1336,19 @@ function renderAddTab() {
   const timerBtn = document.getElementById('timer-btn');
   const timerDisplay = document.getElementById('timer-display');
   const timerBtnText = document.getElementById('timer-btn-text');
+
+  // 初始化时检查timerRunning状态
+  if (timerRunning) {
+    timerBtn.classList.add('running');
+    timerBtnText.textContent = t('stop_timer');
+    timerDisplay.textContent = formatDuration(timerElapsed);
+    
+    // 如果计时器正在运行，重新启动计时器
+    timerInterval = setInterval(() => {
+      timerElapsed = Math.floor((Date.now() - timerStartTime) / 1000);
+      timerDisplay.textContent = formatDuration(timerElapsed);
+    }, 100);
+  }
 
   timerBtn.addEventListener('click', () => {
     if (timerRunning) {
@@ -1328,21 +1381,29 @@ function renderAddTab() {
       selectedFetishes.push(parseInt(checkbox.value));
     });
     
+    let satisfaction = parseInt(document.getElementById('timer-satisfaction').value);
+    if (isNaN(satisfaction) || satisfaction < 0 || satisfaction > 10) {
+      satisfaction = 6;
+    }
     const record = {
       id: Date.now(),
       startTime: new Date(timerStartTime).toISOString(),
       duration: timerElapsed,
       medium: document.getElementById('timer-medium').value,
       fetishes: selectedFetishes,
-      notes: document.getElementById('timer-notes').value
+      notes: document.getElementById('timer-notes').value,
+      satisfaction: satisfaction
     };
     records.unshift(record);
     saveRecords();
     showToast(t('record_saved'));
     
+    // 重置计时器
     timerElapsed = 0;
     timerDisplay.textContent = '00:00';
+    
     document.getElementById('timer-notes').value = '';
+    document.getElementById('timer-satisfaction').value = '6';
     document.querySelectorAll('#timer-fetishes .fetish-checkbox').forEach(checkbox => {
       checkbox.checked = false;
     });
@@ -1363,13 +1424,18 @@ function renderAddTab() {
       selectedFetishes.push(parseInt(checkbox.value));
     });
     
+    let satisfaction = parseInt(document.getElementById('manual-satisfaction').value);
+    if (isNaN(satisfaction) || satisfaction < 0 || satisfaction > 10) {
+      satisfaction = 6;
+    }
     const record = {
       id: Date.now(),
       startTime: new Date(datetime).toISOString(),
       duration: mins * 60 + secs,
       medium: document.getElementById('manual-medium').value,
       fetishes: selectedFetishes,
-      notes: document.getElementById('manual-notes').value
+      notes: document.getElementById('manual-notes').value,
+      satisfaction: satisfaction
     };
     records.unshift(record);
     records.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
@@ -1379,6 +1445,7 @@ function renderAddTab() {
     document.getElementById('manual-min').value = '0';
     document.getElementById('manual-sec').value = '0';
     document.getElementById('manual-notes').value = '';
+    document.getElementById('manual-satisfaction').value = '6';
     document.querySelectorAll('#manual-fetishes .fetish-checkbox').forEach(checkbox => {
       checkbox.checked = false;
     });
@@ -1414,7 +1481,7 @@ function renderRecordsTab() {
       const recordsHTML = monthRecords.map(record => {
         const recordIndex = sortedRecords.findIndex(r => r.id === record.id);
         let durationDiffHTML = '';
-        if (recordIndex > 0) {
+        if (recordIndex > 0 && statsConfig.showDurationDiff) {
           const prevRecord = sortedRecords[recordIndex - 1];
           const diff = record.duration - prevRecord.duration;
           const absDiff = Math.abs(diff);
@@ -1450,6 +1517,7 @@ function renderRecordsTab() {
                 ${record.medium ? `<div class="record-medium">${getMediumLabel(record.medium)}</div>` : ''}
                 ${fetishHTML}
                 ${record.notes ? `<div class="record-notes">${record.notes}</div>` : ''}
+                ${record.satisfaction !== undefined && record.satisfaction !== null ? `<div class="record-satisfaction">满意度: ${record.satisfaction}/10</div>` : ''}
               </div>
               <div style="display: flex; gap: 8px;">
                 <button class="record-edit" data-id="${record.id}">✏️</button>
@@ -1551,6 +1619,10 @@ function renderEditRecord() {
         <label class="form-label">${t('notes')}</label>
         <input type="text" class="form-input" id="edit-notes" value="${record.notes || ''}">
       </div>
+      <div class="form-group">
+        <label class="form-label">${t('satisfaction_rating')}</label>
+        <input type="number" class="form-input" id="edit-satisfaction" min="0" max="10" step="1" value="${record.satisfaction || 6}" placeholder="${t('satisfaction_hint')}">
+      </div>
       <div style="display: flex; gap: 12px;">
         <button class="btn btn-secondary" id="cancel-edit">${t('back')}</button>
         <button class="btn btn-primary" id="save-edit">${t('save_changes')}</button>
@@ -1575,6 +1647,10 @@ function renderEditRecord() {
     });
     
     const notes = document.getElementById('edit-notes').value;
+    let satisfaction = parseInt(document.getElementById('edit-satisfaction').value);
+    if (isNaN(satisfaction) || satisfaction < 0 || satisfaction > 10) {
+      satisfaction = 6;
+    }
     
     if (!datetime) {
       showToast('请选择开始时间');
@@ -1589,7 +1665,8 @@ function renderEditRecord() {
         duration: mins * 60 + secs,
         medium: medium,
         fetishes: selectedFetishes,
-        notes: notes
+        notes: notes,
+        satisfaction: satisfaction
       };
       delete records[recordIndex].fetish;
       records.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
@@ -1792,7 +1869,12 @@ function drawHorizontalBarChart(containerId, data, colors) {
     
     const valueDiv = document.createElement('div');
     valueDiv.style.cssText = 'min-width: 40px; text-align: right; color: var(--text-secondary);';
-    valueDiv.textContent = `${item.value} ${t('times')}`;
+    // 根据值的范围判断是次数还是满意度
+    if (maxValue <= 10) {
+      valueDiv.textContent = `${item.value} 分`;
+    } else {
+      valueDiv.textContent = `${item.value} ${t('times')}`;
+    }
     
     barContainer.appendChild(barBackground);
     barContainer.appendChild(valueDiv);
@@ -1801,6 +1883,123 @@ function drawHorizontalBarChart(containerId, data, colors) {
     itemDiv.appendChild(barContainer);
     
     container.appendChild(itemDiv);
+  });
+}
+
+function drawDurationLineChart(canvasId, data) {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  
+  const ctx = canvas.getContext('2d');
+  const padding = 60;
+  
+  const isDarkMode = currentTheme === 'dark';
+  const textColor = isDarkMode ? '#ffffff' : '#333333';
+  const lineColor = '#6366f1';
+  const pointColor = '#4f46e5';
+  const gridColor = isDarkMode ? '#444444' : '#e0e0e0';
+  
+  const values = data.map(d => d.value);
+  const maxValue = Math.max(...values, 1);
+  const minValue = Math.min(...values);
+  const valueRange = Math.max(maxValue - minValue, 1);
+  
+  const dpr = window.devicePixelRatio || 1;
+  
+  let canvasWidth = canvas.width || 500;
+  let canvasHeight = canvas.height || 250;
+  
+  if (canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
+    canvasWidth = canvas.offsetWidth;
+    canvasHeight = canvas.offsetHeight;
+  }
+  
+  canvas.width = canvasWidth * dpr;
+  canvas.height = canvasHeight * dpr;
+  canvas.style.width = canvasWidth + 'px';
+  canvas.style.height = canvasHeight + 'px';
+  ctx.scale(dpr, dpr);
+  
+  const chartWidth = canvasWidth - padding * 2;
+  const chartHeight = canvasHeight - padding * 2;
+  
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  
+  // 绘制网格
+  ctx.strokeStyle = gridColor;
+  ctx.lineWidth = 1;
+  
+  // 水平网格线
+  const gridLines = 5; // 保持5条网格线
+  for (let i = 0; i <= gridLines; i++) {
+    const y = padding + (i / gridLines) * chartHeight;
+    ctx.beginPath();
+    ctx.moveTo(padding, y);
+    ctx.lineTo(canvasWidth - padding, y);
+    ctx.stroke();
+    
+    // 绘制Y轴标签
+    const value = maxValue - (i / gridLines) * valueRange;
+    ctx.fillStyle = textColor;
+    ctx.font = '10px Arial'; // 减小字体大小
+    ctx.textAlign = 'right';
+    ctx.fillText(formatDuration(Math.round(value)), padding - 8, y + 3); // 调整位置
+  }
+  
+  // 垂直网格线
+  for (let i = 0; i < data.length; i++) {
+    const x = padding + (i / (data.length - 1)) * chartWidth;
+    ctx.beginPath();
+    ctx.moveTo(x, padding);
+    ctx.lineTo(x, canvasHeight - padding);
+    ctx.stroke();
+    
+    // 绘制X轴标签
+    // 只在大屏幕或间隔显示标签，避免拥挤
+    if (window.innerWidth > 768 || i % 2 === 0) {
+      ctx.fillStyle = textColor;
+      ctx.font = '11px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(data[i].label, x, canvasHeight - 20);
+    }
+  }
+  
+  // 绘制折线
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  
+  data.forEach((item, index) => {
+    const x = padding + (index / (data.length - 1)) * chartWidth;
+    const y = padding + chartHeight - ((item.value - minValue) / valueRange) * chartHeight;
+    
+    if (index === 0) {
+      ctx.moveTo(x, y);
+    } else {
+      ctx.lineTo(x, y);
+    }
+  });
+  
+  ctx.stroke();
+  
+  // 绘制数据点
+  data.forEach((item, index) => {
+    const x = padding + (index / (data.length - 1)) * chartWidth;
+    const y = padding + chartHeight - ((item.value - minValue) / valueRange) * chartHeight;
+    
+    ctx.fillStyle = pointColor;
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+    ctx.fill();
+    
+    // 绘制数据值
+    // 只在大屏幕显示数据值，避免拥挤
+    if (window.innerWidth > 768) {
+      ctx.fillStyle = textColor;
+      ctx.font = '11px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText(formatDuration(item.value), x, y - 10);
+    }
   });
 }
 
@@ -1932,6 +2131,22 @@ function calculateFrequency(filteredRecords, fromDate, toDate) {
 function getTimeRange(preset, now) {
   let from, to;
   switch (preset) {
+    case 'all':
+      // 根据实际记录的时间范围计算
+      if (records.length > 0) {
+        const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+        from = new Date(sortedRecords[0].startTime);
+        from.setHours(0, 0, 0, 0);
+        to = new Date(sortedRecords[sortedRecords.length - 1].startTime);
+        to.setHours(23, 59, 59, 999);
+      } else {
+        // 如果没有记录，使用当前时间
+        from = new Date(now);
+        from.setHours(0, 0, 0, 0);
+        to = new Date(now);
+        to.setHours(23, 59, 59, 999);
+      }
+      break;
     case 'thisWeek':
       from = new Date(now);
       from.setHours(0, 0, 0, 0);
@@ -1982,7 +2197,7 @@ function getTimeRange(preset, now) {
 
 function renderStatsTab() {
   const now = new Date();
-  const defaultRange = getTimeRange('thisWeek', now);
+  const defaultRange = getTimeRange('all', now);
   
   let screenshotButtonHTML = '';
   if (isWeb()) {
@@ -1994,10 +2209,23 @@ function renderStatsTab() {
       </div>
     `;
   }
+  
+  let refreshButtonHTML = `
+    <div style="margin-bottom: 16px;">
+      <button class="btn btn-secondary" id="refresh-stats-btn" style="width: 100%; padding: 12px 16px;">
+        <span style="margin-right: 8px;">🔄</span>刷新数据
+      </button>
+    </div>
+  `;
 
   let presetButtonsHTML = '';
   let firstButtonAdded = false;
-  let defaultPreset = 'custom';
+  let defaultPreset = 'all';
+  
+  // 添加"全部"选项
+  presetButtonsHTML += `<button class="tab-btn ${!firstButtonAdded ? 'active' : ''}" data-preset="all">全部</button>`;
+  if (!firstButtonAdded) defaultPreset = 'all';
+  firstButtonAdded = true;
   
   if (statsConfig.showThisWeek) {
     presetButtonsHTML += `<button class="tab-btn ${!firstButtonAdded ? 'active' : ''}" data-preset="thisWeek">${t('preset_this_week')}</button>`;
@@ -2025,6 +2253,7 @@ function renderStatsTab() {
     <div class="card">
       <h3 class="card-title">${t('stats_title')}</h3>
       ${screenshotButtonHTML}
+      ${refreshButtonHTML}
       <div class="tab-buttons" style="margin-bottom: 16px;">
         ${presetButtonsHTML}
       </div>
@@ -2065,11 +2294,37 @@ function renderStatsTab() {
 
     const filtered = [];
     const mediumCounts = {};
+    const mediumSatisfaction = {};
     const fetishCounts = {};
+    const fetishSatisfaction = {};
     const barData = {};
     let totalDuration = 0;
     let minDuration = Infinity;
     let maxDuration = 0;
+    let totalSatisfaction = 0;
+    let satisfactionCount = 0;
+    let currentGrouping;
+
+    // 计算当前分组方式
+    if (currentPreset === 'all') {
+      // 全部数据使用专门的分组设置
+      currentGrouping = statsConfig.allDataGrouping || 'year';
+    } else if (currentPreset === 'thisWeek') {
+      currentGrouping = statsConfig.timeGroupingWeek;
+    } else if (currentPreset === 'thisMonth' || currentPreset === 'lastMonth') {
+      currentGrouping = statsConfig.timeGroupingMonth;
+    } else if (currentPreset === 'thisYear') {
+      currentGrouping = statsConfig.timeGroupingYear;
+    } else {
+      const totalDays = Math.ceil((to - from) / (1000 * 60 * 60 * 24));
+      if (totalDays > 90) {
+        currentGrouping = 'month';
+      } else if (totalDays > 30) {
+        currentGrouping = 'week';
+      } else {
+        currentGrouping = 'day';
+      }
+    }
 
     for (let i = 0; i < records.length; i++) {
       const record = records[i];
@@ -2092,39 +2347,39 @@ function renderStatsTab() {
           if (record.duration < minDuration) minDuration = record.duration;
           if (record.duration > maxDuration) maxDuration = record.duration;
           
+          // 统计满意度
+          if (record.satisfaction !== undefined && record.satisfaction !== null) {
+            totalSatisfaction += record.satisfaction;
+            satisfactionCount++;
+          }
+          
           if (hasValidMedium) {
             mediumCounts[record.medium] = (mediumCounts[record.medium] || 0) + 1;
+            // 统计媒介的满意度
+            if (record.satisfaction !== undefined && record.satisfaction !== null) {
+              mediumSatisfaction[record.medium] = (mediumSatisfaction[record.medium] || 0) + record.satisfaction;
+            }
           }
           
           if (Array.isArray(record.fetishes)) {
             record.fetishes.forEach(fetish => {
               if (fetishCache[fetish]) {
                 fetishCounts[fetish] = (fetishCounts[fetish] || 0) + 1;
+                // 统计性癖的满意度
+                if (record.satisfaction !== undefined && record.satisfaction !== null) {
+                  fetishSatisfaction[fetish] = (fetishSatisfaction[fetish] || 0) + record.satisfaction;
+                }
               }
             });
           } else if (record.fetish && fetishCache[record.fetish]) {
             fetishCounts[record.fetish] = (fetishCounts[record.fetish] || 0) + 1;
-          }
-          
-          let key;
-          let currentGrouping;
-          if (currentPreset === 'thisWeek') {
-            currentGrouping = statsConfig.timeGroupingWeek;
-          } else if (currentPreset === 'thisMonth' || currentPreset === 'lastMonth') {
-            currentGrouping = statsConfig.timeGroupingMonth;
-          } else if (currentPreset === 'thisYear') {
-            currentGrouping = statsConfig.timeGroupingYear;
-          } else {
-            const totalDays = Math.ceil((to - from) / (1000 * 60 * 60 * 24));
-            if (totalDays > 90) {
-              currentGrouping = 'month';
-            } else if (totalDays > 30) {
-              currentGrouping = 'week';
-            } else {
-              currentGrouping = 'day';
+            // 统计性癖的满意度
+            if (record.satisfaction !== undefined && record.satisfaction !== null) {
+              fetishSatisfaction[record.fetish] = (fetishSatisfaction[record.fetish] || 0) + record.satisfaction;
             }
           }
           
+          let key;
           if (currentGrouping === 'day') {
             key = new Date(record.startTime).toISOString().slice(0, 10);
           } else if (currentGrouping === 'week') {
@@ -2136,6 +2391,9 @@ function renderStatsTab() {
             const year = d.getFullYear();
             const quarter = Math.floor(d.getMonth() / 3) + 1;
             key = `${year}-Q${quarter}`;
+          } else if (currentGrouping === 'year') {
+            const d = new Date(record.startTime);
+            key = d.getFullYear().toString();
           }
           barData[key] = (barData[key] || 0) + 1;
         }
@@ -2146,6 +2404,7 @@ function renderStatsTab() {
     const avgDuration = count > 0 ? Math.round(totalDuration / count) : 0;
     minDuration = count > 0 ? minDuration : 0;
     maxDuration = count > 0 ? maxDuration : 0;
+    const avgSatisfaction = satisfactionCount > 0 ? (totalSatisfaction / satisfactionCount).toFixed(1) : 0;
     const frequency = calculateFrequency(filtered, from, to);
     const longestAbstinence = calculateLongestAbstinence(filtered);
 
@@ -2195,17 +2454,22 @@ function renderStatsTab() {
 
     let mediumChartData = Object.keys(mediumCounts).map(key => ({
       label: getMediumLabel(key),
-      value: mediumCounts[key]
+      value: mediumCounts[key],
+      satisfaction: mediumSatisfaction[key] ? (mediumSatisfaction[key] / mediumCounts[key]).toFixed(1) : 0
     }));
     
     let fetishChartData = Object.keys(fetishCounts).map(key => ({
       label: getFetishLabel(key),
-      value: fetishCounts[key]
+      value: fetishCounts[key],
+      satisfaction: fetishSatisfaction[key] ? (fetishSatisfaction[key] / fetishCounts[key]).toFixed(1) : 0
     }));
     
     if (statsConfig.sortBy === 'count') {
       mediumChartData.sort((a, b) => b.value - a.value);
       fetishChartData.sort((a, b) => b.value - a.value);
+    } else if (statsConfig.sortBy === 'satisfaction') {
+      mediumChartData.sort((a, b) => parseFloat(b.satisfaction) - parseFloat(a.satisfaction));
+      fetishChartData.sort((a, b) => parseFloat(b.satisfaction) - parseFloat(a.satisfaction));
     } else {
       mediumChartData.sort((a, b) => a.label.localeCompare(b.label, currentLang === 'zh' ? 'zh-CN' : 'en-US'));
       fetishChartData.sort((a, b) => a.label.localeCompare(b.label, currentLang === 'zh' ? 'zh-CN' : 'en-US'));
@@ -2214,64 +2478,114 @@ function renderStatsTab() {
     let allKeys;
     let formatLabel;
     
-    let currentGrouping;
-    if (currentPreset === 'thisWeek') {
-      currentGrouping = statsConfig.timeGroupingWeek;
-    } else if (currentPreset === 'thisMonth' || currentPreset === 'lastMonth') {
-      currentGrouping = statsConfig.timeGroupingMonth;
-    } else if (currentPreset === 'thisYear') {
-      currentGrouping = statsConfig.timeGroupingYear;
-    } else {
-      const totalDays = Math.ceil((to - from) / (1000 * 60 * 60 * 24));
-      if (totalDays > 90) {
-        currentGrouping = 'month';
-      } else if (totalDays > 30) {
-        currentGrouping = 'week';
-      } else {
-        currentGrouping = 'day';
-      }
+    // 确保currentGrouping已定义
+    if (!currentGrouping) {
+      currentGrouping = 'month';
     }
     
-    if (currentGrouping === 'day') {
-      allKeys = [];
-      const current = new Date(from);
-      current.setHours(0, 0, 0, 0);
-      const end = new Date(to);
-      while (current <= end) {
-        allKeys.push(current.toISOString().slice(0, 10));
-        current.setDate(current.getDate() + 1);
-      }
-      formatLabel = (key) => {
+    // 只显示有数值的时间点
+    const barChartData = Object.keys(barData).map(key => {
+      let label;
+      if (currentGrouping === 'day') {
         const d = new Date(key);
-        return `${d.getMonth() + 1}/${d.getDate()}`;
-      };
-    } else if (currentGrouping === 'week') {
-      allKeys = generateWeekKeys(from, to);
-      formatLabel = formatWeekLabel;
-    } else if (currentGrouping === 'month') {
-      allKeys = generateMonthKeys(from, to);
-      formatLabel = formatMonthLabelShort;
-    } else if (currentGrouping === 'quarter') {
-      allKeys = [];
-      const startYear = from.getFullYear();
-      const startQuarter = Math.floor(from.getMonth() / 3) + 1;
-      const endYear = to.getFullYear();
-      const endQuarter = Math.floor(to.getMonth() / 3) + 1;
-      
-      for (let year = startYear; year <= endYear; year++) {
-        const qStart = year === startYear ? startQuarter : 1;
-        const qEnd = year === endYear ? endQuarter : 4;
-        for (let q = qStart; q <= qEnd; q++) {
-          allKeys.push(`${year}-Q${q}`);
+        if (!isNaN(d.getTime())) {
+          label = `${d.getMonth() + 1}/${d.getDate()}`;
+        } else {
+          label = key;
         }
+      } else if (currentGrouping === 'week') {
+        const d = new Date(key);
+        if (!isNaN(d.getTime())) {
+          label = `${d.getMonth() + 1}/${d.getDate()}`;
+        } else {
+          label = key;
+        }
+      } else if (currentGrouping === 'month') {
+        const parts = key.split('-');
+        if (parts.length === 2) {
+          const month = parseInt(parts[1]);
+          if (!isNaN(month)) {
+            label = `${month}月`;
+          } else {
+            label = key;
+          }
+        } else {
+          label = key;
+        }
+      } else if (currentGrouping === 'quarter') {
+        const parts = key.split('-');
+        if (parts.length === 2) {
+          const quarter = parts[1].replace('Q', '');
+          const quarterMap = {'1': '一', '2': '二', '3': '三', '4': '四'};
+          if (quarterMap[quarter]) {
+            label = `第${quarterMap[quarter]}季度`;
+          } else {
+            label = key;
+          }
+        } else {
+          label = key;
+        }
+      } else if (currentGrouping === 'year') {
+        label = key;
+      } else {
+        label = key;
       }
-      formatLabel = (key) => key.split('-')[1];
-    }
+      return {
+        label: label,
+        value: barData[key],
+        originalKey: key
+      };
+    }).sort((a, b) => {
+      // 按时间顺序排序
+      return a.originalKey.localeCompare(b.originalKey);
+    });
 
-    const barChartData = allKeys.map(key => ({
-      label: formatLabel(key),
-      value: barData[key] || 0
-    }));
+    // 检查是否跨年，如果是则在最开头添加年份
+    if (barChartData.length > 1) {
+      const firstKey = barChartData[0].originalKey;
+      const lastKey = barChartData[barChartData.length - 1].originalKey;
+      let hasCrossYear = false;
+      
+      if (currentGrouping === 'day') {
+        const firstYear = new Date(firstKey).getFullYear();
+        const lastYear = new Date(lastKey).getFullYear();
+        hasCrossYear = firstYear !== lastYear;
+      } else if (currentGrouping === 'week') {
+        const firstYear = new Date(firstKey).getFullYear();
+        const lastYear = new Date(lastKey).getFullYear();
+        hasCrossYear = firstYear !== lastYear;
+      } else if (currentGrouping === 'month') {
+        const firstYear = firstKey.split('-')[0];
+        const lastYear = lastKey.split('-')[0];
+        hasCrossYear = firstYear !== lastYear;
+      } else if (currentGrouping === 'quarter') {
+        const firstYear = firstKey.split('-')[0];
+        const lastYear = lastKey.split('-')[0];
+        hasCrossYear = firstYear !== lastYear;
+      } else if (currentGrouping === 'year') {
+        // 按年分组时，直接显示年份
+        hasCrossYear = false;
+      }
+      
+      if (hasCrossYear) {
+        // 在每个标签前添加年份
+        barChartData.forEach(item => {
+          if (currentGrouping === 'day') {
+            const d = new Date(item.originalKey);
+            item.label = `${d.getFullYear()}/${item.label}`;
+          } else if (currentGrouping === 'week') {
+            const d = new Date(item.originalKey);
+            item.label = `${d.getFullYear()}/${item.label}`;
+          } else if (currentGrouping === 'month') {
+            const year = item.originalKey.split('-')[0];
+            item.label = `${year}/${item.label}`;
+          } else if (currentGrouping === 'quarter') {
+            const year = item.originalKey.split('-')[0];
+            item.label = `${year}年${item.label}`;
+          }
+        });
+      }
+    }
 
     let changeHTML = '';
     if (prevPeriodCount > 0) {
@@ -2329,6 +2643,23 @@ function renderStatsTab() {
         </div>
       `;
     }
+    // 添加满意度统计
+    if (satisfactionCount > 0) {
+      statsGridHTML += `
+        <div class="stat-card">
+          <div class="stat-value">${avgSatisfaction}/10</div>
+          <div class="stat-label">平均满意度</div>
+        </div>
+      `;
+    }
+
+    // 准备时间次数折线图数据
+    const recentRecords = [...records].sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
+      .slice(0, statsConfig.durationChartCount);
+    const durationLineData = recentRecords.map((record, index) => ({
+      label: `${recentRecords.length - index}`,
+      value: record.duration
+    })).reverse();
 
     document.getElementById('stats-result').innerHTML = `
       <div class="card" style="margin-bottom: 16px;">
@@ -2336,9 +2667,15 @@ function renderStatsTab() {
         <div class="stats-grid">
           ${statsGridHTML}
         </div>
+        ${currentPreset === 'all' && !statsConfig.showAllCountAnalysis ? '' : `
         <div style="margin-top: 16px;">
           <h4 style="margin-bottom: 12px;">${t('count_trend')}</h4>
           <div id="count-bar"></div>
+        </div>
+        `}
+        <div style="margin-top: 24px;">
+          <h4 style="margin-bottom: 12px;">${t('duration_trend')}</h4>
+          <canvas id="duration-line" width="500" height="300" style="width: 100%; max-width: 500px; height: 300px; display: block; margin: 0 auto;"></canvas>
         </div>
       </div>
       
@@ -2346,7 +2683,7 @@ function renderStatsTab() {
         <h3 class="card-title">${t('medium_stats')}</h3>
         <canvas id="medium-pie" width="300" height="250" style="width: 100%; max-width: 300px; display: block; margin: 0 auto;"></canvas>
         <div style="margin-top: 16px;">
-          <h4 style="margin-bottom: 12px;">${t('usage_rank')}</h4>
+          <h4 style="margin-bottom: 12px;">满意度排名</h4>
           <div id="medium-rank-chart"></div>
         </div>
       </div>
@@ -2355,7 +2692,7 @@ function renderStatsTab() {
         <h3 class="card-title">${t('fetish_stats')}</h3>
         <canvas id="fetish-pie" width="300" height="250" style="width: 100%; max-width: 300px; display: block; margin: 0 auto;"></canvas>
         <div style="margin-top: 16px;">
-          <h4 style="margin-bottom: 12px;">${t('usage_rank')}</h4>
+          <h4 style="margin-bottom: 12px;">满意度排名</h4>
           <div id="fetish-rank-chart"></div>
         </div>
       </div>
@@ -2365,15 +2702,26 @@ function renderStatsTab() {
       drawPieChart('medium-pie', mediumChartData, pieColors);
       drawPieChart('fetish-pie', fetishChartData, pieColors);
       drawHorizontalCountChart('count-bar', barChartData);
+      drawDurationLineChart('duration-line', durationLineData);
       
       if (mediumChartData.length > 0) {
-        drawHorizontalBarChart('medium-rank-chart', mediumChartData, pieColors);
+        // 转换为显示满意度的数据
+        const mediumSatisfactionData = mediumChartData.map(item => ({
+          label: `${item.label} (${item.value}次)`,
+          value: parseFloat(item.satisfaction)
+        }));
+        drawHorizontalBarChart('medium-rank-chart', mediumSatisfactionData, pieColors);
       } else {
         document.getElementById('medium-rank-chart').innerHTML = '<p style="color: var(--text-secondary);">' + t('no_records') + '</p>';
       }
       
       if (fetishChartData.length > 0) {
-        drawHorizontalBarChart('fetish-rank-chart', fetishChartData, pieColors);
+        // 转换为显示满意度的数据
+        const fetishSatisfactionData = fetishChartData.map(item => ({
+          label: `${item.label} (${item.value}次)`,
+          value: parseFloat(item.satisfaction)
+        }));
+        drawHorizontalBarChart('fetish-rank-chart', fetishSatisfactionData, pieColors);
       } else {
         document.getElementById('fetish-rank-chart').innerHTML = '<p style="color: var(--text-secondary);">' + t('no_records') + '</p>';
       }
@@ -2402,6 +2750,19 @@ function renderStatsTab() {
     if (screenshotBtn) {
       screenshotBtn.addEventListener('click', takeScreenshot);
     }
+  }
+  
+  const refreshStatsBtn = document.getElementById('refresh-stats-btn');
+  if (refreshStatsBtn) {
+    refreshStatsBtn.addEventListener('click', () => {
+      // 重新更新缓存
+      updateMediaCache();
+      updateFetishCache();
+      // 重新计算统计数据
+      calculateStats();
+      // 显示刷新成功的提示
+      showToast('数据已刷新');
+    });
   }
 }
 
@@ -2672,71 +3033,7 @@ function renderAppearanceManagement() {
 
       </div>
       
-      <div style="margin-bottom: 24px;">
-        <h4 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">🎨 ${t('color_enhanced')}</h4>
-        
-        <div class="form-group">
-          <label class="form-label">白天模式背景图片</label>
-          <input type="file" id="light-bg-image" accept="image/*" style="width: 100%; padding: 8px; margin-bottom: 8px;">
-          <div id="light-bg-preview" style="width: 100%; height: 100px; border-radius: 8px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-size: cover; background-position: center;"></div>
-          <button class="btn btn-secondary" id="reset-light-bg-image" style="width: 100%;">清除白天模式背景图片</button>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">黑夜模式背景图片</label>
-          <input type="file" id="dark-bg-image" accept="image/*" style="width: 100%; padding: 8px; margin-bottom: 8px;">
-          <div id="dark-bg-preview" style="width: 100%; height: 100px; border-radius: 8px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-size: cover; background-position: center;"></div>
-          <button class="btn btn-secondary" id="reset-dark-bg-image" style="width: 100%;">清除黑夜模式背景图片</button>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('light_bg')}</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="color" id="custom-light-bg" class="form-input" style="flex: 0 0 60px; height: 48px; padding: 4px;" value="${uiConfig.lightBg || '#f8fafc'}">
-            <button class="btn btn-secondary" id="reset-light-bg" style="flex: 1; padding: 0 12px;">×</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('dark_bg')}</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="color" id="custom-dark-bg" class="form-input" style="flex: 0 0 60px; height: 48px; padding: 4px;" value="${uiConfig.darkBg || '#0f172a'}">
-            <button class="btn btn-secondary" id="reset-dark-bg" style="flex: 1; padding: 0 12px;">×</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('card_bg')}</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="color" id="custom-card-bg" class="form-input" style="flex: 0 0 60px; height: 48px; padding: 4px;" value="${uiConfig.cardBg || '#ffffff'}">
-            <button class="btn btn-secondary" id="reset-card-bg" style="flex: 1; padding: 0 12px;">×</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('text_primary_color')}</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="color" id="custom-text-primary" class="form-input" style="flex: 0 0 60px; height: 48px; padding: 4px;" value="${uiConfig.textPrimary || '#1e293b'}">
-            <button class="btn btn-secondary" id="reset-text-primary" style="flex: 1; padding: 0 12px;">×</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('text_secondary_color')}</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="color" id="custom-text-secondary" class="form-input" style="flex: 0 0 60px; height: 48px; padding: 4px;" value="${uiConfig.textSecondary || '#64748b'}">
-            <button class="btn btn-secondary" id="reset-text-secondary" style="flex: 1; padding: 0 12px;">×</button>
-          </div>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('border_color_custom')}</label>
-          <div style="display: flex; gap: 8px;">
-            <input type="color" id="custom-border-color" class="form-input" style="flex: 0 0 60px; height: 48px; padding: 4px;" value="${uiConfig.borderColor || '#e2e8f0'}">
-            <button class="btn btn-secondary" id="reset-border-color" style="flex: 1; padding: 0 12px;">×</button>
-          </div>
-        </div>
-      </div>
+
       
       <div style="margin-bottom: 24px;">
         <h4 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">📐 ${t('layout_size')}</h4>
@@ -2889,30 +3186,6 @@ function renderAppearanceManagement() {
     });
   }
 
-  syncColorInputUI('custom-light-bg', 'lightBg', 'reset-light-bg');
-  syncColorInputUI('custom-dark-bg', 'darkBg', 'reset-dark-bg');
-  syncColorInputUI('custom-card-bg', 'cardBg', 'reset-card-bg');
-  syncColorInputUI('custom-text-primary', 'textPrimary', 'reset-text-primary');
-  syncColorInputUI('custom-text-secondary', 'textSecondary', 'reset-text-secondary');
-  syncColorInputUI('custom-border-color', 'borderColor', 'reset-border-color');
-  
-  const lightBgPreview = document.getElementById('light-bg-preview');
-  const darkBgPreview = document.getElementById('dark-bg-preview');
-  
-  if (uiConfig.lightBgImage) {
-    lightBgPreview.style.backgroundImage = `url(${uiConfig.lightBgImage})`;
-    lightBgPreview.innerHTML = '';
-  } else {
-    lightBgPreview.innerHTML = '预览';
-  }
-  
-  if (uiConfig.darkBgImage) {
-    darkBgPreview.style.backgroundImage = `url(${uiConfig.darkBgImage})`;
-    darkBgPreview.innerHTML = '';
-  } else {
-    darkBgPreview.innerHTML = '预览';
-  }
-  
   const addIconPreview = document.getElementById('add-icon-preview');
   const recordsIconPreview = document.getElementById('records-icon-preview');
   const statsIconPreview = document.getElementById('stats-icon-preview');
@@ -2945,44 +3218,6 @@ function renderAppearanceManagement() {
   } else {
     settingsIconPreview.innerHTML = '⚙️';
   }
-  
-  document.getElementById('light-bg-image').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        uiConfig.lightBgImage = event.target.result;
-        applyUIConfig();
-        renderAppearanceManagement();
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-  
-  document.getElementById('dark-bg-image').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        uiConfig.darkBgImage = event.target.result;
-        applyUIConfig();
-        renderAppearanceManagement();
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-  
-  document.getElementById('reset-light-bg-image').addEventListener('click', () => {
-    uiConfig.lightBgImage = '';
-    applyUIConfig();
-    renderAppearanceManagement();
-  });
-  
-  document.getElementById('reset-dark-bg-image').addEventListener('click', () => {
-    uiConfig.darkBgImage = '';
-    applyUIConfig();
-    renderAppearanceManagement();
-  });
   
   function handleIconUpload(tab) {
     return (e) => {
@@ -3426,6 +3661,14 @@ function renderStatsManagement() {
             <span class="toggle-slider"></span>
           </label>
         </div>
+        
+        <div class="settings-item">
+          <span class="settings-label">${t('show_duration_diff')}</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="show-duration-diff" ${statsConfig.showDurationDiff ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
       </div>
       
       <div style="margin-bottom: 24px;">
@@ -3480,6 +3723,40 @@ function renderStatsManagement() {
             <option value="friday" ${statsConfig.weekStartDay === 'friday' ? 'selected' : ''}>${t('friday')}</option>
             <option value="saturday" ${statsConfig.weekStartDay === 'saturday' ? 'selected' : ''}>${t('saturday')}</option>
             <option value="sunday" ${statsConfig.weekStartDay === 'sunday' ? 'selected' : ''}>${t('sunday')}</option>
+          </select>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 24px;">
+        <h4 style="color: var(--text-color); margin-bottom: 12px;">📈 ${t('duration_chart_count')}</h4>
+        <div class="settings-item">
+          <span class="settings-label">${t('duration_chart_count')}</span>
+          <select class="settings-select" id="duration-chart-count">
+            <option value="5" ${statsConfig.durationChartCount === 5 ? 'selected' : ''}>5 ${t('times')}</option>
+            <option value="10" ${statsConfig.durationChartCount === 10 ? 'selected' : ''}>10 ${t('times')}</option>
+            <option value="20" ${statsConfig.durationChartCount === 20 ? 'selected' : ''}>20 ${t('times')}</option>
+          </select>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 24px;">
+        <h4 style="color: var(--text-color); margin-bottom: 12px;">📊 全部数据统计设置</h4>
+        
+        <div class="settings-item">
+          <span class="settings-label">显示全部数据的次数分析</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="show-all-count-analysis" ${statsConfig.showAllCountAnalysis ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        
+        <div class="settings-item">
+          <span class="settings-label">全部数据的分析周期</span>
+          <select class="settings-select" id="all-data-grouping">
+            <option value="year" ${statsConfig.allDataGrouping === 'year' ? 'selected' : ''}>${t('group_by_year')}</option>
+            <option value="quarter" ${statsConfig.allDataGrouping === 'quarter' ? 'selected' : ''}>${t('group_by_quarter')}</option>
+            <option value="month" ${statsConfig.allDataGrouping === 'month' ? 'selected' : ''}>${t('group_by_month')}</option>
+            <option value="week" ${statsConfig.allDataGrouping === 'week' ? 'selected' : ''}>${t('group_by_week')}</option>
           </select>
         </div>
       </div>
@@ -3553,6 +3830,11 @@ function renderStatsManagement() {
     saveStatsConfig();
   });
 
+  document.getElementById('show-duration-diff').addEventListener('change', (e) => {
+    statsConfig.showDurationDiff = e.target.checked;
+    saveStatsConfig();
+  });
+
   if (!statsConfig.timeGroupingWeek) statsConfig.timeGroupingWeek = 'day';
   if (!statsConfig.timeGroupingMonth) statsConfig.timeGroupingMonth = 'week';
   if (!statsConfig.timeGroupingYear) statsConfig.timeGroupingYear = 'month';
@@ -3586,6 +3868,21 @@ function renderStatsManagement() {
     saveStatsConfig();
   });
 
+  document.getElementById('duration-chart-count').addEventListener('change', (e) => {
+    statsConfig.durationChartCount = parseInt(e.target.value);
+    saveStatsConfig();
+  });
+
+  document.getElementById('show-all-count-analysis').addEventListener('change', (e) => {
+    statsConfig.showAllCountAnalysis = e.target.checked;
+    saveStatsConfig();
+  });
+
+  document.getElementById('all-data-grouping').addEventListener('change', (e) => {
+    statsConfig.allDataGrouping = e.target.value;
+    saveStatsConfig();
+  });
+
   document.getElementById('sync-time').addEventListener('change', (e) => {
     statsConfig.syncTime = e.target.checked;
     saveStatsConfig();
@@ -3609,7 +3906,7 @@ function renderAbout() {
       <div style="margin-bottom: 24px; padding: 16px; background: var(--border-color); border-radius: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('version')}</span>
-          <span style="color: var(--primary-color); font-weight: 700;">0.91.6</span>
+          <span style="color: var(--primary-color); font-weight: 700;">0.91.7</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('developer')}</span>
@@ -3631,7 +3928,19 @@ function renderAbout() {
         <h4 style="color: var(--text-color); margin-bottom: 12px; font-size: 16px;">📝 ${t('changelog')}</h4>
         <div style="line-height: 1.6;">
           <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--primary-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0916_title')}</h5>
+            <h5 style="color: var(--primary-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0917_title')}</h5>
+            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
+              <li>${t('cl_v0917_1')}</li>
+              <li>${t('cl_v0917_2')}</li>
+              <li>${t('cl_v0917_3')}</li>
+              <li>${t('cl_v0917_4')}</li>
+              <li>添加全部数据视图，可查看所有记录的统计分析</li>
+              <li>实现全部数据视图的分组选项设置</li>
+              <li>确保全部数据视图正确响应分析管理界面的分组设置</li>
+            </ul>
+          </div>
+          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0916_title')}</h5>
             <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
               <li>${t('cl_v0916_1')}</li>
               <li>${t('cl_v0916_2')}</li>
@@ -3977,7 +4286,13 @@ function renderDataManagement() {
   
   if (isWeb()) {
     dataManagementHTML = `
-      <button class="btn btn-secondary" id="import-btn" style="width: 100%; margin-bottom: 16px;">📥 ${t('import_data')}</button>
+      <h4 style="color: var(--text-secondary); margin-bottom: 8px;">📥 导入方式</h4>
+      <button class="btn btn-secondary" id="file-import-btn" style="width: 100%; margin-bottom: 8px;">📁 ${t('import_data')} (文件)</button>
+      <div style="margin-bottom: 16px;">
+        <h5 style="color: var(--text-secondary); margin-bottom: 8px;">粘贴导入</h5>
+        <textarea id="paste-import-input" style="width: 100%; height: 150px; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 14px; resize: none; overflow-y: auto; font-family: monospace;"></textarea>
+        <button class="btn btn-primary" id="paste-import-btn" style="width: 100%; margin-top: 8px;">${t('confirm')}</button>
+      </div>
       
       <div style="margin-bottom: 24px;">
         <h4 style="margin-bottom: 12px; color: var(--text-color);">${t('export_settings')}</h4>
@@ -3998,17 +4313,26 @@ function renderDataManagement() {
           <button class="btn btn-primary" id="export-records-json" style="flex: 1;">${t('export_json')}</button>
           <button class="btn btn-primary" id="export-records-csv" style="flex: 1;">${t('export_csv')}</button>
         </div>
-        <button class="btn btn-primary" id="export-records-excel" style="width: 100%;">${t('export_excel')}</button>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-secondary" id="export-records-clipboard" style="flex: 1;">📋 复制到剪贴板</button>
+          <button class="btn btn-primary" id="export-records-excel" style="flex: 1;">${t('export_excel')}</button>
+        </div>
       </div>
       
       <div style="margin-top: 24px;">
         <button class="btn btn-primary" id="receive-data-btn" style="width: 100%;">📥 ${t('receive_data')}</button>
       </div>
-      <input type="file" id="import-file" accept=".json" style="display: none;">
+      <input type="file" id="import-file" accept=".json,.csv,.xlsx" style="display: none;">
     `;
   } else {
     dataManagementHTML = `
-      <button class="btn btn-secondary" id="import-btn" style="width: 100%; margin-bottom: 16px;">📥 ${t('import_data')}</button>
+      <h4 style="color: var(--text-secondary); margin-bottom: 8px;">📥 导入方式</h4>
+      <button class="btn btn-secondary" id="file-import-btn" style="width: 100%; margin-bottom: 8px;">📁 ${t('import_data')} (文件)</button>
+      <div style="margin-bottom: 16px;">
+        <h5 style="color: var(--text-secondary); margin-bottom: 8px;">粘贴导入</h5>
+        <textarea id="paste-import-input" style="width: 100%; height: 150px; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 14px; resize: none; overflow-y: auto; font-family: monospace;"></textarea>
+        <button class="btn btn-primary" id="paste-import-btn" style="width: 100%; margin-top: 8px;">${t('confirm')}</button>
+      </div>
       
       <div style="margin-bottom: 24px;">
         <h4 style="margin-bottom: 12px; color: var(--text-color);">${t('export_settings')}</h4>
@@ -4050,7 +4374,7 @@ function renderDataManagement() {
         </p>
       </div>
       
-      <input type="file" id="import-file" accept=".json" style="display: none;">
+      <input type="file" id="import-file" accept=".json,.csv,.xlsx" style="display: none;">
     `;
   }
 
@@ -4069,34 +4393,305 @@ function renderDataManagement() {
     renderSettingsTab();
   });
 
-  if (isWeb()) {
-    document.getElementById('export-settings-copy').addEventListener('click', copySettingsToClipboard);
-    document.getElementById('export-records-json').addEventListener('click', () => exportRecords('json'));
-    document.getElementById('export-records-csv').addEventListener('click', () => exportRecords('csv'));
-    document.getElementById('export-records-excel').addEventListener('click', () => exportRecords('excel'));
-    document.getElementById('receive-data-btn').addEventListener('click', receiveDataFromMobile);
-    
-    const dateFrom = document.getElementById('date-from');
-    const dateTo = document.getElementById('date-to');
-    
-    if (records.length > 0) {
-      const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-      const firstDate = new Date(sortedRecords[0].startTime);
-      const lastDate = new Date(sortedRecords[sortedRecords.length - 1].startTime);
-      dateFrom.value = firstDate.toISOString().slice(0, 10);
-      dateTo.value = lastDate.toISOString().slice(0, 10);
-    }
-    
-    document.getElementById('reset-date-btn').addEventListener('click', () => {
-      if (records.length > 0) {
-        const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-        const firstDate = new Date(sortedRecords[0].startTime);
-        const lastDate = new Date(sortedRecords[sortedRecords.length - 1].startTime);
-        dateFrom.value = firstDate.toISOString().slice(0, 10);
-        dateTo.value = lastDate.toISOString().slice(0, 10);
+  // 通用事件监听器
+  document.getElementById('export-settings-copy').addEventListener('click', copySettingsToClipboard);
+  
+  // 文件导入按钮点击事件
+  if (document.getElementById('file-import-btn')) {
+    document.getElementById('file-import-btn').addEventListener('click', () => {
+      document.getElementById('import-file').click();
+    });
+  }
+  
+  // 粘贴导入按钮点击事件
+  if (document.getElementById('paste-import-btn')) {
+    document.getElementById('paste-import-btn').addEventListener('click', () => {
+      const pasteInput = document.getElementById('paste-import-input');
+      const text = pasteInput.value.trim();
+      
+      if (!text) {
+        alert('请先在文本框中粘贴数据');
+        return;
+      }
+      
+      try {
+        const data = JSON.parse(text);
+        
+        if (data.type === 'settings') {
+          if (!confirm(t('import_confirm'))) {
+            return;
+          }
+          
+          if (data.lang) {
+            localStorage.setItem('lang', data.lang);
+            currentLang = data.lang;
+          }
+          if (data.theme) {
+            localStorage.setItem('theme', data.theme);
+            currentTheme = data.theme;
+          }
+          if (data.colorTheme) {
+            localStorage.setItem('colorTheme', data.colorTheme);
+            currentColorTheme = data.colorTheme;
+          }
+          if (data.customTheme) {
+            localStorage.setItem('customTheme', JSON.stringify(data.customTheme));
+            customTheme = data.customTheme;
+          }
+          if (data.statsConfig) {
+            localStorage.setItem('statsConfig', JSON.stringify(data.statsConfig));
+            statsConfig = data.statsConfig;
+          }
+          if (data.uiConfig) {
+            localStorage.setItem('uiConfig', JSON.stringify(data.uiConfig));
+            uiConfig = data.uiConfig;
+          }
+          if (data.media && Array.isArray(data.media)) {
+            localStorage.setItem('media', JSON.stringify(data.media));
+            media = data.media;
+          }
+          if (data.fetishes && Array.isArray(data.fetishes)) {
+            localStorage.setItem('fetishes', JSON.stringify(data.fetishes));
+            fetishes = data.fetishes;
+          }
+          
+          updateMediaCache();
+          updateFetishCache();
+          applyTheme();
+          applyUIConfig();
+          updateNavigationLabels();
+          renderCurrentTab();
+          
+          alert(t('import_success'));
+          pasteInput.value = '';
+          return;
+        }
+        
+        if (data.part && data.totalParts) {
+          if (data.canStandalone) {
+            if (!confirm(`检测到可单独导入的第 ${data.part}/${data.totalParts} 部分数据。\n\n点击「确定」仅导入这部分数据\n点击「取消」收集全部部分后合并导入`)) {
+              const key = data.exportDate || 'default';
+              if (!splitDataParts[key]) {
+                splitDataParts[key] = {
+                  totalParts: data.totalParts,
+                  receivedParts: {},
+                  media: data.media,
+                  fetishes: data.fetishes
+                };
+              }
+              
+              splitDataParts[key].receivedParts[data.part] = data.records;
+              
+              const receivedCount = Object.keys(splitDataParts[key].receivedParts).length;
+              const totalNeeded = splitDataParts[key].totalParts;
+              
+              if (receivedCount === totalNeeded) {
+                if (!confirm(t('import_confirm'))) {
+                  pasteInput.value = '';
+                  return;
+                }
+                
+                let allRecords = [];
+                for (let i = 1; i <= totalNeeded; i++) {
+                  allRecords = allRecords.concat(splitDataParts[key].receivedParts[i] || []);
+                }
+                
+                allRecords.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+                
+                localStorage.setItem('records', JSON.stringify(allRecords));
+                records = allRecords;
+                
+                if (splitDataParts[key].media && Array.isArray(splitDataParts[key].media)) {
+                  localStorage.setItem('media', JSON.stringify(splitDataParts[key].media));
+                  media = splitDataParts[key].media;
+                }
+                if (splitDataParts[key].fetishes && Array.isArray(splitDataParts[key].fetishes)) {
+                  localStorage.setItem('fetishes', JSON.stringify(splitDataParts[key].fetishes));
+                  fetishes = splitDataParts[key].fetishes;
+                }
+                
+                updateMediaCache();
+                updateFetishCache();
+                
+                delete splitDataParts[key];
+                
+                alert(t('import_success'));
+                pasteInput.value = '';
+                renderCurrentTab();
+              } else {
+                alert(`已收集 ${receivedCount}/${totalNeeded} 部分数据，请继续导入剩余部分`);
+                pasteInput.value = '';
+              }
+            } else {
+              if (!confirm(t('import_confirm'))) {
+                pasteInput.value = '';
+                return;
+              }
+              
+              const existingRecords = [...records];
+              const newRecords = data.records || [];
+              
+              const mergedRecords = [...existingRecords, ...newRecords];
+              
+              const seenIds = new Set();
+              const uniqueRecords = mergedRecords.filter(record => {
+                if (seenIds.has(record.id)) {
+                  return false;
+                }
+                seenIds.add(record.id);
+                return true;
+              });
+              
+              uniqueRecords.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+              
+              localStorage.setItem('records', JSON.stringify(uniqueRecords));
+              records = uniqueRecords;
+              
+              if (data.media && Array.isArray(data.media)) {
+                const existingMedia = [...media];
+                const newMedia = data.media;
+                const mergedMedia = [];
+                const mediaIds = new Set();
+                
+                [...existingMedia, ...newMedia].forEach(m => {
+                  if (!mediaIds.has(m.id)) {
+                    mediaIds.add(m.id);
+                    mergedMedia.push(m);
+                  }
+                });
+                
+                localStorage.setItem('media', JSON.stringify(mergedMedia));
+                media = mergedMedia;
+              }
+              
+              if (data.fetishes && Array.isArray(data.fetishes)) {
+                const existingFetishes = [...fetishes];
+                const newFetishes = data.fetishes;
+                const mergedFetishes = [];
+                const fetishIds = new Set();
+                
+                [...existingFetishes, ...newFetishes].forEach(f => {
+                  if (!fetishIds.has(f.id)) {
+                    fetishIds.add(f.id);
+                    mergedFetishes.push(f);
+                  }
+                });
+                
+                localStorage.setItem('fetishes', JSON.stringify(mergedFetishes));
+                fetishes = mergedFetishes;
+              }
+              
+              updateMediaCache();
+              updateFetishCache();
+              alert(t('import_success'));
+              pasteInput.value = '';
+              renderCurrentTab();
+            }
+          } else {
+            const key = data.exportDate || 'default';
+            if (!splitDataParts[key]) {
+              splitDataParts[key] = {
+                totalParts: data.totalParts,
+                receivedParts: {},
+                media: data.media,
+                fetishes: data.fetishes
+              };
+            }
+            
+            splitDataParts[key].receivedParts[data.part] = data.records;
+            
+            const receivedCount = Object.keys(splitDataParts[key].receivedParts).length;
+            const totalNeeded = splitDataParts[key].totalParts;
+            
+            if (receivedCount === totalNeeded) {
+              if (!confirm(t('import_confirm'))) {
+                pasteInput.value = '';
+                return;
+              }
+              
+              let allRecords = [];
+              for (let i = 1; i <= totalNeeded; i++) {
+                allRecords = allRecords.concat(splitDataParts[key].receivedParts[i] || []);
+              }
+              
+              allRecords.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+              
+              localStorage.setItem('records', JSON.stringify(allRecords));
+              records = allRecords;
+              
+              if (splitDataParts[key].media && Array.isArray(splitDataParts[key].media)) {
+                localStorage.setItem('media', JSON.stringify(splitDataParts[key].media));
+                media = splitDataParts[key].media;
+              }
+              if (splitDataParts[key].fetishes && Array.isArray(splitDataParts[key].fetishes)) {
+                localStorage.setItem('fetishes', JSON.stringify(splitDataParts[key].fetishes));
+                fetishes = splitDataParts[key].fetishes;
+              }
+              
+              updateMediaCache();
+              updateFetishCache();
+              
+              delete splitDataParts[key];
+              
+              alert(t('import_success'));
+              pasteInput.value = '';
+              renderCurrentTab();
+            } else {
+              alert(`已收集 ${receivedCount}/${totalNeeded} 部分数据，请继续导入剩余部分`);
+              pasteInput.value = '';
+            }
+          }
+        } else if (data.records && Array.isArray(data.records)) {
+          if (!confirm(t('import_confirm'))) {
+            pasteInput.value = '';
+            return;
+          }
+          
+          localStorage.setItem('records', JSON.stringify(data.records));
+          records = data.records;
+          if (data.media && Array.isArray(data.media)) {
+            localStorage.setItem('media', JSON.stringify(data.media));
+            media = data.media;
+          }
+          if (data.fetishes && Array.isArray(data.fetishes)) {
+            localStorage.setItem('fetishes', JSON.stringify(data.fetishes));
+            fetishes = data.fetishes;
+          }
+          updateMediaCache();
+          updateFetishCache();
+          alert(t('import_success'));
+          pasteInput.value = '';
+          renderCurrentTab();
+        } else {
+          alert(t('invalid_file'));
+          pasteInput.value = '';
+        }
+      } catch (error) {
+        alert(t('invalid_file'));
+        pasteInput.value = '';
       }
     });
-  } else {
+  }
+  
+  // 记录导出相关事件
+  if (document.getElementById('export-records-json')) {
+    document.getElementById('export-records-json').addEventListener('click', () => exportRecords('json'));
+  }
+  if (document.getElementById('export-records-csv')) {
+    document.getElementById('export-records-csv').addEventListener('click', () => exportRecords('csv'));
+  }
+  if (document.getElementById('export-records-excel')) {
+    document.getElementById('export-records-excel').addEventListener('click', () => exportRecords('excel'));
+  }
+  if (document.getElementById('export-records-clipboard')) {
+    document.getElementById('export-records-clipboard').addEventListener('click', exportRecordsToClipboard);
+  }
+  if (document.getElementById('receive-data-btn')) {
+    document.getElementById('receive-data-btn').addEventListener('click', receiveDataFromMobile);
+  }
+  
+  // 分割分享相关事件
+  if (document.getElementById('confirm-split-btn')) {
     let currentSplitCount = 1;
     
     function renderSplitButtons() {
@@ -4113,8 +4708,6 @@ function renderDataManagement() {
       }
     }
     
-    document.getElementById('export-settings-copy').addEventListener('click', copySettingsToClipboard);
-    
     document.getElementById('confirm-split-btn').addEventListener('click', () => {
       const select = document.getElementById('split-count-select');
       const value = parseInt(select.value) || 1;
@@ -4124,20 +4717,23 @@ function renderDataManagement() {
     });
     
     renderSplitButtons();
-    
-    const dateFrom = document.getElementById('date-from');
-    const dateTo = document.getElementById('date-to');
-    
-    if (records.length > 0) {
-      const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-      const firstDate = new Date(sortedRecords[0].startTime);
-      const lastDate = new Date(sortedRecords[sortedRecords.length - 1].startTime);
-      dateFrom.value = firstDate.toISOString().slice(0, 10);
-      dateTo.value = lastDate.toISOString().slice(0, 10);
-    }
-    
+  }
+  
+  // 日期范围相关事件
+  const dateFrom = document.getElementById('date-from');
+  const dateTo = document.getElementById('date-to');
+  
+  if (dateFrom && dateTo && records.length > 0) {
+    const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+    const firstDate = new Date(sortedRecords[0].startTime);
+    const lastDate = new Date(sortedRecords[sortedRecords.length - 1].startTime);
+    dateFrom.value = firstDate.toISOString().slice(0, 10);
+    dateTo.value = lastDate.toISOString().slice(0, 10);
+  }
+  
+  if (document.getElementById('reset-date-btn')) {
     document.getElementById('reset-date-btn').addEventListener('click', () => {
-      if (records.length > 0) {
+      if (dateFrom && dateTo && records.length > 0) {
         const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
         const firstDate = new Date(sortedRecords[0].startTime);
         const lastDate = new Date(sortedRecords[sortedRecords.length - 1].startTime);
@@ -4146,15 +4742,6 @@ function renderDataManagement() {
       }
     });
   }
-
-  document.getElementById('import-btn').addEventListener('click', () => {
-    const choice = confirm('点击「确定」从剪贴板粘贴数据\n点击「取消」选择文件导入');
-    if (choice) {
-      importFromClipboard();
-    } else {
-      document.getElementById('import-file').click();
-    }
-  });
   
   document.getElementById('import-file').addEventListener('change', (e) => {
     if (e.target.files[0]) {
@@ -4186,6 +4773,36 @@ function shareSplitData(partNumber, totalParts) {
   };
   
   const dataStr = JSON.stringify(splitData);
+  
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(dataStr).then(() => {
+      alert(t('copy_success'));
+    }).catch(() => {
+      const textarea = document.createElement('textarea');
+      textarea.value = dataStr;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+      alert(t('copy_success'));
+    });
+  } else {
+    const textarea = document.createElement('textarea');
+    textarea.value = dataStr;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert(t('copy_success'));
+  }
+}
+
+function exportRecordsToClipboard() {
+  const dateFrom = document.getElementById('date-from')?.value;
+  const dateTo = document.getElementById('date-to')?.value;
+  
+  const data = getExportData(dateFrom, dateTo);
+  const dataStr = JSON.stringify(data);
   
   if (navigator.clipboard) {
     navigator.clipboard.writeText(dataStr).then(() => {
@@ -4508,12 +5125,36 @@ function importFromFile(file, e) {
           uiConfig = data.uiConfig;
         }
         if (data.media && Array.isArray(data.media)) {
-          localStorage.setItem('media', JSON.stringify(data.media));
-          media = data.media;
+          const existingMedia = [...media];
+          const newMedia = data.media;
+          const mergedMedia = [];
+          const mediaIds = new Set();
+          
+          [...existingMedia, ...newMedia].forEach(m => {
+            if (!mediaIds.has(m.id)) {
+              mediaIds.add(m.id);
+              mergedMedia.push(m);
+            }
+          });
+          
+          localStorage.setItem('media', JSON.stringify(mergedMedia));
+          media = mergedMedia;
         }
         if (data.fetishes && Array.isArray(data.fetishes)) {
-          localStorage.setItem('fetishes', JSON.stringify(data.fetishes));
-          fetishes = data.fetishes;
+          const existingFetishes = [...fetishes];
+          const newFetishes = data.fetishes;
+          const mergedFetishes = [];
+          const fetishIds = new Set();
+          
+          [...existingFetishes, ...newFetishes].forEach(f => {
+            if (!fetishIds.has(f.id)) {
+              fetishIds.add(f.id);
+              mergedFetishes.push(f);
+            }
+          });
+          
+          localStorage.setItem('fetishes', JSON.stringify(mergedFetishes));
+          fetishes = mergedFetishes;
         }
         
         updateMediaCache();
@@ -5159,41 +5800,192 @@ function receiveDataFromMobile() {
       try {
         text = await navigator.clipboard.readText();
       } catch (e) {
-        text = prompt(t('paste_data_here') + ':');
+        // 显示自定义的输入界面，而不是使用prompt()
+        text = await showCustomPrompt(t('paste_data_here') + ':');
       }
       
-      if (text && text.trim()) {
-        if (!confirm(t('import_confirm'))) {
+      if (!text || !text.trim()) {
+        alert(t('clipboard_empty'));
+        return;
+      }
+      
+      // 验证输入内容
+      if (text.length < 10) {
+        alert('输入数据过短，请检查是否正确复制了完整的数据');
+        return;
+      }
+      
+      if (!confirm(t('import_confirm'))) {
+        return;
+      }
+      
+      try {
+        // 优化JSON解析，添加错误处理和性能优化
+        const startTime = performance.now();
+        
+        // 移除可能的BOM字符和多余空格
+        text = text.trim().replace(/^\ufeff/, '');
+        
+        const data = JSON.parse(text);
+        const parseTime = performance.now() - startTime;
+        console.log(`JSON解析耗时: ${parseTime.toFixed(2)}ms`);
+        
+        // 验证数据结构
+        if (!data || typeof data !== 'object') {
+          alert('无效的数据格式，请检查复制的数据是否完整');
           return;
         }
-        try {
-          const data = JSON.parse(text);
-          if (data.records && Array.isArray(data.records)) {
-            localStorage.setItem('records', JSON.stringify(data.records));
-            if (data.media && Array.isArray(data.media)) {
-              localStorage.setItem('media', JSON.stringify(data.media));
-              media = data.media;
+        
+        if (!data.records || !Array.isArray(data.records)) {
+          alert('数据中缺少记录信息，请检查复制的数据是否完整');
+          return;
+        }
+        
+        // 验证记录格式并过滤无效记录
+        const validRecords = [];
+        const invalidRecords = [];
+        
+        data.records.forEach((record, index) => {
+          if (record && record.id && record.startTime && typeof record.duration === 'number') {
+            // 验证日期格式
+            if (!isNaN(new Date(record.startTime).getTime())) {
+              validRecords.push(record);
+            } else {
+              invalidRecords.push(index + 1);
             }
-            if (data.fetishes && Array.isArray(data.fetishes)) {
-              localStorage.setItem('fetishes', JSON.stringify(data.fetishes));
-              fetishes = data.fetishes;
-            }
-            alert(t('import_success'));
-            renderCurrentTab();
           } else {
-            alert(t('invalid_file'));
+            invalidRecords.push(index + 1);
           }
-        } catch (error) {
+        });
+        
+        if (invalidRecords.length > 0) {
+          alert(`发现 ${invalidRecords.length} 条无效记录（编号：${invalidRecords.join(', ')}），导入可能会出现问题`);
+        }
+        
+        // 导入数据
+        const importStartTime = performance.now();
+        
+        if (validRecords.length > 0) {
+          localStorage.setItem('records', JSON.stringify(validRecords));
+        }
+        
+        if (data.media && Array.isArray(data.media)) {
+          localStorage.setItem('media', JSON.stringify(data.media));
+          media = data.media;
+        }
+        if (data.fetishes && Array.isArray(data.fetishes)) {
+          localStorage.setItem('fetishes', JSON.stringify(data.fetishes));
+          fetishes = data.fetishes;
+        }
+        
+        // 更新缓存
+        updateMediaCache();
+        updateFetishCache();
+        
+        const importTime = performance.now() - importStartTime;
+        console.log(`数据导入耗时: ${importTime.toFixed(2)}ms`);
+        
+        alert(t('import_success') + `\n导入记录数: ${validRecords.length}\n无效记录数: ${invalidRecords.length}`);
+        renderCurrentTab();
+      } catch (error) {
+        if (error instanceof SyntaxError) {
+          // 尝试修复常见的JSON格式问题
+          try {
+            // 修复可能的单引号问题
+            text = text.replace(/'/g, '"');
+            // 修复可能的尾随逗号问题
+            text = text.replace(/,\s*}/g, '}').replace(/,\s*\]/g, ']');
+            const data = JSON.parse(text);
+            alert('数据格式有轻微问题，但已自动修复并导入成功');
+            // 重新处理修复后的数据
+            if (data.records && Array.isArray(data.records)) {
+              localStorage.setItem('records', JSON.stringify(data.records));
+              if (data.media && Array.isArray(data.media)) {
+                localStorage.setItem('media', JSON.stringify(data.media));
+                media = data.media;
+              }
+              if (data.fetishes && Array.isArray(data.fetishes)) {
+                localStorage.setItem('fetishes', JSON.stringify(data.fetishes));
+                fetishes = data.fetishes;
+              }
+              updateMediaCache();
+              updateFetishCache();
+              renderCurrentTab();
+            }
+            return;
+          } catch (e) {
+            alert('数据格式错误，无法解析JSON。请检查复制的数据是否完整且格式正确');
+          }
+        } else {
           alert(t('invalid_file'));
         }
-      } else {
-        alert(t('clipboard_empty'));
+        console.error('Import error:', error);
       }
     } catch (error) {
       alert(t('cannot_read_clipboard'));
+      console.error('Clipboard error:', error);
     }
   }
   doImport();
+}
+
+// 自定义prompt函数，避免虚拟键盘遮挡问题
+function showCustomPrompt(message) {
+  return new Promise((resolve) => {
+    // 创建模态框
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>${message}</h3>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <textarea id="custom-prompt-input" style="width: 100%; height: 150px; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 16px; resize: none; overflow-y: auto;"></textarea>
+          <div style="margin-top: 16px; display: flex; gap: 12px;">
+            <button class="btn btn-secondary" id="custom-prompt-cancel" style="flex: 1;">取消</button>
+            <button class="btn btn-primary" id="custom-prompt-ok" style="flex: 1;">确定</button>
+          </div>
+        </div>
+      </div>
+      <style>
+        @media (max-width: 768px) {
+          .modal-content {
+            max-height: 85vh;
+          }
+          #custom-prompt-input {
+            height: 120px;
+            font-size: 14px;
+          }
+        }
+      </style>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // 聚焦输入框
+    const input = document.getElementById('custom-prompt-input');
+    input.focus();
+    
+    // 关闭模态框
+    function closeModal(value = null) {
+      modal.remove();
+      resolve(value);
+    }
+    
+    // 绑定事件
+    modal.querySelector('.modal-close').addEventListener('click', () => closeModal(null));
+    document.getElementById('custom-prompt-cancel').addEventListener('click', () => closeModal(null));
+    document.getElementById('custom-prompt-ok').addEventListener('click', () => closeModal(input.value));
+    
+    // 点击模态框外部关闭
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal(null);
+      }
+    });
+  });
 }
 
 if ('serviceWorker' in navigator) {

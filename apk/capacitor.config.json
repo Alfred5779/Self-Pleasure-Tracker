@@ -1,7 +1,7 @@
 {
   "appId": "com.selfcare.manager",
   "appName": "起飞助手",
-  "webDir": "../web",
+  "webDir": "www",
   "server": {
     "androidScheme": "https"
   }

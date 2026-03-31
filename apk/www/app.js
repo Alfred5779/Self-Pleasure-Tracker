@@ -1886,118 +1886,141 @@ function drawHorizontalBarChart(containerId, data, colors) {
   });
 }
 
-function drawDurationLineChart(canvasId, data) {
-  const canvas = document.getElementById(canvasId);
-  if (!canvas) return;
+/**
+ * 绘制时长折线图
+ * @param {string} containerId - 容器元素ID
+ * @param {Array} data - 图表数据，每个元素包含label和value属性
+ */
+function drawDurationLineChart(containerId, data) {
+  // 获取容器元素
+  const container = document.getElementById(containerId);
+  if (!container) return; // 容器不存在则直接返回
   
-  const ctx = canvas.getContext('2d');
-  const padding = 60;
+  // 清空容器内容
+  container.innerHTML = '';
   
-  const isDarkMode = currentTheme === 'dark';
-  const textColor = isDarkMode ? '#ffffff' : '#333333';
-  const lineColor = '#6366f1';
-  const pointColor = '#4f46e5';
-  const gridColor = isDarkMode ? '#444444' : '#e0e0e0';
+  // 处理数据：解析数值并过滤无效值
+  const values = data.map(d => {
+    const parsed = parseFloat(d.value);
+    return isNaN(parsed) ? 0 : parsed;
+  });
   
-  const maxValue = Math.max(...data.map(d => d.value), 1);
+  // 计算数据范围
+  const maxValue = Math.max(...values, 1); // 最大值，确保至少为1
+  const minValue = Math.min(...values); // 最小值
+  const valueRange = Math.max(maxValue - minValue, 1); // 值范围，确保至少为1
   
-  const dpr = window.devicePixelRatio || 1;
+  // 创建图表容器，使用flex布局实现垂直排列
+  const chartContainer = document.createElement('div');
+  chartContainer.style.cssText = 'display: flex; align-items: end; gap: 12px; height: 100%; padding: 0 16px; position: relative;';
   
-  let canvasWidth = canvas.width || 500;
-  let canvasHeight = canvas.height || 250;
+  // 遍历数据，创建每个数据点
+  data.forEach((item, index) => {
+    // 解析当前数据点的值
+    const value = parseFloat(item.value) || 0;
+    // 计算高度百分比（基于数据范围）
+    const heightPercent = ((value - minValue) / valueRange) * 100;
+    // 确保最小高度为5px，避免数据值过小导致柱子不可见
+    const height = Math.max(heightPercent, 5);
+    
+    // 创建数据项容器，使用flex布局垂直排列元素
+    const itemContainer = document.createElement('div');
+    itemContainer.style.cssText = 'flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;';
+    
+    // 创建连接线（从第二个数据点开始）
+    if (index > 0) {
+      // 获取前一个数据点
+      const prevItem = data[index - 1];
+      const prevValue = parseFloat(prevItem.value) || 0;
+      // 计算前一个数据点的高度百分比
+      const prevHeightPercent = ((prevValue - minValue) / valueRange) * 100;
+      const prevHeight = Math.max(prevHeightPercent, 5);
+      
+      // 创建连接线元素
+      const line = document.createElement('div');
+      line.style.cssText = `position: absolute; height: 2px; background: #6366f1; z-index: 1;`;
+      
+      // 计算连接线的位置和角度
+      // 计算X轴位置（百分比）
+      const startX = (index - 1) * (100 / (data.length - 1));
+      const endX = index * (100 / (data.length - 1));
+      // 计算Y轴位置（百分比，从底部开始计算）
+      const startY = 100 - prevHeight;
+      const endY = 100 - height;
+      
+      // 使用勾股定理计算线的长度
+      const length = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+      // 计算线的角度（弧度转角度）
+      const angle = Math.atan2(endY - startY, endX - startX) * 180 / Math.PI;
+      
+      // 设置线的样式和位置
+      line.style.width = `${length}%`;
+      line.style.left = `${startX}%`;
+      line.style.bottom = `${startY}%`;
+      line.style.transformOrigin = 'left center'; // 设置旋转原点
+      line.style.transform = `rotate(${angle}deg)`; // 应用旋转
+      
+      // 将连接线添加到图表容器
+      chartContainer.appendChild(line);
+    }
+    
+    // 创建柱子（与其他柱状图保持一致的样式）
+    const barBackground = document.createElement('div');
+    barBackground.style.cssText = 'width: 20px; background: var(--border-color); border-radius: 4px 4px 0 0; overflow: hidden; flex: 1;';
+    
+    // 创建柱子填充部分
+    const bar = document.createElement('div');
+    bar.style.cssText = `width: 100%; background: #6366f1; border-radius: 4px 4px 0 0; transition: height 0.3s ease; height: ${height}%;`;
+    
+    // 将填充部分添加到背景容器
+    barBackground.appendChild(bar);
+    
+    // 添加值标签（显示格式化的时长）
+    const valueLabel = document.createElement('div');
+    valueLabel.style.cssText = 'font-size: 11px; font-weight: 600; color: var(--text-primary); text-align: center;';
+    valueLabel.textContent = formatDuration(Math.round(value));
+    
+    // 添加X轴标签（显示数据点的标签）
+    const label = document.createElement('div');
+    label.style.cssText = 'font-size: 11px; color: var(--text-secondary); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+    label.textContent = item.label;
+    
+    // 将元素添加到数据项容器
+    itemContainer.appendChild(valueLabel); // 值标签在顶部
+    itemContainer.appendChild(barBackground); // 柱子在中间
+    itemContainer.appendChild(label); // X轴标签在底部
+    
+    // 将数据项容器添加到图表容器
+    chartContainer.appendChild(itemContainer);
+  });
   
-  if (canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
-    canvasWidth = canvas.offsetWidth;
-    canvasHeight = canvas.offsetHeight;
-  }
+  // 添加Y轴标签
+  const yAxisContainer = document.createElement('div');
+  yAxisContainer.style.cssText = 'position: absolute; left: 0; top: 0; height: 100%; width: 50px; display: flex; flex-direction: column; justify-content: space-between; padding: 0 8px;';
   
-  canvas.width = canvasWidth * dpr;
-  canvas.height = canvasHeight * dpr;
-  canvas.style.width = canvasWidth + 'px';
-  canvas.style.height = canvasHeight + 'px';
-  ctx.scale(dpr, dpr);
-  
-  const chartWidth = canvasWidth - padding * 2;
-  const chartHeight = canvasHeight - padding * 2;
-  
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // 绘制网格
-  ctx.strokeStyle = gridColor;
-  ctx.lineWidth = 1;
-  
-  // 水平网格线
+  // 生成Y轴刻度标签（5个刻度）
   const gridLines = 5;
   for (let i = 0; i <= gridLines; i++) {
-    const y = padding + (i / gridLines) * chartHeight;
-    ctx.beginPath();
-    ctx.moveTo(padding, y);
-    ctx.lineTo(canvasWidth - padding, y);
-    ctx.stroke();
+    // 计算当前刻度的值
+    const value = maxValue - (i / gridLines) * valueRange;
+    const roundedValue = Math.round(value);
+    const formattedValue = formatDuration(roundedValue); // 格式化时长
     
-    // 绘制Y轴标签
-    const value = maxValue - (i / gridLines) * maxValue;
-    ctx.fillStyle = textColor;
-    ctx.font = '11px Arial';
-    ctx.textAlign = 'right';
-    ctx.fillText(formatDuration(Math.round(value)), padding - 10, y + 4);
+    // 创建刻度标签元素
+    const label = document.createElement('div');
+    label.style.cssText = 'font-size: 10px; color: var(--text-secondary); text-align: right;';
+    label.textContent = formattedValue;
+    yAxisContainer.appendChild(label);
   }
   
-  // 垂直网格线
-  for (let i = 0; i < data.length; i++) {
-    const x = padding + (i / (data.length - 1)) * chartWidth;
-    ctx.beginPath();
-    ctx.moveTo(x, padding);
-    ctx.lineTo(x, canvasHeight - padding);
-    ctx.stroke();
-    
-    // 绘制X轴标签
-    // 只在大屏幕或间隔显示标签，避免拥挤
-    if (window.innerWidth > 768 || i % 2 === 0) {
-      ctx.fillStyle = textColor;
-      ctx.font = '11px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(data[i].label, x, canvasHeight - 20);
-    }
-  }
+  // 创建主容器，用于容纳Y轴标签和图表容器
+  const mainContainer = document.createElement('div');
+  mainContainer.style.cssText = 'position: relative; width: 100%; height: 100%;';
+  mainContainer.appendChild(yAxisContainer); // 添加Y轴标签
+  mainContainer.appendChild(chartContainer); // 添加图表容器
   
-  // 绘制折线
-  ctx.strokeStyle = lineColor;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  
-  data.forEach((item, index) => {
-    const x = padding + (index / (data.length - 1)) * chartWidth;
-    const y = padding + chartHeight - (item.value / maxValue) * chartHeight;
-    
-    if (index === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
-  });
-  
-  ctx.stroke();
-  
-  // 绘制数据点
-  data.forEach((item, index) => {
-    const x = padding + (index / (data.length - 1)) * chartWidth;
-    const y = padding + chartHeight - (item.value / maxValue) * chartHeight;
-    
-    ctx.fillStyle = pointColor;
-    ctx.beginPath();
-    ctx.arc(x, y, 4, 0, 2 * Math.PI);
-    ctx.fill();
-    
-    // 绘制数据值
-    // 只在大屏幕显示数据值，避免拥挤
-    if (window.innerWidth > 768) {
-      ctx.fillStyle = textColor;
-      ctx.font = '11px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(formatDuration(item.value), x, y - 10);
-    }
-  });
+  // 将主容器添加到页面容器
+  container.appendChild(mainContainer);
 }
 
 function getWeekStartDay() {
@@ -2653,10 +2676,26 @@ function renderStatsTab() {
     // 准备时间次数折线图数据
     const recentRecords = [...records].sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
       .slice(0, statsConfig.durationChartCount);
+    
+    // 检查record.duration的类型
+    console.log('=== 数据准备调试信息 ===');
+    recentRecords.forEach((record, index) => {
+      console.log(`Record ${index} duration:`, record.duration, typeof record.duration);
+    });
+    
     const durationLineData = recentRecords.map((record, index) => ({
       label: `${recentRecords.length - index}`,
-      value: record.duration
+      value: parseFloat(record.duration) || 0
     })).reverse();
+    
+    console.log('最近记录:', JSON.stringify(recentRecords));
+    console.log('折线图数据:', JSON.stringify(durationLineData));
+    
+    // 计算统计信息
+    const durations = recentRecords.map(r => parseFloat(r.duration) || 0);
+    console.log('Durations:', durations);
+    console.log('Min duration:', Math.min(...durations));
+    console.log('Max duration:', Math.max(...durations));
 
     document.getElementById('stats-result').innerHTML = `
       <div class="card" style="margin-bottom: 16px;">
@@ -2672,7 +2711,7 @@ function renderStatsTab() {
         `}
         <div style="margin-top: 24px;">
           <h4 style="margin-bottom: 12px;">${t('duration_trend')}</h4>
-          <canvas id="duration-line" width="500" height="250" style="width: 100%; max-width: 500px; display: block; margin: 0 auto;"></canvas>
+          <div id="duration-line" style="width: 100%; max-width: 500px; height: 300px; display: block; margin: 0 auto;"></div>
         </div>
       </div>
       
