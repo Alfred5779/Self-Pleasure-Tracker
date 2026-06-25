@@ -146,262 +146,71 @@ For detailed usage guides, please refer to the corresponding version documents:
 ## 版本历史
 Version History
 
+### v0.91.8
+- ✨ 优化折线图铺开显示，在每个数据点标注时间
+- Optimized line chart with wider layout and time labels at each point
+- ✨ 修复日历和统计页面的时区偏移问题
+- Fixed timezone offset issues in calendar and stats pages
+
 ### v0.91.7
-- ✨ 修复分析界面功能缺失，添加折线图数据可视化组件
-- Fixed analytics page functionality, added line chart data visualization component
-
-- ✨ 优化折线图实现，使用Canvas API替代DOM操作，解决线条异常波动问题
-- Optimized line chart implementation using Canvas API instead of DOM operations, fixing line fluctuation issues
-
-- ✨ 简化折线图视觉效果，移除柱状图部分，只保留折线和数据点
-- Simplified line chart visual effect, removed bar chart part, only kept lines and data points
-
-- ✨ 确保添加界面满意度评分模块正确实现
-- Ensured satisfaction rating module is correctly implemented in add page
-
-- ✨ 修复计时状态异常BUG，确保界面切换后状态正确保持
-- Fixed timer state anomaly BUG, ensuring state is correctly maintained after switching interfaces
-
+- ✨ 新增折线图数据可视化和满意度评分
+- Added line chart data visualization and satisfaction rating
 - ✨ 添加全部数据视图，可查看所有记录的统计分析
 - Added all data view for analyzing all records
 
-- ✨ 实现全部数据视图的分组选项设置
-- Implemented grouping options for all data view
-
-- ✨ 确保全部数据视图正确响应分析管理界面的分组设置
-- Ensured all data view correctly responds to grouping settings in stats management
-
-- 📱 版本号更新为 0.91.7
-- Version updated to 0.91.7
-
 ### v0.91.6
-- ✨ 优化手机版柱状图显示，增加柱间距，避免日期重叠
-- Optimized mobile bar chart display, increased bar spacing, avoid date overlapping
-
-- ✨ 在记录界面显示每条记录与上一条的时长差异
-- Show duration difference compared to previous record in records page
-
-- ✨ 快了用红色显示，慢了用绿色显示
-- Faster shown in red, slower shown in green
-
-- ✨ 实现外观设置整体导入导出功能
+- ✨ 将分析界面柱状图改为横向显示
+- Changed analytics bar chart to horizontal display
+- ✨ 实现外观设置整体导入导出
 - Implemented appearance settings import/export
-
-- ✨ 允许自定义外观保存为预设
-- Allow saving custom appearance as preset
-
-- ✨ 将导入导出按钮移到外观管理顶部
-- Moved import/export buttons to top of appearance management
-
-- ✨ 在自定义主题区域添加保存按钮
-- Added save button to custom theme section
-
-- ✨ 将分析界面的纵向柱状图改为横向
-- Changed vertical bar chart to horizontal in analytics page
-
-- 📱 版本号更新为 0.91.6
-- Version updated to 0.91.6
+- ✨ 记录界面显示与上一条的时长差异
+- Show duration difference compared to previous record
 
 ### v0.91.5
-- ✨ 实现视觉风格自定义：圆角、阴影、动画开关
-- Implemented visual style customization: corner radius, shadow, animation toggle
-
-- ✨ 实现颜色增强自定义：背景、卡片、文字、边框
-- Implemented enhanced color customization: background, card, text, border
-
-- ✨ 实现布局和尺寸自定义：字体大小、间距
-- Implemented layout and size customization: font size, spacing
-
-- ✨ 新增更多主题预设：渐变色、高对比度、单色、节日
-- Added more theme presets: gradient, high contrast, monochrome, holiday
-
-- ✨ 实现功能开关：统计指标显示、导航栏位置、震动反馈
-- Implemented function toggles: stats indicators, nav position, vibration
-
-- ✨ 实现首页设置和底部按钮顺序自定义
-- Implemented home page and nav button order customization
-
-- ✨ 实现数据分析界面自定义：排序、按钮位置
-- Implemented analytics page customization: sort order, button position
-
-- 📱 版本号更新为 0.91.5
-- Version updated to 0.91.5
+- ✨ 视觉风格自定义：圆角、阴影、动画、布局尺寸
+- Visual style customization: corner radius, shadow, animation, layout
+- ✨ 新增渐变色、高对比度等主题预设
+- Added gradient, high contrast and more theme presets
 
 ### v0.91.4
-- ✨ 实现完整的高级主题自定义功能
-- Implemented complete advanced theme customization
-
-- ✨ 新增多个主题预设
-- Added multiple theme presets
-
-- ✨ 支持自定义每个颜色
-- Support customizing each color
-
-- 📱 版本号更新为 0.91.4
-- Version updated to 0.91.4
+- ✨ 高级主题自定义，支持自定义每个颜色
+- Advanced theme customization with per-color control
 
 ### v0.91.3
-- ✨ 优化导出数据模块，将设置和记录分开导出
-- Optimized export data module, separate settings and records export
-
-- ✨ 为记录导出添加自定义输出范围功能
-- Added custom output range for records export
-
-- 📱 版本号更新为 0.91.3
-- Version updated to 0.91.3
+- ✨ 优化导出模块，设置和记录分开导出
+- Optimized export: separate settings and records export
 
 ### v0.91.2
 - ✨ 高度自定义分析功能，可控制统计指标显示
-- Highly customizable analytics feature, control which stats to display
-
-- ✨ 新增时间分组粒度选择（按日/周/月/季度）
-- Added time grouping granularity selection (day/week/month/quarter)
-
-- ✨ 新增数据排序方式选择（按次数/名称）
-- Added data sorting selection (by count/name)
-
+- Highly customizable analytics with controllable stats display
 - ✨ 新增分析模板保存和加载功能
-- Added analytics template save and load feature
-
-- ✨ 新增周对比、月对比、年度总结预设模板
-- Added preset templates: week compare, month compare, year summary
-
-- 📱 版本号更新为 0.91.2
-- Version updated to 0.91.2
+- Added analytics template save and load
 
 ### v0.91.1
-- ✨ 每周起算日支持周一到周日全部7天
-- Added support for all 7 days as week start day (Monday to Sunday)
-
-- ✨ 专属时间分组配置：本周→日，本月/上月→周/日，今年→日/周/月/季
-- Added dedicated time grouping: This Week→Day, This/Last Month→Week/Day, This Year→Day/Week/Month/Quarter
-
-- ✨ 新增分析管理功能，可自定义分析界面显示的时间范围按钮
-- Added stats management feature, customizable time range buttons in analytics page
-
-- ✨ 新增时间同步功能，自动同步系统时间
-- Added time sync feature, auto sync system time
-
-- ✨ 优化柱状图：增加柱间距、清晰显示数字、避免横坐标重叠
-- Optimized bar chart: increased bar spacing, clear number display, avoid overlapping x-axis labels
-
-- ✨ 删除Windows桌面版本，推荐使用Web/PWA版本
-- Removed Windows desktop version, recommend Web/PWA version
-
-- 📱 版本号更新为 0.91.1
-- Version updated to 0.91.1
+- ✨ 每周起算日支持全部7天，新增分析管理功能
+- Week start day supports all 7 days, added stats management
+- ✨ 优化柱状图显示，删除Windows桌面版本
+- Optimized bar chart, removed Windows desktop version
 
 ### v0.91
-- ✨ 添加性癖管理功能，与媒介管理并列
-- Added fetish management, parallel to medium management
-
-- ✨ 在添加/编辑记录时可选择性癖
-- Added fetish selection when adding/editing records
-
-- ✨ 分析页面新增最常用的性癖统计
-- Added most used fetish statistics in stats page
-
-- ✨ 新增媒介和性癖分布饼状图
-- Added medium and fetish distribution pie charts
-
-- ✨ 新增统计无记录的设置选项
-- Added setting to include empty records
-
-- ✨ 删除媒介/性癖时同步更新相关记录
-- Automatically update related records when deleting medium/fetish
-
-- ✨ 将"最喜欢的媒介"改为"最常用的媒介"
-- Changed "Favorite Medium" to "Most Used Medium"
-
-- ✨ 默认性癖改为"纯爱"
-- Changed default fetish to "Pure Love"
-
-- ✨ 优化分析页面布局
-- Optimized stats page layout
-
-- ✨ 新增性癖多选功能，可同时选择多个性癖
-- Added multi-fetish selection, can select multiple fetishes at once
-
-- ✨ 增大柱状图尺寸，优化视觉效果
-- Increased bar chart size for better visual experience
-
-- ✨ 修复年份柱状图只显示双数月的问题，现在完整显示12个月
-- Fixed year bar chart only showing even months, now shows all 12 months
-
-- ✨ 修复自定义时间范围的柱状图显示问题
-- Fixed custom time range bar chart display issue
-
-- ✨ 优化夜晚模式下柱状图文字颜色显示
-- Improved bar chart text color in dark mode
-
-- ⚡ 优化代码性能，添加缓存机制减少重复计算
-- Optimized code performance with caching mechanism
-
-- 📱 版本号更新为 0.91
-- Version updated to 0.91
+- ✨ 添加性癖管理，支持多选，新增饼状图统计
+- Added fetish management with multi-select and pie charts
+- ✨ 优化柱状图和夜间模式显示
+- Optimized bar chart and dark mode display
 
 ### v0.78
-- ✨ 添加 QQ 交流群链接
-- Added QQ group link
-
-- ✨ 添加免责声明和更新日志二级界面
-- Added disclaimer and changelog secondary interfaces
-
-- ✨ 添加媒介管理功能
-- Added medium management
-
-- ✨ 优化二级界面返回逻辑
-- Optimized secondary interface back navigation
-
-- 📱 版本号更新为 0.78
-- Version updated to 0.78
+- ✨ 添加媒介管理、免责声明和更新日志界面
+- Added medium management, disclaimer and changelog pages
 
 ### v0.69
-- ✨ 添加数据导出和导入功能（支持 JSON、CSV、Excel）
-- Added data export/import (JSON, CSV, Excel)
-
-- ✨ 在分析页面添加截图分享功能
-- Added screenshot sharing in stats page
-
-- ✨ 在设置页面添加 GitHub 仓库链接
-- Added GitHub repository link in settings
-
-- ✨ 添加娱乐声明
-- Added entertainment statement
-
-- ✨ 新增 Windows 桌面版本支持
-- Added Windows desktop version support
-
-- 🌙 完善白天/夜晚模式切换
-- Improved day/night mode switch
-
-- 🌐 支持中英文双语切换
-- Support Chinese/English bilingual switch
-
-- 🔒 所有数据 100% 保存在本地
-- All data stored 100% locally
-
-- 📱 版本号更新为 0.69
-- Version updated to 0.69
+- ✨ 添加数据导出导入（JSON/CSV/Excel）和截图分享
+- Added data export/import (JSON/CSV/Excel) and screenshot sharing
+- ✨ 支持中英文双语切换，所有数据本地存储
+- Added bilingual support, all data stored locally
 
 ### v0.13
-- 添加媒介选择
-- Added medium selection
-
-- 添加备注功能
-- Added notes feature
-
-- 添加记录编辑功能
-- Added record editing feature
-
-- 分析页面添加"最长时长"和"最喜欢的媒介"统计
-- Added "max duration" and "favorite medium" stats
-
-- 初始版本
-- Initial version
-
-- 基础的四个模块：添加、记录、分析、设置
-- Four basic modules: Add, Records, Stats, Settings
+- ✨ 初始版本：添加、记录、分析、设置四大模块
+- Initial version: Add, Records, Stats, Settings modules
 
 ---
 

@@ -308,6 +308,10 @@ const i18n = {
     cl_v0917_2: '✨ 确保添加界面满意度评分模块正确实现',
     cl_v0917_3: '✨ 修复计时状态异常BUG，确保界面切换后状态正确保持',
     cl_v0917_4: '📱 版本号更新为 0.91.7',
+    cl_v0917_5: '✨ 添加全部数据视图，可查看所有记录的统计分析',
+    cl_v0918_title: 'v0.91.8',
+    cl_v0918_1: '✨ 优化折线图铺开显示，在每个数据点标注时间',
+    cl_v0918_2: '✨ 修复日历和统计页面的时区偏移问题',
     appearance_management: '外观管理',
     advanced_settings: '高级设置',
     visual_style: '视觉风格',
@@ -683,6 +687,10 @@ const i18n = {
     cl_v0917_2: '✨ Ensured satisfaction rating module is correctly implemented in add page',
     cl_v0917_3: '✨ Fixed timer state anomaly BUG, ensuring state is correctly maintained after switching interfaces',
     cl_v0917_4: '📱 Version updated to 0.91.7',
+    cl_v0917_5: '✨ Added all data view for analyzing all records',
+    cl_v0918_title: 'v0.91.8',
+    cl_v0918_1: '✨ Optimized line chart with wider layout and time labels at each point',
+    cl_v0918_2: '✨ Fixed timezone offset issues in calendar and stats pages',
     appearance_management: 'Appearance Management',
     advanced_settings: 'Advanced Settings',
     visual_style: 'Visual Style',
@@ -872,6 +880,21 @@ let timerRunning = false;
 let timerStartTime = null;
 let timerInterval = null;
 let timerElapsed = 0;
+let calendarCurrentMonth = new Date(); // 日历当前显示的月份
+let calendarCollapsed = false; // 日历是否收起
+let calendarSelectedDate = null; // 日历选中的日期 YYYY-MM-DD
+
+// 统一的日期提取函数 - 将 startTime 字符串转为本地日期 YYYY-MM-DD
+function getLocalDateStr(startTime) {
+  const d = new Date(startTime);
+  return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}`;
+}
+
+// 获取今天的本地日期字符串
+function getTodayStr() {
+  const now = new Date();
+  return `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}`;
+}
 
 const themePresets = {
   default: {
@@ -1327,8 +1350,7 @@ function renderAddTab() {
         timerSection.classList.add('hidden');
         manualSection.classList.remove('hidden');
         const now = new Date();
-        now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
-        document.getElementById('manual-datetime').value = now.toISOString().slice(0, 16);
+        document.getElementById('manual-datetime').value = `${now.getFullYear()}-${(now.getMonth() + 1).toString().padStart(2, '0')}-${now.getDate().toString().padStart(2, '0')}T${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
       }
     });
   });
@@ -1385,9 +1407,10 @@ function renderAddTab() {
     if (isNaN(satisfaction) || satisfaction < 0 || satisfaction > 10) {
       satisfaction = 6;
     }
+    const startTime = new Date(timerStartTime);
     const record = {
       id: Date.now(),
-      startTime: new Date(timerStartTime).toISOString(),
+      startTime: `${startTime.getFullYear()}-${(startTime.getMonth() + 1).toString().padStart(2, '0')}-${startTime.getDate().toString().padStart(2, '0')}T${startTime.getHours().toString().padStart(2, '0')}:${startTime.getMinutes().toString().padStart(2, '0')}:00`,
       duration: timerElapsed,
       medium: document.getElementById('timer-medium').value,
       fetishes: selectedFetishes,
@@ -1428,9 +1451,17 @@ function renderAddTab() {
     if (isNaN(satisfaction) || satisfaction < 0 || satisfaction > 10) {
       satisfaction = 6;
     }
+    
+    const dateParts = datetime.split('T');
+    const timeParts = dateParts[1].split(':');
+    const date = new Date();
+    const datePart = dateParts[0].split('-');
+    date.setFullYear(parseInt(datePart[0]), parseInt(datePart[1]) - 1, parseInt(datePart[2]));
+    date.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), 0);
+    
     const record = {
       id: Date.now(),
-      startTime: new Date(datetime).toISOString(),
+      startTime: `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:00`,
       duration: mins * 60 + secs,
       medium: document.getElementById('manual-medium').value,
       fetishes: selectedFetishes,
@@ -1452,6 +1483,115 @@ function renderAddTab() {
   });
 }
 
+function renderCalendar() {
+  const year = calendarCurrentMonth.getFullYear();
+  const month = calendarCurrentMonth.getMonth();
+
+  // 统计每天的记录次数 - 使用统一的本地日期提取函数
+  const dailyCounts = {};
+  records.forEach(record => {
+    const dateStr = getLocalDateStr(record.startTime);
+    dailyCounts[dateStr] = (dailyCounts[dateStr] || 0) + 1;
+  });
+
+  // 获取今天的日期字符串
+  const todayStr = getTodayStr();
+
+  // 获取月份第一天是星期几
+  const firstDay = new Date(year, month, 1).getDay();
+  // 获取月份有多少天
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  // 获取上个月有多少天
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  // 星期标题
+  const weekDays = ['日', '一', '二', '三', '四', '五', '六'];
+
+  let calendarHTML = '';
+
+  if (calendarCollapsed) {
+    // 收起状态：只显示标题栏，点击展开
+    calendarHTML += `
+      <div class="calendar-header-bar" id="calendar-header-bar">
+        <span class="calendar-title">${year}年${month + 1}月</span>
+        <span class="calendar-toggle-indicator">▼</span>
+      </div>
+    `;
+    return calendarHTML;
+  }
+
+  // 展开状态：标题栏 + 导航按钮 + 日历网格
+  calendarHTML += `
+    <div class="calendar-header-bar" id="calendar-header-bar">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <button class="calendar-nav-btn" id="calendar-prev">◀</button>
+        <span class="calendar-title">${year}年${month + 1}月</span>
+        <button class="calendar-nav-btn" id="calendar-next">▶</button>
+      </div>
+      <span class="calendar-toggle-indicator">▲</span>
+    </div>
+    <div class="calendar-container">
+      <div class="calendar-grid">
+  `;
+
+  // 添加星期标题
+  weekDays.forEach(day => {
+    calendarHTML += `<div class="calendar-day-header">${day}</div>`;
+  });
+
+  // 添加上个月的日期
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = daysInPrevMonth - i;
+    const prevMonth = month === 0 ? 12 : month;
+    const prevYear = month === 0 ? year - 1 : year;
+    const dateStr = `${prevYear}-${prevMonth.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const count = dailyCounts[dateStr] || 0;
+    const countClass = getDayCountClass(count);
+    calendarHTML += `<div class="calendar-day other-month ${countClass}" data-date="${dateStr}">${day}</div>`;
+  }
+
+  // 添加当月的日期
+  for (let day = 1; day <= daysInMonth; day++) {
+    const dateStr = `${year}-${(month + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const count = dailyCounts[dateStr] || 0;
+    const countClass = getDayCountClass(count);
+    const todayClass = dateStr === todayStr ? ' today' : '';
+    const selectedClass = dateStr === calendarSelectedDate ? ' selected' : '';
+    calendarHTML += `<div class="calendar-day ${countClass}${todayClass}${selectedClass}" data-date="${dateStr}">${day}</div>`;
+  }
+
+  // 添加下个月的日期
+  const totalCells = firstDay + daysInMonth;
+  const remainingCells = 7 - (totalCells % 7);
+  if (remainingCells < 7) {
+    for (let day = 1; day <= remainingCells; day++) {
+      const nextMonth = (month + 1) % 12 + 1;
+      const nextYear = month === 11 ? year + 1 : year;
+      const dateStr = `${nextYear}-${nextMonth.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+      const count = dailyCounts[dateStr] || 0;
+      const countClass = getDayCountClass(count);
+      calendarHTML += `<div class="calendar-day other-month ${countClass}" data-date="${dateStr}">${day}</div>`;
+    }
+  }
+
+  calendarHTML += `
+      </div>
+    </div>
+  `;
+
+  return calendarHTML;
+}
+
+function getDayCountClass(count) {
+  if (count === 0) return 'calendar-day-count-0';
+  if (count === 1) return 'calendar-day-count-1';
+  if (count === 2) return 'calendar-day-count-2';
+  if (count === 3) return 'calendar-day-count-3';
+  if (count === 4) return 'calendar-day-count-4';
+  if (count === 5) return 'calendar-day-count-5';
+  return 'calendar-day-count-6-plus';
+}
+
 function renderRecordsTab() {
   if (editingRecordId !== null) {
     renderEditRecord();
@@ -1461,15 +1601,16 @@ function renderRecordsTab() {
   const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
   const grouped = {};
   sortedRecords.forEach(record => {
-    const monthKey = new Date(record.startTime).toISOString().slice(0, 7);
+    const datePart = getLocalDateStr(record.startTime);
+    const monthKey = datePart.substring(0, 7);
     if (!grouped[monthKey]) grouped[monthKey] = [];
     grouped[monthKey].push(record);
   });
 
-  let html = `<div class="card"><h3 class="card-title">${t('records_title')}</h3>`;
-  
+  // 构建记录列表 HTML
+  let recordsHTML = '';
   if (records.length === 0) {
-    html += `
+    recordsHTML = `
       <div class="empty-state">
         <div class="empty-state-icon">📝</div>
         <div class="empty-state-text">${t('no_records')}</div>
@@ -1478,7 +1619,7 @@ function renderRecordsTab() {
   } else {
     Object.keys(grouped).sort().reverse().forEach(month => {
       const monthRecords = grouped[month].sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
-      const recordsHTML = monthRecords.map(record => {
+      const itemsHTML = monthRecords.map(record => {
         const recordIndex = sortedRecords.findIndex(r => r.id === record.id);
         let durationDiffHTML = '';
         if (recordIndex > 0 && statsConfig.showDurationDiff) {
@@ -1500,7 +1641,7 @@ function renderRecordsTab() {
             durationDiffHTML = `<div class="record-duration-diff ${diffClass}">${diffText}</div>`;
           }
         }
-        
+
         let fetishHTML = '';
         const fetishLabels = getFetishesLabels(record.fetishes);
         const singleFetishLabel = getFetishLabel(record.fetish);
@@ -1526,19 +1667,25 @@ function renderRecordsTab() {
             </div>
         `;
       }).join('');
-      
-      html += `
-        <div class="record-group">
+
+      recordsHTML += `
+        <div class="record-group" data-month="${month}">
           <div class="group-header">${formatMonth(grouped[month][0].startTime)}</div>
-          ${recordsHTML}
+          ${itemsHTML}
         </div>
       `;
     });
   }
-  
-  html += '</div>';
-  mainContent.innerHTML = html;
 
+  // 两栏布局：日历固定顶部，记录独立滚动
+  mainContent.innerHTML = `
+    <div class="records-calendar-section">${renderCalendar()}</div>
+    <div class="records-panel" id="records-panel">
+      <div class="card"><h3 class="card-title">${t('records_title')}</h3>${recordsHTML}</div>
+    </div>
+  `;
+
+  // 记录编辑/删除事件
   mainContent.querySelectorAll('.record-edit').forEach(btn => {
     btn.addEventListener('click', () => {
       editingRecordId = parseInt(btn.dataset.id);
@@ -1556,6 +1703,81 @@ function renderRecordsTab() {
       }
     });
   });
+
+  // 日历收起/展开事件
+  const headerBar = document.getElementById('calendar-header-bar');
+  if (headerBar) {
+    headerBar.addEventListener('click', () => {
+      calendarCollapsed = !calendarCollapsed;
+      renderRecordsTab();
+    });
+  }
+
+  // 日历导航按钮事件
+  const prevBtn = document.getElementById('calendar-prev');
+  const nextBtn = document.getElementById('calendar-next');
+
+  if (prevBtn) {
+    prevBtn.addEventListener('click', () => {
+      calendarCurrentMonth.setMonth(calendarCurrentMonth.getMonth() - 1);
+      renderRecordsTab();
+    });
+  }
+
+  if (nextBtn) {
+    nextBtn.addEventListener('click', () => {
+      calendarCurrentMonth.setMonth(calendarCurrentMonth.getMonth() + 1);
+      renderRecordsTab();
+    });
+  }
+
+  // 日历日期点击 → 滚动到当天记录
+  mainContent.querySelectorAll('.calendar-day[data-date]').forEach(day => {
+    day.addEventListener('click', () => {
+      const dateStr = day.dataset.date;
+      calendarSelectedDate = dateStr;
+
+      // 高亮选中日期
+      mainContent.querySelectorAll('.calendar-day.selected').forEach(d => d.classList.remove('selected'));
+      day.classList.add('selected');
+
+      // 滚动记录列表到当天
+      const recordsPanel = document.getElementById('records-panel');
+      if (recordsPanel) {
+        const target = recordsPanel.querySelector(`.record-item[data-record-id]`);
+        // 查找该日期的第一条记录
+        const dateRecords = records.filter(r => getLocalDateStr(r.startTime) === dateStr);
+        if (dateRecords.length > 0) {
+          // 按时间正序排列，找第一条
+          dateRecords.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+          const firstRecordId = dateRecords[0].id;
+          const targetEl = recordsPanel.querySelector(`.record-item[data-record-id="${firstRecordId}"]`);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // 短暂高亮
+            targetEl.style.transition = 'background-color 0.3s';
+            targetEl.style.backgroundColor = 'var(--primary-color)';
+            setTimeout(() => { targetEl.style.backgroundColor = ''; }, 1000);
+          }
+        }
+      }
+    });
+  });
+
+  // 如果有选中日期，滚动到该日期
+  if (calendarSelectedDate) {
+    const recordsPanel = document.getElementById('records-panel');
+    if (recordsPanel) {
+      const dateRecords = records.filter(r => getLocalDateStr(r.startTime) === calendarSelectedDate);
+      if (dateRecords.length > 0) {
+        dateRecords.sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+        const targetEl = recordsPanel.querySelector(`.record-item[data-record-id="${dateRecords[0].id}"]`);
+        if (targetEl) {
+          setTimeout(() => targetEl.scrollIntoView({ behavior: 'auto', block: 'start' }), 50);
+        }
+      }
+    }
+  }
 }
 
 function renderEditRecord() {
@@ -1567,8 +1789,7 @@ function renderEditRecord() {
   }
 
   const date = new Date(record.startTime);
-  date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-  const datetimeValue = date.toISOString().slice(0, 16);
+  const datetimeValue = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
   const mins = Math.floor(record.duration / 60);
   const secs = record.duration % 60;
   let mediumOptions = media.map(m => `<option value="${m.id}" ${record.medium === m.id ? 'selected' : ''}>${m.name}</option>`).join('');
@@ -1657,11 +1878,18 @@ function renderEditRecord() {
       return;
     }
     
+    const dateParts = datetime.split('T');
+    const timeParts = dateParts[1].split(':');
+    const date = new Date();
+    const datePart = dateParts[0].split('-');
+    date.setFullYear(parseInt(datePart[0]), parseInt(datePart[1]) - 1, parseInt(datePart[2]));
+    date.setHours(parseInt(timeParts[0]), parseInt(timeParts[1]), 0);
+    
     const recordIndex = records.findIndex(r => r.id === editingRecordId);
     if (recordIndex !== -1) {
       records[recordIndex] = {
         ...records[recordIndex],
-        startTime: new Date(datetime).toISOString(),
+        startTime: `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}:00`,
         duration: mins * 60 + secs,
         medium: medium,
         fetishes: selectedFetishes,
@@ -1889,111 +2117,114 @@ function drawHorizontalBarChart(containerId, data, colors) {
 function drawDurationLineChart(canvasId, data) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
-  
+  if (!data.length) return;
+
   const ctx = canvas.getContext('2d');
-  const padding = 60;
-  
+  const paddingTop = 40;
+  const paddingBottom = 50;
+  const paddingLeft = 60;
+  const paddingRight = 20;
+
   const isDarkMode = currentTheme === 'dark';
   const textColor = isDarkMode ? '#ffffff' : '#333333';
   const lineColor = '#6366f1';
   const pointColor = '#4f46e5';
   const gridColor = isDarkMode ? '#444444' : '#e0e0e0';
-  
-  const maxValue = Math.max(...data.map(d => d.value), 1);
-  
+  const labelColor = isDarkMode ? '#aaaaaa' : '#888888';
+
+  const values = data.map(d => d.value);
+  const maxValue = Math.max(...values, 1);
+  const minValue = Math.min(...values);
+  const valueRange = Math.max(maxValue - minValue, 1);
+
   const dpr = window.devicePixelRatio || 1;
-  
-  let canvasWidth = canvas.width || 500;
-  let canvasHeight = canvas.height || 250;
-  
-  if (canvas.offsetWidth > 0 && canvas.offsetHeight > 0) {
-    canvasWidth = canvas.offsetWidth;
-    canvasHeight = canvas.offsetHeight;
-  }
-  
+
+  // 自适应容器宽度，不撑出
+  const canvasWidth = canvas.offsetWidth || canvas.parentElement.offsetWidth || 500;
+  const canvasHeight = 280;
+
   canvas.width = canvasWidth * dpr;
   canvas.height = canvasHeight * dpr;
   canvas.style.width = canvasWidth + 'px';
   canvas.style.height = canvasHeight + 'px';
   ctx.scale(dpr, dpr);
-  
-  const chartWidth = canvasWidth - padding * 2;
-  const chartHeight = canvasHeight - padding * 2;
-  
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  
-  // 绘制网格
+
+  const chartWidth = canvasWidth - paddingLeft - paddingRight;
+  const chartHeight = canvasHeight - paddingTop - paddingBottom;
+
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  // 水平网格线 + Y轴标签
   ctx.strokeStyle = gridColor;
   ctx.lineWidth = 1;
-  
-  // 水平网格线
   const gridLines = 5;
   for (let i = 0; i <= gridLines; i++) {
-    const y = padding + (i / gridLines) * chartHeight;
+    const y = paddingTop + (i / gridLines) * chartHeight;
     ctx.beginPath();
-    ctx.moveTo(padding, y);
-    ctx.lineTo(canvasWidth - padding, y);
+    ctx.moveTo(paddingLeft, y);
+    ctx.lineTo(canvasWidth - paddingRight, y);
     ctx.stroke();
-    
-    // 绘制Y轴标签
-    const value = maxValue - (i / gridLines) * maxValue;
+
+    const value = maxValue - (i / gridLines) * valueRange;
     ctx.fillStyle = textColor;
-    ctx.font = '11px Arial';
+    ctx.font = '10px Arial';
     ctx.textAlign = 'right';
-    ctx.fillText(formatDuration(Math.round(value)), padding - 10, y + 4);
+    ctx.fillText(formatDuration(Math.round(value)), paddingLeft - 8, y + 3);
   }
-  
+
   // 垂直网格线
   for (let i = 0; i < data.length; i++) {
-    const x = padding + (i / (data.length - 1)) * chartWidth;
+    const x = paddingLeft + (i / Math.max(data.length - 1, 1)) * chartWidth;
     ctx.beginPath();
-    ctx.moveTo(x, padding);
-    ctx.lineTo(x, canvasHeight - padding);
+    ctx.strokeStyle = gridColor;
+    ctx.lineWidth = 1;
+    ctx.moveTo(x, paddingTop);
+    ctx.lineTo(x, canvasHeight - paddingBottom);
     ctx.stroke();
-    
-    // 绘制X轴标签
-    // 只在大屏幕或间隔显示标签，避免拥挤
-    if (window.innerWidth > 768 || i % 2 === 0) {
-      ctx.fillStyle = textColor;
-      ctx.font = '11px Arial';
-      ctx.textAlign = 'center';
-      ctx.fillText(data[i].label, x, canvasHeight - 20);
-    }
   }
-  
+
+  // X轴标签：根据点数决定显示密度，避免重叠
+  const labelStep = data.length <= 6 ? 1 :
+                    data.length <= 12 ? 2 :
+                    data.length <= 24 ? 4 : Math.ceil(data.length / 6);
+  ctx.font = '10px Arial';
+  for (let i = 0; i < data.length; i += labelStep) {
+    const x = paddingLeft + (i / Math.max(data.length - 1, 1)) * chartWidth;
+    ctx.save();
+    ctx.translate(x, canvasHeight - paddingBottom + 14);
+    ctx.rotate(-Math.PI / 4);
+    ctx.fillStyle = textColor;
+    ctx.textAlign = 'right';
+    ctx.fillText(data[i].label, 0, 0);
+    ctx.restore();
+  }
+
   // 绘制折线
   ctx.strokeStyle = lineColor;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
-  
   data.forEach((item, index) => {
-    const x = padding + (index / (data.length - 1)) * chartWidth;
-    const y = padding + chartHeight - (item.value / maxValue) * chartHeight;
-    
-    if (index === 0) {
-      ctx.moveTo(x, y);
-    } else {
-      ctx.lineTo(x, y);
-    }
+    const x = paddingLeft + (index / Math.max(data.length - 1, 1)) * chartWidth;
+    const y = paddingTop + chartHeight - ((item.value - minValue) / valueRange) * chartHeight;
+    if (index === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
   });
-  
   ctx.stroke();
-  
-  // 绘制数据点
+
+  // 绘制数据点 + 时长标签
+  ctx.font = '10px Arial';
   data.forEach((item, index) => {
-    const x = padding + (index / (data.length - 1)) * chartWidth;
-    const y = padding + chartHeight - (item.value / maxValue) * chartHeight;
-    
+    const x = paddingLeft + (index / Math.max(data.length - 1, 1)) * chartWidth;
+    const y = paddingTop + chartHeight - ((item.value - minValue) / valueRange) * chartHeight;
+
     ctx.fillStyle = pointColor;
     ctx.beginPath();
-    ctx.arc(x, y, 4, 0, 2 * Math.PI);
+    ctx.arc(x, y, 3.5, 0, 2 * Math.PI);
     ctx.fill();
-    
-    // 绘制数据值
-    // 只在大屏幕显示数据值，避免拥挤
-    if (window.innerWidth > 768) {
-      ctx.fillStyle = textColor;
-      ctx.font = '11px Arial';
+
+    // 时长标签（点上方），密集时也跳过
+    if (index % labelStep === 0) {
+      ctx.fillStyle = labelColor;
       ctx.textAlign = 'center';
       ctx.fillText(formatDuration(item.value), x, y - 10);
     }
@@ -2255,8 +2486,8 @@ function renderStatsTab() {
         ${presetButtonsHTML}
       </div>
       <div class="date-range" id="custom-date-range" style="display: none;">
-        <input type="date" class="form-input" id="stat-from" value="${defaultRange.from.toISOString().slice(0, 10)}">
-        <input type="date" class="form-input" id="stat-to" value="${defaultRange.to.toISOString().slice(0, 10)}">
+        <input type="date" class="form-input" id="stat-from" value="${getLocalDateStr(defaultRange.from)}">
+        <input type="date" class="form-input" id="stat-to" value="${getLocalDateStr(defaultRange.to)}">
       </div>
       <div id="stats-result"></div>
     </div>
@@ -2266,8 +2497,8 @@ function renderStatsTab() {
   const pieColors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#FF6384', '#C9CBCF'];
 
   function setDateRange(from, to) {
-    document.getElementById('stat-from').value = from.toISOString().slice(0, 10);
-    document.getElementById('stat-to').value = to.toISOString().slice(0, 10);
+    document.getElementById('stat-from').value = getLocalDateStr(from);
+    document.getElementById('stat-to').value = getLocalDateStr(to);
   }
 
   function applyPreset(preset) {
@@ -2378,7 +2609,7 @@ function renderStatsTab() {
           
           let key;
           if (currentGrouping === 'day') {
-            key = new Date(record.startTime).toISOString().slice(0, 10);
+            key = getLocalDateStr(record.startTime);
           } else if (currentGrouping === 'week') {
             key = getWeekKey(record.startTime);
           } else if (currentGrouping === 'month') {
@@ -2653,10 +2884,15 @@ function renderStatsTab() {
     // 准备时间次数折线图数据
     const recentRecords = [...records].sort((a, b) => new Date(b.startTime) - new Date(a.startTime))
       .slice(0, statsConfig.durationChartCount);
-    const durationLineData = recentRecords.map((record, index) => ({
-      label: `${recentRecords.length - index}`,
-      value: record.duration
-    })).reverse();
+    const durationLineData = recentRecords.map((record, index) => {
+      const d = new Date(record.startTime);
+      const month = d.getMonth() + 1;
+      const day = d.getDate();
+      return {
+        label: `${month}/${day}`,
+        value: record.duration
+      };
+    }).reverse();
 
     document.getElementById('stats-result').innerHTML = `
       <div class="card" style="margin-bottom: 16px;">
@@ -2672,7 +2908,7 @@ function renderStatsTab() {
         `}
         <div style="margin-top: 24px;">
           <h4 style="margin-bottom: 12px;">${t('duration_trend')}</h4>
-          <canvas id="duration-line" width="500" height="250" style="width: 100%; max-width: 500px; display: block; margin: 0 auto;"></canvas>
+          <canvas id="duration-line" style="width: 100%; display: block;"></canvas>
         </div>
       </div>
       
@@ -3903,7 +4139,7 @@ function renderAbout() {
       <div style="margin-bottom: 24px; padding: 16px; background: var(--border-color); border-radius: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('version')}</span>
-          <span style="color: var(--primary-color); font-weight: 700;">0.91.7</span>
+          <span style="color: var(--primary-color); font-weight: 700;">0.91.8</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('developer')}</span>
@@ -3925,136 +4161,25 @@ function renderAbout() {
         <h4 style="color: var(--text-color); margin-bottom: 12px; font-size: 16px;">📝 ${t('changelog')}</h4>
         <div style="line-height: 1.6;">
           <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--primary-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0917_title')}</h5>
+            <h5 style="color: var(--primary-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0918_title')}</h5>
+            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
+              <li>${t('cl_v0918_1')}</li>
+              <li>${t('cl_v0918_2')}</li>
+            </ul>
+          </div>
+          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0917_title')}</h5>
             <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
               <li>${t('cl_v0917_1')}</li>
-              <li>${t('cl_v0917_2')}</li>
-              <li>${t('cl_v0917_3')}</li>
-              <li>${t('cl_v0917_4')}</li>
-              <li>添加全部数据视图，可查看所有记录的统计分析</li>
-              <li>实现全部数据视图的分组选项设置</li>
-              <li>确保全部数据视图正确响应分析管理界面的分组设置</li>
+              <li>${t('cl_v0917_5')}</li>
             </ul>
           </div>
           <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
             <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0916_title')}</h5>
             <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
               <li>${t('cl_v0916_1')}</li>
-              <li>${t('cl_v0916_2')}</li>
-              <li>${t('cl_v0916_3')}</li>
               <li>${t('cl_v0916_4')}</li>
-              <li>${t('cl_v0916_5')}</li>
-              <li>${t('cl_v0916_6')}</li>
-              <li>${t('cl_v0916_7')}</li>
               <li>${t('cl_v0916_8')}</li>
-              <li>${t('cl_v0916_9')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0915_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v0915_1')}</li>
-              <li>${t('cl_v0915_2')}</li>
-              <li>${t('cl_v0915_3')}</li>
-              <li>${t('cl_v0915_4')}</li>
-              <li>${t('cl_v0915_5')}</li>
-              <li>${t('cl_v0915_6')}</li>
-              <li>${t('cl_v0915_7')}</li>
-              <li>${t('cl_v0915_8')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0914_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v0914_1')}</li>
-              <li>${t('cl_v0914_2')}</li>
-              <li>${t('cl_v0914_3')}</li>
-              <li>${t('cl_v0914_4')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0913_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v0913_1')}</li>
-              <li>${t('cl_v0913_2')}</li>
-              <li>${t('cl_v0913_3')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0912_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v0912_1')}</li>
-              <li>${t('cl_v0912_2')}</li>
-              <li>${t('cl_v0912_3')}</li>
-              <li>${t('cl_v0912_4')}</li>
-              <li>${t('cl_v0912_5')}</li>
-              <li>${t('cl_v0912_6')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0911_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v0911_1')}</li>
-              <li>${t('cl_v0911_2')}</li>
-              <li>${t('cl_v0911_3')}</li>
-              <li>${t('cl_v0911_4')}</li>
-              <li>${t('cl_v0911_5')}</li>
-              <li>${t('cl_v0911_6')}</li>
-              <li>${t('cl_v0911_7')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v091_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v091_1')}</li>
-              <li>${t('cl_v091_2')}</li>
-              <li>${t('cl_v091_3')}</li>
-              <li>${t('cl_v091_4')}</li>
-              <li>${t('cl_v091_5')}</li>
-              <li>${t('cl_v091_6')}</li>
-              <li>${t('cl_v091_7')}</li>
-              <li>${t('cl_v091_8')}</li>
-              <li>${t('cl_v091_9')}</li>
-              <li>${t('cl_v091_10')}</li>
-              <li>${t('cl_v091_11')}</li>
-              <li>${t('cl_v091_12')}</li>
-              <li>${t('cl_v091_13')}</li>
-              <li>${t('cl_v091_14')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v078_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v078_1')}</li>
-              <li>${t('cl_v078_2')}</li>
-              <li>${t('cl_v078_3')}</li>
-              <li>${t('cl_v078_4')}</li>
-              <li>${t('cl_v078_5')}</li>
-            </ul>
-          </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v069_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v069_1')}</li>
-              <li>${t('cl_v069_2')}</li>
-              <li>${t('cl_v069_3')}</li>
-              <li>${t('cl_v069_4')}</li>
-              <li>${t('cl_v069_5')}</li>
-              <li>${t('cl_v069_6')}</li>
-              <li>${t('cl_v069_7')}</li>
-              <li>${t('cl_v069_8')}</li>
-              <li>${t('cl_v069_9')}</li>
-            </ul>
-          </div>
-          <div>
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v013_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v013_1')}</li>
-              <li>${t('cl_v013_2')}</li>
-              <li>${t('cl_v013_3')}</li>
-              <li>${t('cl_v013_4')}</li>
-              <li>${t('cl_v013_5')}</li>
-              <li>${t('cl_v013_6')}</li>
             </ul>
           </div>
         </div>
@@ -4330,12 +4455,12 @@ function renderDataManagement() {
         <textarea id="paste-import-input" style="width: 100%; height: 150px; padding: 12px; border: 2px solid var(--border-color); border-radius: 12px; font-size: 14px; resize: none; overflow-y: auto; font-family: monospace;"></textarea>
         <button class="btn btn-primary" id="paste-import-btn" style="width: 100%; margin-top: 8px;">${t('confirm')}</button>
       </div>
-      
+
       <div style="margin-bottom: 24px;">
         <h4 style="margin-bottom: 12px; color: var(--text-color);">${t('export_settings')}</h4>
         <button class="btn btn-primary" id="export-settings-copy" style="width: 100%;">📋 复制设置数据</button>
       </div>
-      
+
       <div>
         <h4 style="margin-bottom: 12px; color: var(--text-color);">${t('export_records')}</h4>
         <div class="form-group" style="margin-bottom: 12px;">
@@ -4344,33 +4469,44 @@ function renderDataManagement() {
             <input type="date" class="form-input" id="date-from" style="flex: 1;">
             <input type="date" class="form-input" id="date-to" style="flex: 1;">
           </div>
-          <button class="btn btn-secondary" id="reset-date-btn" style="width: 100%; margin-bottom: 16px;">${t('reset_date_range')}</button>
+          <button class="btn btn-secondary" id="reset-date-btn" style="width: 100%;">${t('reset_date_range')}</button>
         </div>
-        <div class="form-group">
-          <label class="form-label">${t('split_count')}</label>
-          <select class="form-input" id="split-count-select" style="width: 100%; margin-bottom: 8px;">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-          </select>
-          <button class="btn btn-primary" id="confirm-split-btn" style="width: 100%;">${t('confirm')}</button>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-primary" id="export-records-json" style="flex: 1;">${t('export_json')}</button>
+          <button class="btn btn-primary" id="export-records-csv" style="flex: 1;">${t('export_csv')}</button>
         </div>
-        <div id="split-buttons-container"></div>
-        <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.6; margin-top: 12px;">
-          <strong>用法：</strong>选择日期范围（可选），然后选择要分成几份，点击确定后会生成对应数量的分享按钮，依次点击分享每个部分。<br>
-          <strong>目的：</strong>当数据量太大时，可以将数据分成多个小文件分别分享，每个部分都可以单独导入。<br>
-          <strong>导入：</strong>可以单独导入任意部分，也可以收集全部部分后合并导入。<br>
-          <strong>说明：</strong>点击分享按钮后会直接复制到剪贴板，这是因为手机分享API技术限制，改用剪贴板方式更稳定可靠。
-        </p>
+        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+          <button class="btn btn-secondary" id="export-records-clipboard" style="flex: 1;">📋 复制到剪贴板</button>
+          <button class="btn btn-primary" id="export-records-excel" style="flex: 1;">${t('export_excel')}</button>
+        </div>
       </div>
-      
+
+      <details style="margin-top: 16px; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px;">
+        <summary style="cursor: pointer; color: var(--text-secondary); font-size: 14px; font-weight: 600;">📋 ${t('split_share')}（剪贴板备用方案）</summary>
+        <div style="margin-top: 12px;">
+          <div class="form-group">
+            <label class="form-label">${t('split_count')}</label>
+            <select class="form-input" id="split-count-select" style="width: 100%; margin-bottom: 8px;">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+            </select>
+            <button class="btn btn-secondary" id="confirm-split-btn" style="width: 100%;">${t('confirm')}</button>
+          </div>
+          <div id="split-buttons-container"></div>
+          <p style="color: var(--text-secondary); font-size: 12px; line-height: 1.6; margin-top: 12px;">
+            <strong>说明：</strong>如果文件导出不工作，可以使用此功能将数据复制到剪贴板，手动粘贴保存。
+          </p>
+        </div>
+      </details>
+
       <input type="file" id="import-file" accept=".json,.csv,.xlsx" style="display: none;">
     `;
   }
@@ -4722,20 +4858,20 @@ function renderDataManagement() {
   
   if (dateFrom && dateTo && records.length > 0) {
     const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-    const firstDate = new Date(sortedRecords[0].startTime);
-    const lastDate = new Date(sortedRecords[sortedRecords.length - 1].startTime);
-    dateFrom.value = firstDate.toISOString().slice(0, 10);
-    dateTo.value = lastDate.toISOString().slice(0, 10);
+    const firstDate = getLocalDateStr(sortedRecords[0].startTime);
+    const lastDate = getLocalDateStr(sortedRecords[sortedRecords.length - 1].startTime);
+    dateFrom.value = firstDate;
+    dateTo.value = lastDate;
   }
   
   if (document.getElementById('reset-date-btn')) {
     document.getElementById('reset-date-btn').addEventListener('click', () => {
       if (dateFrom && dateTo && records.length > 0) {
         const sortedRecords = [...records].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
-        const firstDate = new Date(sortedRecords[0].startTime);
-        const lastDate = new Date(sortedRecords[sortedRecords.length - 1].startTime);
-        dateFrom.value = firstDate.toISOString().slice(0, 10);
-        dateTo.value = lastDate.toISOString().slice(0, 10);
+        const firstDate = getLocalDateStr(sortedRecords[0].startTime);
+        const lastDate = getLocalDateStr(sortedRecords[sortedRecords.length - 1].startTime);
+        dateFrom.value = firstDate;
+        dateTo.value = lastDate;
       }
     });
   }
@@ -4876,6 +5012,149 @@ function renderEditFetish() {
   });
 }
 
+// CSV 字段转义：双引号包裹字段，内部双引号转为两个双引号
+function escapeCSV(value) {
+  const str = String(value == null ? '' : value);
+  if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+    return '"' + str.replace(/"/g, '""') + '"';
+  }
+  return str;
+}
+
+// 解析 CSV 文本为记录数组（含性癖/备注等完整字段）
+function parseCSV(text) {
+  const lines = text.replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n').filter(l => l.trim());
+  if (lines.length < 2) return [];
+
+  // 解析表头
+  const headers = parseCSVLine(lines[0]);
+
+  const records = [];
+  for (let i = 1; i < lines.length; i++) {
+    const values = parseCSVLine(lines[i]);
+    if (values.length === 0) continue;
+
+    const row = {};
+    headers.forEach((h, idx) => { row[h] = values[idx] || ''; });
+
+    // 从各列重建记录对象
+    const dateStr = row[t('date')] || row['日期'] || row['Date'] || '';
+    const timeStr = row[t('start_time')] || row['开始时间'] || row['Start Time'] || '';
+    const durationVal = row[t('duration')] || row['时长'] || row['Duration'] || '0';
+    const mediumName = row[t('medium')] || row['方式'] || row['Medium'] || '';
+    const fetishNames = row[t('fetish')] || row['性癖'] || row['Fetish'] || '';
+    const notesVal = row[t('notes')] || row['备注'] || row['Notes'] || '';
+    const satisfactionVal = row[t('satisfaction_rating')] || row['满意度'] || row['Satisfaction'] || '';
+
+    // 解析时长：支持 "15:21" (MM:SS)、"2分30秒"、"2m30s"、纯秒数
+    let duration = 0;
+    const colonMatch = durationVal.match(/^(\d+):(\d+)$/);
+    const cnMatch = durationVal.match(/(\d+)分(\d+)秒/);
+    const enMatch = durationVal.match(/(\d+)m(\d+)s/);
+    if (colonMatch) {
+      duration = parseInt(colonMatch[1]) * 60 + parseInt(colonMatch[2]);
+    } else if (cnMatch) {
+      duration = parseInt(cnMatch[1]) * 60 + parseInt(cnMatch[2]);
+    } else if (enMatch) {
+      duration = parseInt(enMatch[1]) * 60 + parseInt(enMatch[2]);
+    } else {
+      duration = parseInt(durationVal) || 0;
+    }
+
+    // 解析日期时间
+    let startTime = '';
+    if (dateStr && timeStr) {
+      startTime = new Date(`${dateStr} ${timeStr}`).toISOString();
+    } else if (dateStr) {
+      startTime = new Date(dateStr).toISOString();
+    }
+
+    // 查找或自动创建 medium
+    let mediumId = null;
+    if (mediumName) {
+      const found = media.find(m => m.name === mediumName);
+      if (found) {
+        mediumId = found.id;
+      } else {
+        // 自动创建缺失的媒介
+        const newId = media.length > 0 ? Math.max(...media.map(m => m.id)) + 1 : 1;
+        media.push({ id: newId, name: mediumName });
+        mediaCache[newId] = mediumName;
+        mediumId = newId;
+      }
+    }
+
+    // 查找或自动创建 fetishes
+    let fetishIds = [];
+    if (fetishNames) {
+      const names = fetishNames.split(',').map(s => s.trim()).filter(Boolean);
+      names.forEach(name => {
+        const found = fetishes.find(f => f.name === name);
+        if (found) {
+          fetishIds.push(found.id);
+        } else {
+          // 自动创建缺失的性癖
+          const newId = fetishes.length > 0 ? Math.max(...fetishes.map(f => f.id)) + 1 : 1;
+          fetishes.push({ id: newId, name: name });
+          fetishCache[newId] = name;
+          fetishIds.push(newId);
+        }
+      });
+    }
+
+    const record = {
+      id: Date.now() + i,
+      startTime: startTime,
+      duration: duration,
+      medium: mediumId,
+      fetishes: fetishIds,
+      notes: notesVal || undefined,
+      satisfaction: satisfactionVal ? parseInt(satisfactionVal) : undefined
+    };
+    records.push(record);
+  }
+  return records;
+}
+
+// 解析单行 CSV，正确处理引号内的逗号和转义双引号
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  let i = 0;
+  while (i < line.length) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (i + 1 < line.length && line[i + 1] === '"') {
+          current += '"';
+          i += 2;
+        } else {
+          inQuotes = false;
+          i++;
+        }
+      } else {
+        current += ch;
+        i++;
+      }
+    } else {
+      if (ch === '"') {
+        inQuotes = true;
+        i++;
+      } else if (ch === ',') {
+        result.push(current);
+        current = '';
+        i++;
+      } else {
+        current += ch;
+        i++;
+      }
+    }
+  }
+  result.push(current);
+  return result;
+}
+
 function getDataBlob(format = 'json') {
   if (format === 'json') {
     const data = {
@@ -4891,22 +5170,24 @@ function getDataBlob(format = 'json') {
       mimeType: 'application/json'
     };
   } else if (format === 'csv' || format === 'excel') {
-    const headers = [t('id'), t('date'), t('start_time'), t('duration'), t('medium'), t('fetish'), t('notes')];
-    let csvContent = headers.join(',') + '\n';
-    
+    const headers = [t('id'), t('date'), t('start_time'), t('duration'), t('medium'), t('fetish'), t('notes'), t('satisfaction_rating')];
+    let csvContent = headers.map(escapeCSV).join(',') + '\n';
+
     records.forEach((record, index) => {
+      const fetishLabels = getFetishesLabels(record.fetishes) || getFetishLabel(record.fetish) || '';
       const row = [
         index + 1,
         new Date(record.startTime).toLocaleDateString(),
         new Date(record.startTime).toLocaleTimeString(),
-        record.duration,
+        formatDuration(record.duration),
         getMediumLabel(record.medium),
-        getFetishLabel(record.fetish),
-        (record.notes || '').replace(/"/g, '""')
+        fetishLabels,
+        record.notes || '',
+        record.satisfaction != null ? record.satisfaction : ''
       ];
-      csvContent += row.map(field => `"${field}"`).join(',') + '\n';
+      csvContent += row.map(escapeCSV).join(',') + '\n';
     });
-    
+
     return {
       blob: new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' }),
       ext: 'csv',
@@ -4920,7 +5201,7 @@ function exportData(format = 'json') {
   const data = getDataBlob(format);
   if (data) {
     downloadFile(data.blob, `selfcare-data-${dateStr}.${data.ext}`);
-    alert(t('export_success'));
+    if (!isCapacitor()) alert(t('export_success'));
   }
 }
 
@@ -4992,7 +5273,7 @@ function exportSettings(format = 'json') {
   
   if (data) {
     downloadFile(data.blob, `selfcare-settings-${dateStr}.${data.ext}`);
-    alert(t('export_success'));
+    if (!isCapacitor()) alert(t('export_success'));
   }
 }
 
@@ -5033,22 +5314,24 @@ function exportRecords(format = 'json') {
       mimeType: 'application/json'
     };
   } else if (format === 'csv' || format === 'excel') {
-    const headers = [t('id'), t('date'), t('start_time'), t('duration'), t('medium'), t('fetish'), t('notes')];
-    let csvContent = headers.join(',') + '\n';
-    
+    const headers = [t('id'), t('date'), t('start_time'), t('duration'), t('medium'), t('fetish'), t('notes'), t('satisfaction_rating')];
+    let csvContent = headers.map(escapeCSV).join(',') + '\n';
+
     filteredRecords.forEach((record, index) => {
+      const fetishLabels = getFetishesLabels(record.fetishes) || getFetishLabel(record.fetish) || '';
       const row = [
         index + 1,
         new Date(record.startTime).toLocaleDateString(),
         new Date(record.startTime).toLocaleTimeString(),
-        record.duration,
+        formatDuration(record.duration),
         getMediumLabel(record.medium),
-        getFetishLabel(record.fetish),
-        (record.notes || '').replace(/"/g, '""')
+        fetishLabels,
+        record.notes || '',
+        record.satisfaction != null ? record.satisfaction : ''
       ];
-      csvContent += row.map(field => `"${field}"`).join(',') + '\n';
+      csvContent += row.map(escapeCSV).join(',') + '\n';
     });
-    
+
     data = {
       blob: new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' }),
       ext: 'csv',
@@ -5058,19 +5341,50 @@ function exportRecords(format = 'json') {
   
   if (data) {
     downloadFile(data.blob, `selfcare-records-${dateStr}.${data.ext}`);
-    alert(t('export_success'));
+    if (!isCapacitor()) alert(t('export_success'));
   }
 }
 
-function downloadFile(blob, filename) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+function blobToBase64(blob) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function downloadFile(blob, filename) {
+  if (isCapacitor()) {
+    try {
+      const base64Data = await blobToBase64(blob);
+      const mimeType = blob.type || 'application/octet-stream';
+      const result = window.FileHelper.saveFile(base64Data, filename, mimeType);
+      if (result === 'OK') {
+        alert(t('export_success') + '\n\n📁 已保存到下载文件夹: ' + filename);
+      } else {
+        throw new Error(result);
+      }
+    } catch (e) {
+      console.error('Native save failed, falling back to clipboard:', e);
+      try {
+        const text = await blob.text();
+        await navigator.clipboard.writeText(text);
+        alert('文件保存失败，已复制到剪贴板\n请手动粘贴保存');
+      } catch {
+        prompt('请手动复制数据:', await blob.text());
+      }
+    }
+  } else {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 }
 
 function importData(e) {
@@ -5089,8 +5403,46 @@ function importFromFile(file, e) {
   const reader = new FileReader();
   reader.onload = (event) => {
     try {
-      const data = JSON.parse(event.target.result);
-      
+      const text = event.target.result;
+
+      // CSV 文件导入
+      const isCSV = file.name.endsWith('.csv') || (!text.trim().startsWith('{') && !text.trim().startsWith('['));
+      if (isCSV) {
+        const importedRecords = parseCSV(text);
+        if (importedRecords.length === 0) {
+          alert(t('invalid_file') + '（CSV 无有效记录）');
+          if (e) e.target.value = '';
+          return;
+        }
+        if (!confirm(`检测到 ${importedRecords.length} 条记录，确认导入？`)) {
+          if (e) e.target.value = '';
+          return;
+        }
+        // 合并记录，去重
+        const existingRecords = [...records];
+        const mergedRecords = [...existingRecords, ...importedRecords];
+        const seenIds = new Set();
+        const uniqueRecords = mergedRecords.filter(record => {
+          if (seenIds.has(record.id)) return false;
+          seenIds.add(record.id);
+          return true;
+        });
+        uniqueRecords.sort((a, b) => new Date(b.startTime) - new Date(a.startTime));
+        localStorage.setItem('records', JSON.stringify(uniqueRecords));
+        records = uniqueRecords;
+        saveMedia();
+        saveFetishes();
+        updateMediaCache();
+        updateFetishCache();
+        alert(t('import_success') + `\n\n导入 ${importedRecords.length} 条记录`);
+        renderCurrentTab();
+        if (e) e.target.value = '';
+        return;
+      }
+
+      // JSON 文件导入
+      const data = JSON.parse(text);
+
       if (data.type === 'settings') {
         if (!confirm(t('import_confirm'))) {
           if (e) e.target.value = '';
@@ -5635,6 +5987,19 @@ function updateLanguage() {
 }
 
 function renderCurrentTab() {
+  // 记录 tab 需要特殊布局：日历固定顶部，记录独立滚动
+  if (currentTab === 'records') {
+    mainContent.style.display = 'flex';
+    mainContent.style.flexDirection = 'column';
+    mainContent.style.overflowY = 'hidden';
+    mainContent.style.paddingBottom = '0';
+  } else {
+    mainContent.style.display = '';
+    mainContent.style.flexDirection = '';
+    mainContent.style.overflowY = '';
+    mainContent.style.paddingBottom = '';
+  }
+
   switch (currentTab) {
     case 'add':
       renderAddTab();

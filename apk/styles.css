@@ -665,3 +665,166 @@ body {
 .toggle-switch input:checked + .toggle-slider:before {
   transform: translateX(24px);
 }
+
+/* 日历模块样式 */
+.calendar-container {
+  margin-bottom: var(--spacing-base);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.calendar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.calendar-nav-btn {
+  background: none;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: all 0.2s;
+}
+
+.calendar-nav-btn:hover {
+  background-color: var(--border-color);
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.calendar-day-header {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 8px 0;
+}
+
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  border-radius: 8px;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+/* 六种记录次数颜色 */
+.calendar-day-count-0 {
+  background-color: transparent;
+  color: var(--text-primary);
+}
+
+.calendar-day-count-1 {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+
+.calendar-day-count-2 {
+  background-color: #fbcfe8;
+  color: #9d174d;
+}
+
+.calendar-day-count-3 {
+  background-color: #f9a8d4;
+  color: #9d174d;
+}
+
+.calendar-day-count-4 {
+  background-color: #f472b6;
+  color: white;
+}
+
+.calendar-day-count-5 {
+  background-color: #ec4899;
+  color: white;
+}
+
+.calendar-day-count-6-plus {
+  background-color: #db2777;
+  color: white;
+}
+
+.calendar-day.other-month {
+  color: var(--text-secondary);
+  opacity: 0.5;
+}
+
+.calendar-day.today {
+  font-weight: 700;
+  border: 2px solid var(--primary-color);
+}
+
+/* 日历可收起区域 */
+.records-calendar-section {
+  margin-bottom: var(--spacing-base);
+  flex-shrink: 0;
+}
+
+/* 日历收起状态下的头部栏 */
+.calendar-header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--card-background);
+  border-radius: var(--corner-radius);
+  padding: 10px var(--spacing-lg);
+  margin-bottom: 0;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s;
+}
+
+.calendar-header-bar:active {
+  background-color: var(--border-color);
+}
+
+.calendar-toggle-indicator {
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: transform 0.3s;
+}
+
+/* 日历日期可点击 */
+.calendar-day[data-date] {
+  cursor: pointer;
+}
+
+.calendar-day[data-date]:active {
+  opacity: 0.7;
+}
+
+/* 日历选中日期 */
+.calendar-day.selected {
+  background-color: var(--primary-color) !important;
+  color: white !important;
+  font-weight: 700;
+}
+
+/* 记录面板 - 独立滚动 */
+.records-panel {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 90px;
+}
+
+.records-panel .card {
+  margin-bottom: 0;
+}
