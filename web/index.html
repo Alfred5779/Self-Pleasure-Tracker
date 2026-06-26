@@ -13,36 +13,12 @@
 <body>
     <div id="app">
         <main id="main-content">
-            <div id="loading-screen" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 16px; color: #333333;">
-                <div style="font-size: 48px;">✈️</div>
-                <div style="font-size: 20px; font-weight: 600; color: #333333;">起飞助手</div>
-                <div id="loading-status" style="color: #666666; font-size: 14px;">初始化中...</div>
-                <div style="width: 200px; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
-                    <div id="loading-progress" style="height: 100%; width: 0%; background: #6366f1; transition: width 0.3s ease;"></div>
-                </div>
-            </div>
         </main>
-        
-        <nav id="bottom-nav">
-            <button class="nav-item active" data-tab="add">
-                <span class="nav-icon">➕</span>
-                <span class="nav-label" data-i18n="tab_add">添加</span>
-            </button>
-            <button class="nav-item" data-tab="records">
-                <span class="nav-icon">📋</span>
-                <span class="nav-label" data-i18n="tab_records">记录</span>
-            </button>
-            <button class="nav-item" data-tab="stats">
-                <span class="nav-icon">📊</span>
-                <span class="nav-label" data-i18n="tab_stats">分析</span>
-            </button>
-            <button class="nav-item" data-tab="settings">
-                <span class="nav-icon">⚙️</span>
-                <span class="nav-label" data-i18n="tab_settings">设置</span>
-            </button>
-        </nav>
+        <nav id="bottom-nav"></nav>
     </div>
-    
-    <script src="app.js"></script>
+
+    <script src="pdf.min.js"></script>
+    <script>if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='pdf.worker.min.js';</script>
+    <script src="app.js?v=14"></script>
 </body>
 </html>

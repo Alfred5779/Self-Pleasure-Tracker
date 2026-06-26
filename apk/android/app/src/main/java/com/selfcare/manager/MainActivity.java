@@ -7,6 +7,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import com.getcapacitor.BridgeActivity;
+import com.capacitorjs.plugins.app.AppPlugin;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -19,6 +20,9 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // 注册 App 插件（必须在 super.onCreate 之前，否则 load() 不会执行）
+        registerPlugin(AppPlugin.class);
+
         super.onCreate(savedInstanceState);
 
         // 注入原生文件保存接口到 WebView
@@ -59,6 +63,26 @@ public class MainActivity extends BridgeActivity {
                     fos.write(data);
                     fos.close();
                     return "OK";
+                }
+            } catch (Exception e) {
+                return "ERROR: " + e.getMessage();
+            }
+        }
+
+        @JavascriptInterface
+        public String deleteFile(String filename) {
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    Uri uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
+                    String selection = MediaStore.Downloads.DISPLAY_NAME + "=?";
+                    String[] selectionArgs = new String[]{ filename };
+                    int deleted = getContentResolver().delete(uri, selection, selectionArgs);
+                    return deleted > 0 ? "OK" : "NOT_FOUND";
+                } else {
+                    File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+                    File file = new File(dir, filename);
+                    if (file.exists() && file.delete()) return "OK";
+                    return "NOT_FOUND";
                 }
             } catch (Exception e) {
                 return "ERROR: " + e.getMessage();

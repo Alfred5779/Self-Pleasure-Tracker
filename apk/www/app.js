@@ -205,6 +205,7 @@ const i18n = {
     show_avg_duration: '显示平均时长',
     show_min_duration: '显示最短时长',
     show_max_duration: '显示最长时长',
+    calendar_default_collapsed: '日历默认收起',
     time_grouping: '时间分组',
     group_by_day: '按日',
     group_by_week: '按周',
@@ -312,6 +313,18 @@ const i18n = {
     cl_v0918_title: 'v0.91.8',
     cl_v0918_1: '✨ 优化折线图铺开显示，在每个数据点标注时间',
     cl_v0918_2: '✨ 修复日历和统计页面的时区偏移问题',
+    cl_v100_title: 'v1.0',
+    cl_v100_1: '✨ 新增 JM 漫画书架功能，支持搜索、下载、阅读漫画',
+    cl_v100_2: '✨ 书架支持封面显示，下载后自动抓取第一章封面',
+    cl_v100_3: '✨ 书架支持宫格和列表两种显示模式，宫格可选 2/3 列',
+    cl_v100_4: '✨ 批量下载支持多漫画并发下载，提升下载效率',
+    cl_v100_5: '✨ 图片下载支持多通道并发，章节信息并发获取',
+    cl_v100_6: '✨ 外观管理新增书架显示设置，移除自定义图标功能',
+    credits_title: '致谢',
+    credits_acheron: '感谢「Acheron」在项目接近尾期Token烧干的时候，提供Token救急',
+    reader_convert: '转换为图片格式',
+    reader_converting: '转换中...',
+    reader_converted: '转换完成，已可离线阅读',
     appearance_management: '外观管理',
     advanced_settings: '高级设置',
     visual_style: '视觉风格',
@@ -360,6 +373,23 @@ const i18n = {
     move_up: '上移',
     move_down: '下移',
     custom_icons: '自定义图标',
+    bookshelf_display: '书架显示',
+    bs_view_grid: '宫格模式',
+    bs_view_list: '列表模式',
+    bs_columns: '每行列数',
+    bs_settings: '书架设置',
+    bs_download_format: '下载格式',
+    bs_format_pdf: '仅 PDF 文件',
+    bs_format_read: '仅软件内阅读',
+    bs_format_both: '都要（推荐）',
+    bs_format_hint: 'PDF 文件会保存到手机，可在文件管理器中找到和分享',
+    bs_save_images: '软件内阅读',
+    bs_save_images_desc: '将图片存储在应用内，可离线阅读，不占用手机文件空间',
+    bs_save_pdf: '保存 PDF 到手机',
+    bs_save_pdf_desc: '同时保存 PDF 文件到手机下载目录，可在文件管理器中找到和分享',
+    bs_download_choice_title: '选择下载方式',
+    bs_download_choice_msg: '首次下载，请选择漫画存储方式：',
+    bs_download_choice_hint: '可在 设置 → 书架设置 中随时修改',
     add_icon: '添加图标',
     records_icon: '记录图标',
     stats_icon: '分析图标',
@@ -377,7 +407,57 @@ const i18n = {
     satisfaction_rating: '满意度评分',
     satisfaction_hint: '0-10分，0分最低，10分最高',
     show_duration_diff: '显示时长差异',
-    show_duration_diff_desc: '在记录界面显示与上一条记录的时长差异'
+    show_duration_diff_desc: '在记录界面显示与上一条记录的时长差异',
+    jm_downloader: '漫画下载',
+    jm_input_hint: '输入漫画代码，如 350234',
+    jm_search: '搜索',
+    jm_searching: '正在搜索...',
+    jm_loading: '加载中...',
+    jm_chapters: '章节列表',
+    jm_download: '下载 PDF',
+    jm_downloading: '正在下载...',
+    jm_download_complete: '下载完成',
+    jm_download_failed: '下载失败',
+    jm_no_images: '未找到图片',
+    jm_title: '标题',
+    jm_scrambled_warn: '部分图片可能需要解密，下载结果可能不完整',
+    jm_input_empty: '请输入漫画代码',
+    jm_server_error: '服务器未启动，请先运行: npm start',
+    tab_bookshelf: '书架',
+    jm_add_comic: '添加漫画',
+    jm_search_download: '搜索下载',
+    jm_local_import: '本地导入',
+    jm_no_comics: '暂无漫画，点击 + 添加',
+    jm_chapter_count: '章',
+    jm_favorite: '收藏',
+    jm_unfavorite: '取消收藏',
+    jm_filter: '筛选',
+    jm_filter_all: '全部',
+    jm_filter_favorite: '⭐ 收藏',
+    jm_filter_tag: '性癖标签',
+    jm_long_press_hint: '长按卡片进入多选',
+    jm_select_mode: '多选模式',
+    jm_select_all: '全选',
+    jm_cancel: '取消',
+    jm_export_codes: '导出代码',
+    jm_export_done: '已复制到剪贴板',
+    jm_tag_comic: '打标签',
+    jm_delete_comic: '删除',
+    jm_delete_confirm: '确认删除选中的漫画？',
+    jm_comic_count: '共 {n} 本',
+    jm_batch_download: '批量下载',
+    jm_batch_hint: '每行一个 JM 代码，支持逗号/空格分隔',
+    jm_batch_start: '开始下载',
+    jm_batch_progress: '下载进度',
+    jm_batch_done: '批量下载完成',
+    jm_batch_pause: '暂停',
+    jm_batch_resume: '继续',
+    jm_batch_summary: '成功 {s} / 跳过 {k} / 失败 {f}',
+    jm_already_downloaded: '已下载',
+    jm_batch_skip: '跳过',
+    jm_back: '返回',
+    jm_open_reader: '阅读',
+    jm_no_chapter: '无章节'
   },
   en: {
     tab_add: 'Add',
@@ -585,6 +665,7 @@ const i18n = {
     show_avg_duration: 'Show Avg Duration',
     show_min_duration: 'Show Min Duration',
     show_max_duration: 'Show Max Duration',
+    calendar_default_collapsed: 'Calendar Default Collapsed',
     time_grouping: 'Time Grouping',
     group_by_day: 'By Day',
     group_by_week: 'By Week',
@@ -691,6 +772,18 @@ const i18n = {
     cl_v0918_title: 'v0.91.8',
     cl_v0918_1: '✨ Optimized line chart with wider layout and time labels at each point',
     cl_v0918_2: '✨ Fixed timezone offset issues in calendar and stats pages',
+    cl_v100_title: 'v1.0',
+    cl_v100_1: '✨ Added JM Comic bookshelf with search, download, and reader',
+    cl_v100_2: '✨ Bookshelf shows covers — auto-fetches first chapter cover after download',
+    cl_v100_3: '✨ Bookshelf supports grid and list view modes, grid can be 2 or 3 columns',
+    cl_v100_4: '✨ Batch download supports concurrent multi-comic downloading',
+    cl_v100_5: '✨ Image downloads use concurrent channels, parallel chapter fetching',
+    cl_v100_6: '✨ Appearance settings now includes bookshelf display options, removed custom icon feature',
+    credits_title: 'Credits',
+    credits_acheron: 'Special thanks to 「Acheron」for providing tokens when the project was running on fumes near the finish line',
+    reader_convert: 'Convert to Images',
+    reader_converting: 'Converting...',
+    reader_converted: 'Done! Now available offline',
     appearance_management: 'Appearance Management',
     advanced_settings: 'Advanced Settings',
     visual_style: 'Visual Style',
@@ -739,6 +832,23 @@ const i18n = {
     move_up: 'Move Up',
     move_down: 'Move Down',
     custom_icons: 'Custom Icons',
+    bookshelf_display: 'Bookshelf Display',
+    bs_view_grid: 'Grid Mode',
+    bs_view_list: 'List Mode',
+    bs_columns: 'Columns per Row',
+    bs_settings: 'Bookshelf Settings',
+    bs_download_format: 'Download Format',
+    bs_format_pdf: 'PDF File Only',
+    bs_format_read: 'In-App Reading Only',
+    bs_format_both: 'Both (Recommended)',
+    bs_format_hint: 'PDF will be saved to your phone, accessible from file manager',
+    bs_save_images: 'In-App Reading',
+    bs_save_images_desc: 'Store images in app for offline reading, no file storage used',
+    bs_save_pdf: 'Save PDF to Phone',
+    bs_save_pdf_desc: 'Also save PDF to Downloads folder, accessible from file manager',
+    bs_download_choice_title: 'Choose Download Format',
+    bs_download_choice_msg: 'First download — choose how to store comics:',
+    bs_download_choice_hint: 'You can change this anytime in Settings → Bookshelf Settings',
     add_icon: 'Add Icon',
     records_icon: 'Records Icon',
     stats_icon: 'Stats Icon',
@@ -756,7 +866,57 @@ const i18n = {
     satisfaction_rating: 'Satisfaction Rating',
     satisfaction_hint: '0-10 points, 0 lowest, 10 highest',
     show_duration_diff: 'Show Duration Difference',
-    show_duration_diff_desc: 'Show duration difference compared to previous record in records page'
+    show_duration_diff_desc: 'Show duration difference compared to previous record in records page',
+    jm_downloader: 'Manga Download',
+    jm_input_hint: 'Enter code, e.g. 350234',
+    jm_search: 'Search',
+    jm_searching: 'Searching...',
+    jm_loading: 'Loading...',
+    jm_chapters: 'Chapters',
+    jm_download: 'Download PDF',
+    jm_downloading: 'Downloading...',
+    jm_download_complete: 'Download Complete',
+    jm_download_failed: 'Download Failed',
+    jm_no_images: 'No images found',
+    jm_title: 'Title',
+    jm_scrambled_warn: 'Some images may need decryption, download may be incomplete',
+    jm_input_empty: 'Please enter manga code',
+    jm_server_error: 'Server not started. Run: npm start',
+    tab_bookshelf: 'Bookshelf',
+    jm_add_comic: 'Add Comic',
+    jm_search_download: 'Search & Download',
+    jm_local_import: 'Local Import',
+    jm_no_comics: 'No comics yet, tap + to add',
+    jm_chapter_count: 'ch',
+    jm_favorite: 'Favorite',
+    jm_unfavorite: 'Unfavorite',
+    jm_filter: 'Filter',
+    jm_filter_all: 'All',
+    jm_filter_favorite: '⭐ Favorites',
+    jm_filter_tag: 'Fetish Tags',
+    jm_long_press_hint: 'Long press to select',
+    jm_select_mode: 'Select Mode',
+    jm_select_all: 'Select All',
+    jm_cancel: 'Cancel',
+    jm_export_codes: 'Export Codes',
+    jm_export_done: 'Copied to clipboard',
+    jm_tag_comic: 'Tag',
+    jm_delete_comic: 'Delete',
+    jm_delete_confirm: 'Delete selected comics?',
+    jm_comic_count: '{n} comics',
+    jm_batch_download: 'Batch Download',
+    jm_batch_hint: 'One JM code per line, comma/space separated',
+    jm_batch_start: 'Start Download',
+    jm_batch_progress: 'Download Progress',
+    jm_batch_done: 'Batch Download Complete',
+    jm_batch_pause: 'Pause',
+    jm_batch_resume: 'Resume',
+    jm_batch_summary: 'Success {s} / Skipped {k} / Failed {f}',
+    jm_already_downloaded: 'Downloaded',
+    jm_batch_skip: 'Skip',
+    jm_back: 'Back',
+    jm_open_reader: 'Read',
+    jm_no_chapter: 'No chapters'
   }
 };
 
@@ -820,6 +980,7 @@ function init() {
   if (!storage.statsConfig.sortBy) storage.statsConfig.sortBy = 'count';
   if (!storage.statsConfig.chartType) storage.statsConfig.chartType = 'bar';
   if (!storage.statsConfig.showAllCountAnalysis) storage.statsConfig.showAllCountAnalysis = false;
+  if (storage.statsConfig.calendarDefaultCollapsed === undefined) storage.statsConfig.calendarDefaultCollapsed = true;
   if (!storage.statsConfig.allDataGrouping) storage.statsConfig.allDataGrouping = 'year';
 
   if (!storage.uiConfig.cornerRadius) storage.uiConfig.cornerRadius = 'medium';
@@ -840,7 +1001,23 @@ function init() {
   if (!storage.uiConfig.spacing) storage.uiConfig.spacing = 'standard';
   if (!storage.uiConfig.navPosition) storage.uiConfig.navPosition = 'bottom';
   if (!storage.uiConfig.defaultHome) storage.uiConfig.defaultHome = 'add';
-  if (!storage.uiConfig.navOrder) storage.uiConfig.navOrder = ['add', 'records', 'stats', 'settings'];
+  if (!storage.uiConfig.navOrder) storage.uiConfig.navOrder = ['add', 'records', 'stats', 'bookshelf', 'settings'];
+  // 旧版本用户可能没有 bookshelf，自动补上（兼容 tools → bookshelf）
+  if (!storage.uiConfig.navOrder.includes('bookshelf')) {
+    const idx = storage.uiConfig.navOrder.indexOf('tools');
+    if (idx >= 0) storage.uiConfig.navOrder[idx] = 'bookshelf';
+    else storage.uiConfig.navOrder.push('bookshelf');
+    localStorage.setItem('uiConfig', JSON.stringify(storage.uiConfig));
+  }
+  // 书栏移到设置左边（v1.0 迁移）
+  const bsIdx = storage.uiConfig.navOrder.indexOf('bookshelf');
+  const stIdx = storage.uiConfig.navOrder.indexOf('settings');
+  if (bsIdx >= 0 && stIdx >= 0 && bsIdx > stIdx) {
+    storage.uiConfig.navOrder.splice(bsIdx, 1);
+    storage.uiConfig.navOrder.splice(stIdx, 0, 'bookshelf');
+    localStorage.setItem('uiConfig', JSON.stringify(storage.uiConfig));
+  }
+
   if (!storage.uiConfig.statsSortOrder) storage.uiConfig.statsSortOrder = 'desc';
   if (!storage.uiConfig.statsButtonsPosition) storage.uiConfig.statsButtonsPosition = 'top';
 
@@ -1106,21 +1283,10 @@ function updateFetishCache() {
   });
 }
 
-function updateProgress(percent, status) {
-  const progressBar = document.getElementById('loading-progress');
-  const statusText = document.getElementById('loading-status');
-  if (progressBar) {
-    progressBar.style.width = percent + '%';
-  }
-  if (statusText) {
-    statusText.textContent = status;
-  }
-}
-
 function initApp() {
   try {
     const storage = init();
-    
+
     currentLang = storage.lang;
     currentTheme = storage.theme;
     currentColorTheme = storage.colorTheme;
@@ -1131,22 +1297,78 @@ function initApp() {
     statsConfig = storage.statsConfig;
     uiConfig = storage.uiConfig;
     customPresets = storage.customPresets;
-    
+
     updateMediaCache();
     updateFetishCache();
-    
+
     applyTheme();
     applyUIConfig();
     updateNavigationLabels();
-    
+
     initNavigation();
-    
+
     currentTab = uiConfig.defaultHome;
     renderCurrentTab();
-    
+
     setTimeout(() => {
       loadExternalLibraries();
     }, 300);
+
+    // ── Android 返回键处理 ──
+    if (isCapacitor()) {
+      const registerBackButton = () => {
+        const App = window.Capacitor?.Plugins?.App || window.Capacitor?.App;
+        if (!App) {
+          console.warn('[BackButton] App plugin not found, retrying...');
+          setTimeout(registerBackButton, 500);
+          return;
+        }
+        console.log('[BackButton] registering backButton listener');
+        App.addListener('backButton', ({ canGoBack }) => {
+          console.log('[BackButton] fired, settingsSubPage=', settingsSubPage, 'currentTab=', currentTab);
+          // 编辑记录：返回记录列表
+          if (editingRecordId !== null) {
+            editingRecordId = null;
+            renderRecordsTab();
+            return;
+          }
+          // 编辑媒介/性癖：返回管理列表
+          if (editingMediumId !== null) {
+            editingMediumId = null;
+            renderMediumManagement();
+            return;
+          }
+          if (editingFetishId !== null) {
+            editingFetishId = null;
+            renderFetishManagement();
+            return;
+          }
+          // 子页面：返回上级
+          if (settingsSubPage) {
+            settingsSubPage = null;
+            renderSettingsTab();
+            return;
+          }
+          if (bookshelfSubPage) {
+            if (document.fullscreenElement) document.exitFullscreen();
+            bookshelfSubPage = null;
+            showNav();
+            renderBookshelfTab();
+            return;
+          }
+          // 非默认 tab：回到默认 tab
+          const defaultTab = uiConfig.defaultHome || 'add';
+          if (currentTab !== defaultTab) {
+            currentTab = defaultTab;
+            renderCurrentTab();
+            return;
+          }
+          // 已在默认 tab：退出 app
+          App.exitApp();
+        });
+      };
+      registerBackButton();
+    }
   } catch (error) {
     console.error('Init error:', error);
   }
@@ -1170,6 +1392,23 @@ function loadExternalLibraries() {
   
   loadScript('https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js').catch(() => {});
   loadScript('https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js').catch(() => {});
+}
+
+// ── JMComic 依赖懒加载（crypto-js, pdf-lib）──
+let _jmDepsReady = null;
+function ensureJMComicDeps() {
+  if (window.CryptoJS && window.PDFLib) return Promise.resolve();
+  if (_jmDepsReady) return _jmDepsReady;
+  const loadScript = (src) => new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = resolve; s.onerror = reject;
+    document.head.appendChild(s);
+  });
+  _jmDepsReady = Promise.all([
+    window.CryptoJS ? Promise.resolve() : loadScript('https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js'),
+    window.PDFLib ? Promise.resolve() : loadScript('https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js'),
+  ]).catch(e => { console.log('[JM] 依赖加载失败:', e.message); _jmDepsReady = null; });
+  return _jmDepsReady;
 }
 
 function updateNavigationLabels() {
@@ -3028,29 +3267,27 @@ function takeScreenshot() {
 
 function renderSettingsTab() {
   if (settingsSubPage === 'mediumManagement') {
-    renderMediumManagement();
-    return;
+    hideNav(); renderMediumManagement(); return;
   }
   if (settingsSubPage === 'fetishManagement') {
-    renderFetishManagement();
-    return;
+    hideNav(); renderFetishManagement(); return;
   }
   if (settingsSubPage === 'dataManagement') {
-    renderDataManagement();
-    return;
+    hideNav(); renderDataManagement(); return;
   }
   if (settingsSubPage === 'statsManagement') {
-    renderStatsManagement();
-    return;
+    hideNav(); renderStatsManagement(); return;
   }
   if (settingsSubPage === 'appearanceManagement') {
-    renderAppearanceManagement();
-    return;
+    hideNav(); renderAppearanceManagement(); return;
   }
   if (settingsSubPage === 'about') {
-    renderAbout();
-    return;
+    hideNav(); renderAbout(); return;
   }
+  if (settingsSubPage === 'bookshelfSettings') {
+    hideNav(); renderBookshelfSettings(); return;
+  }
+  showNav();
 
   mainContent.innerHTML = `
     <div class="card">
@@ -3083,6 +3320,7 @@ function renderSettingsTab() {
       </div>
       <div class="card" style="margin-top: 16px;">
         <button class="btn btn-secondary" id="appearance-management-btn" style="width: 100%; margin-bottom: 8px;">🎨 ${t('appearance_management')}</button>
+        <button class="btn btn-secondary" id="bookshelf-settings-btn" style="width: 100%; margin-bottom: 8px;">📚 ${t('bs_settings')}</button>
         <button class="btn btn-secondary" id="data-management-btn" style="width: 100%; margin-bottom: 8px;">${t('data_management')}</button>
         <button class="btn btn-secondary" id="medium-management-btn" style="width: 100%; margin-bottom: 8px;">${t('medium_management')}</button>
         <button class="btn btn-secondary" id="fetish-management-btn" style="width: 100%; margin-bottom: 8px;">${t('fetish_management')}</button>
@@ -3119,6 +3357,11 @@ function renderSettingsTab() {
 
   document.getElementById('appearance-management-btn').addEventListener('click', () => {
     settingsSubPage = 'appearanceManagement';
+    renderSettingsTab();
+  });
+
+  document.getElementById('bookshelf-settings-btn').addEventListener('click', () => {
+    settingsSubPage = 'bookshelfSettings';
     renderSettingsTab();
   });
 
@@ -3316,39 +3559,7 @@ function renderAppearanceManagement() {
           </div>
         </div>
       </div>
-      
-      <div style="margin-bottom: 24px;">
-        <h4 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">🎨 ${t('custom_icons')}</h4>
-        
-        <div class="form-group">
-          <label class="form-label">${t('add_icon')}</label>
-          <input type="file" id="add-icon" accept="image/*" style="width: 100%; padding: 8px; margin-bottom: 8px;">
-          <div id="add-icon-preview" style="width: 100%; height: 60px; border-radius: 8px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
-          <button class="btn btn-secondary" id="reset-add-icon" style="width: 100%;">${t('reset_icon')}</button>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('records_icon')}</label>
-          <input type="file" id="records-icon" accept="image/*" style="width: 100%; padding: 8px; margin-bottom: 8px;">
-          <div id="records-icon-preview" style="width: 100%; height: 60px; border-radius: 8px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
-          <button class="btn btn-secondary" id="reset-records-icon" style="width: 100%;">${t('reset_icon')}</button>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('stats_icon')}</label>
-          <input type="file" id="stats-icon" accept="image/*" style="width: 100%; padding: 8px; margin-bottom: 8px;">
-          <div id="stats-icon-preview" style="width: 100%; height: 60px; border-radius: 8px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
-          <button class="btn btn-secondary" id="reset-stats-icon" style="width: 100%;">${t('reset_icon')}</button>
-        </div>
-        
-        <div class="form-group">
-          <label class="form-label">${t('settings_icon')}</label>
-          <input type="file" id="settings-icon" accept="image/*" style="width: 100%; padding: 8px; margin-bottom: 8px;">
-          <div id="settings-icon-preview" style="width: 100%; height: 60px; border-radius: 8px; border: 2px dashed var(--border-color); display: flex; align-items: center; justify-content: center; margin-bottom: 8px; background-size: contain; background-repeat: no-repeat; background-position: center;"></div>
-          <button class="btn btn-secondary" id="reset-settings-icon" style="width: 100%;">${t('reset_icon')}</button>
-        </div>
-      </div>
-      
+
       <div style="margin-bottom: 24px;">
         <h4 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">🔄 ${t('nav_order')}</h4>
         <div id="nav-order-list">
@@ -3418,76 +3629,6 @@ function renderAppearanceManagement() {
       renderAppearanceManagement();
     });
   }
-
-  const addIconPreview = document.getElementById('add-icon-preview');
-  const recordsIconPreview = document.getElementById('records-icon-preview');
-  const statsIconPreview = document.getElementById('stats-icon-preview');
-  const settingsIconPreview = document.getElementById('settings-icon-preview');
-  
-  if (uiConfig.addIcon) {
-    addIconPreview.style.backgroundImage = `url(${uiConfig.addIcon})`;
-    addIconPreview.innerHTML = '';
-  } else {
-    addIconPreview.innerHTML = '➕';
-  }
-  
-  if (uiConfig.recordsIcon) {
-    recordsIconPreview.style.backgroundImage = `url(${uiConfig.recordsIcon})`;
-    recordsIconPreview.innerHTML = '';
-  } else {
-    recordsIconPreview.innerHTML = '📋';
-  }
-  
-  if (uiConfig.statsIcon) {
-    statsIconPreview.style.backgroundImage = `url(${uiConfig.statsIcon})`;
-    statsIconPreview.innerHTML = '';
-  } else {
-    statsIconPreview.innerHTML = '📊';
-  }
-  
-  if (uiConfig.settingsIcon) {
-    settingsIconPreview.style.backgroundImage = `url(${uiConfig.settingsIcon})`;
-    settingsIconPreview.innerHTML = '';
-  } else {
-    settingsIconPreview.innerHTML = '⚙️';
-  }
-  
-  function handleIconUpload(tab) {
-    return (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const iconKey = tab + 'Icon';
-          uiConfig[iconKey] = event.target.result;
-          saveUIConfig();
-          renderNavigation();
-          renderAppearanceManagement();
-        };
-        reader.readAsDataURL(file);
-      }
-    };
-  }
-  
-  function handleIconReset(tab) {
-    return () => {
-      const iconKey = tab + 'Icon';
-      uiConfig[iconKey] = '';
-      saveUIConfig();
-      renderNavigation();
-      renderAppearanceManagement();
-    };
-  }
-  
-  document.getElementById('add-icon').addEventListener('change', handleIconUpload('add'));
-  document.getElementById('records-icon').addEventListener('change', handleIconUpload('records'));
-  document.getElementById('stats-icon').addEventListener('change', handleIconUpload('stats'));
-  document.getElementById('settings-icon').addEventListener('change', handleIconUpload('settings'));
-  
-  document.getElementById('reset-add-icon').addEventListener('click', handleIconReset('add'));
-  document.getElementById('reset-records-icon').addEventListener('click', handleIconReset('records'));
-  document.getElementById('reset-stats-icon').addEventListener('click', handleIconReset('stats'));
-  document.getElementById('reset-settings-icon').addEventListener('click', handleIconReset('settings'));
 
   ['square', 'medium', 'round'].forEach(size => {
     document.getElementById(`corner-${size}`).addEventListener('click', () => {
@@ -3562,10 +3703,6 @@ function renderAppearanceManagement() {
       darkBg: '',
       lightBgImage: '',
       darkBgImage: '',
-      addIcon: '',
-      recordsIcon: '',
-      statsIcon: '',
-      settingsIcon: '',
       cardBg: '',
       textPrimary: '',
       textSecondary: '',
@@ -3574,9 +3711,13 @@ function renderAppearanceManagement() {
       spacing: 'standard',
       navPosition: 'bottom',
       defaultHome: 'add',
-      navOrder: ['add', 'records', 'stats', 'settings'],
+      navOrder: ['add', 'records', 'stats', 'bookshelf', 'settings'],
       statsSortOrder: 'desc',
-      statsButtonsPosition: 'top'
+      statsButtonsPosition: 'top',
+      bsViewMode: 'grid',
+      bsGridCols: 3,
+      bsSaveImages: true,
+      bsSavePdf: false,
     };
     saveThemeConfig();
     saveUIConfig();
@@ -3745,7 +3886,102 @@ function renderChangelog() {
       </div>
       <div style="line-height: 1.8;">
         <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-          <h4 style="color: var(--primary-color); margin-bottom: 8px;">${t('cl_v091_title')}</h4>
+          <h4 style="color: var(--primary-color); margin-bottom: 8px;">${t('cl_v100_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v100_1')}</li>
+            <li>${t('cl_v100_2')}</li>
+            <li>${t('cl_v100_3')}</li>
+            <li>${t('cl_v100_4')}</li>
+            <li>${t('cl_v100_5')}</li>
+            <li>${t('cl_v100_6')}</li>
+            <li style="margin-top:8px;color:var(--primary-color);">🙏 ${t('credits_acheron')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0918_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0918_1')}</li>
+            <li>${t('cl_v0918_2')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0917_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0917_1')}</li>
+            <li>${t('cl_v0917_2')}</li>
+            <li>${t('cl_v0917_3')}</li>
+            <li>${t('cl_v0917_4')}</li>
+            <li>${t('cl_v0917_5')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0916_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0916_1')}</li>
+            <li>${t('cl_v0916_2')}</li>
+            <li>${t('cl_v0916_3')}</li>
+            <li>${t('cl_v0916_4')}</li>
+            <li>${t('cl_v0916_5')}</li>
+            <li>${t('cl_v0916_6')}</li>
+            <li>${t('cl_v0916_7')}</li>
+            <li>${t('cl_v0916_8')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0915_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0915_1')}</li>
+            <li>${t('cl_v0915_2')}</li>
+            <li>${t('cl_v0915_3')}</li>
+            <li>${t('cl_v0915_4')}</li>
+            <li>${t('cl_v0915_5')}</li>
+            <li>${t('cl_v0915_6')}</li>
+            <li>${t('cl_v0915_7')}</li>
+            <li>${t('cl_v0915_8')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0914_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0914_1')}</li>
+            <li>${t('cl_v0914_2')}</li>
+            <li>${t('cl_v0914_3')}</li>
+            <li>${t('cl_v0914_4')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0913_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0913_1')}</li>
+            <li>${t('cl_v0913_2')}</li>
+            <li>${t('cl_v0913_3')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0912_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0912_1')}</li>
+            <li>${t('cl_v0912_2')}</li>
+            <li>${t('cl_v0912_3')}</li>
+            <li>${t('cl_v0912_4')}</li>
+            <li>${t('cl_v0912_5')}</li>
+            <li>${t('cl_v0912_6')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v0911_title')}</h4>
+          <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
+            <li>${t('cl_v0911_1')}</li>
+            <li>${t('cl_v0911_2')}</li>
+            <li>${t('cl_v0911_3')}</li>
+            <li>${t('cl_v0911_4')}</li>
+            <li>${t('cl_v0911_5')}</li>
+            <li>${t('cl_v0911_6')}</li>
+            <li>${t('cl_v0911_7')}</li>
+          </ul>
+        </div>
+        <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+          <h4 style="color: var(--text-color); margin-bottom: 8px;">${t('cl_v091_title')}</h4>
           <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px;">
             <li>${t('cl_v091_1')}</li>
             <li>${t('cl_v091_2')}</li>
@@ -3994,8 +4230,17 @@ function renderStatsManagement() {
         </div>
       </div>
       
+      <div style="margin-bottom: 24px;">
+        <div class="settings-item">
+          <span class="settings-label">${t('calendar_default_collapsed')}</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="calendar-default-collapsed" ${statsConfig.calendarDefaultCollapsed ? 'checked' : ''}>
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+
       <div>
-        <h4 style="color: var(--text-color); margin-bottom: 12px;">⏰ ${t('sync_time')}</h4>
         <div class="settings-item">
           <span class="settings-label">${t('sync_time')}</span>
           <label class="toggle-switch">
@@ -4116,9 +4361,99 @@ function renderStatsManagement() {
     saveStatsConfig();
   });
 
+  document.getElementById('calendar-default-collapsed').addEventListener('change', (e) => {
+    statsConfig.calendarDefaultCollapsed = e.target.checked;
+    saveStatsConfig();
+  });
+
   document.getElementById('sync-time').addEventListener('change', (e) => {
     statsConfig.syncTime = e.target.checked;
     saveStatsConfig();
+  });
+}
+
+// ── 书架设置 ──
+function renderBookshelfSettings() {
+  const saveImages = uiConfig.bsSaveImages !== false; // default true
+  const savePdf = uiConfig.bsSavePdf === true; // default false
+  mainContent.innerHTML = `
+    <div class="card">
+      <div style="display: flex; align-items: center; margin-bottom: 16px;">
+        <button class="btn btn-secondary" id="back-btn" style="margin-right: 12px;">← ${t('back')}</button>
+        <h3 class="card-title" style="margin: 0;">📚 ${t('bs_settings')}</h3>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <h4 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">📱 ${t('bookshelf_display')}</h4>
+        <div class="form-group">
+          <label class="form-label">${t('bookshelf_display')}</label>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn ${(!uiConfig.bsViewMode || uiConfig.bsViewMode === 'grid') ? 'btn-primary' : 'btn-secondary'}" id="bs-view-grid" style="flex: 1; padding: 10px;">${t('bs_view_grid')}</button>
+            <button class="btn ${uiConfig.bsViewMode === 'list' ? 'btn-primary' : 'btn-secondary'}" id="bs-view-list" style="flex: 1; padding: 10px;">${t('bs_view_list')}</button>
+          </div>
+        </div>
+        <div class="form-group" id="bs-columns-group" style="${uiConfig.bsViewMode === 'list' ? 'display:none' : ''}">
+          <label class="form-label">${t('bs_columns')}</label>
+          <div style="display: flex; gap: 8px;">
+            <button class="btn ${(!uiConfig.bsGridCols || uiConfig.bsGridCols === 2) ? 'btn-primary' : 'btn-secondary'}" id="bs-col-2" style="flex: 1; padding: 10px;">2</button>
+            <button class="btn ${uiConfig.bsGridCols === 3 ? 'btn-primary' : 'btn-secondary'}" id="bs-col-3" style="flex: 1; padding: 10px;">3</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 24px;">
+        <h4 style="color: var(--text-primary); margin-bottom: 12px; font-size: 16px;">💾 ${t('bs_download_format')}</h4>
+
+        <div class="settings-item" style="flex-direction:column;align-items:flex-start;gap:4px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+            <span class="settings-label">${t('bs_save_images')}</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="bs-save-images" ${saveImages ? 'checked' : ''}>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">${t('bs_save_images_desc')}</p>
+        </div>
+
+        <div class="settings-item" style="flex-direction:column;align-items:flex-start;gap:4px;margin-top:12px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;width:100%;">
+            <span class="settings-label">${t('bs_save_pdf')}</span>
+            <label class="toggle-switch">
+              <input type="checkbox" id="bs-save-pdf" ${savePdf ? 'checked' : ''}>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <p style="font-size:12px;color:var(--text-secondary);margin:0;">${t('bs_save_pdf_desc')}</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('back-btn').addEventListener('click', () => {
+    settingsSubPage = null;
+    renderSettingsTab();
+  });
+
+  document.getElementById('bs-view-grid').addEventListener('click', () => {
+    uiConfig.bsViewMode = 'grid'; saveUIConfig(); renderBookshelfSettings();
+  });
+  document.getElementById('bs-view-list').addEventListener('click', () => {
+    uiConfig.bsViewMode = 'list'; saveUIConfig(); renderBookshelfSettings();
+  });
+  document.getElementById('bs-col-2').addEventListener('click', () => {
+    uiConfig.bsGridCols = 2; saveUIConfig(); renderBookshelfSettings();
+  });
+  document.getElementById('bs-col-3').addEventListener('click', () => {
+    uiConfig.bsGridCols = 3; saveUIConfig(); renderBookshelfSettings();
+  });
+
+  document.getElementById('bs-save-images').addEventListener('change', (e) => {
+    uiConfig.bsSaveImages = e.target.checked;
+    saveUIConfig();
+  });
+  document.getElementById('bs-save-pdf').addEventListener('change', (e) => {
+    uiConfig.bsSavePdf = e.target.checked;
+    saveUIConfig();
   });
 }
 
@@ -4139,7 +4474,7 @@ function renderAbout() {
       <div style="margin-bottom: 24px; padding: 16px; background: var(--border-color); border-radius: 12px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('version')}</span>
-          <span style="color: var(--primary-color); font-weight: 700;">0.91.8</span>
+          <span style="color: var(--primary-color); font-weight: 700;">1.0</span>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span style="font-weight: 600; color: var(--text-primary);">${t('developer')}</span>
@@ -4161,7 +4496,18 @@ function renderAbout() {
         <h4 style="color: var(--text-color); margin-bottom: 12px; font-size: 16px;">📝 ${t('changelog')}</h4>
         <div style="line-height: 1.6;">
           <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--primary-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0918_title')}</h5>
+            <h5 style="color: var(--primary-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v100_title')}</h5>
+            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
+              <li>${t('cl_v100_1')}</li>
+              <li>${t('cl_v100_2')}</li>
+              <li>${t('cl_v100_3')}</li>
+              <li>${t('cl_v100_4')}</li>
+              <li>${t('cl_v100_5')}</li>
+              <li>${t('cl_v100_6')}</li>
+            </ul>
+          </div>
+          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
+            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0918_title')}</h5>
             <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
               <li>${t('cl_v0918_1')}</li>
               <li>${t('cl_v0918_2')}</li>
@@ -4174,14 +4520,13 @@ function renderAbout() {
               <li>${t('cl_v0917_5')}</li>
             </ul>
           </div>
-          <div style="margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border-color);">
-            <h5 style="color: var(--text-color); margin-bottom: 8px; font-size: 15px;">${t('cl_v0916_title')}</h5>
-            <ul style="color: var(--text-secondary); margin: 0; padding-left: 20px; font-size: 14px;">
-              <li>${t('cl_v0916_1')}</li>
-              <li>${t('cl_v0916_4')}</li>
-              <li>${t('cl_v0916_8')}</li>
-            </ul>
-          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 0;">
+        <h4 style="color: var(--text-color); margin-bottom: 12px; font-size: 16px;">🙏 ${t('credits_title')}</h4>
+        <div style="padding: 12px 16px; background: var(--border-color); border-radius: 10px; line-height: 1.6; color: var(--text-secondary); font-size: 14px;">
+          ${t('credits_acheron')}
         </div>
       </div>
     </div>
@@ -5986,6 +6331,1673 @@ function updateLanguage() {
   });
 }
 
+// ──────────────────────────────────────────────
+//  JMComic 漫画下载器（纯 JS 实现）
+// ──────────────────────────────────────────────
+
+// JMComic API 配置
+const JM_API_DOMAINS = [
+  'www.cdnhjk.net',
+  'www.cdngwc.cc',
+  'www.cdngwc.net',
+  'www.cdngwc.club',
+  'www.cdnutc.me',
+];
+const JM_CDN_DOMAINS = [
+  'cdn-msp.jmapiproxy1.cc',
+  'cdn-msp.jmapiproxy2.cc',
+  'cdn-msp2.jmapiproxy2.cc',
+  'cdn-msp3.jmapiproxy2.cc',
+  'cdn-msp.jmapinodeudzn.net',
+  'cdn-msp3.jmapinodeudzn.net',
+];
+const JM_APP_VERSION = '2.0.26';
+const JM_TOKEN_SECRET = '185Hcomic3PAPP7R';
+const JM_TOKEN_SECRET_2 = '18comicAPPContent';
+const JM_DATA_SECRET = '185Hcomic3PAPP7R';
+
+// 检测是否需要本地服务器代理（Web 需要，Capacitor 不需要）
+function jmNeedProxy() {
+  // Capacitor 环境下 hostname 也是 localhost，必须优先判断
+  if (window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform()) return false;
+  if (window.Capacitor && window.Capacitor.isNative) return false;
+  return location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+}
+
+function jmProxyBase() {
+  return `${location.protocol}//${location.hostname}:3001`;
+}
+
+// MD5
+function jmMd5(str) {
+  return CryptoJS.MD5(str).toString(CryptoJS.enc.Hex);
+}
+
+// 生成 token 头
+function jmMakeToken(ts, secret) {
+  secret = secret || JM_TOKEN_SECRET;
+  return {
+    token: jmMd5(ts + secret),
+    tokenparam: `${ts},${JM_APP_VERSION}`,
+  };
+}
+
+// AES-ECB 解密 API 响应数据
+function jmDecryptData(encodedData, ts) {
+  const key = CryptoJS.enc.Utf8.parse(jmMd5(ts + JM_DATA_SECRET));
+  const decrypted = CryptoJS.AES.decrypt(encodedData, key, {
+    mode: CryptoJS.mode.ECB,
+    padding: CryptoJS.pad.Pkcs7,
+  });
+  return JSON.parse(decrypted.toString(CryptoJS.enc.Utf8));
+}
+
+// 通过代理调用 JMComic API
+async function jmApiRequest(apiPath, params) {
+  await ensureJMComicDeps();
+  const ts = Math.floor(Date.now() / 1000).toString();
+  const isScramble = apiPath.includes('chapter_view_template');
+  const headers = jmMakeToken(ts, isScramble ? JM_TOKEN_SECRET_2 : undefined);
+
+  const qs = new URLSearchParams(params).toString();
+  const path = `/${apiPath.replace(/^\//, '')}${qs ? '?' + qs : ''}`;
+
+  let lastErr;
+  for (const domain of JM_API_DOMAINS) {
+    const fullUrl = `https://${domain}${path}`;
+    try {
+      let respData;
+      if (jmNeedProxy()) {
+        // 通过 Node.js 服务器代理
+        const proxyUrl = `${jmProxyBase()}/api/jm/proxy`;
+        console.log('[JM] 请求代理:', proxyUrl, '→', fullUrl);
+        const resp = await fetch(proxyUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ url: fullUrl, headers }),
+        });
+        console.log('[JM] 代理响应 status:', resp.status, 'type:', resp.headers.get('content-type'));
+        const text = await resp.text();
+        console.log('[JM] 代理响应前100字符:', text.substring(0, 100));
+        // 检查是否返回了 HTML（服务器未就绪或路由错误）
+        if (text.startsWith('<') || text.startsWith('<!')) {
+          throw new Error('服务器返回了 HTML 而非 JSON，请确认服务器已启动');
+        }
+        const result = JSON.parse(text);
+        if (result.error) throw new Error(result.error);
+        respData = typeof result.data === 'string' ? JSON.parse(result.data) : result.data;
+      } else {
+        // 直接请求（Capacitor 环境）
+        const resp = await fetch(fullUrl, {
+          headers: {
+            'Accept-Encoding': 'gzip, deflate',
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 9) AppleWebKit/537.36',
+            'X-Requested-With': 'com.JMComic3.app',
+            ...headers,
+          },
+        });
+        respData = await resp.json();
+      }
+
+      if (respData.code === 200) {
+        return { json: respData, ts, domain };
+      }
+      if (respData.redirect_aid) {
+        return { json: respData, ts, domain, redirect: respData.redirect_aid };
+      }
+      throw new Error(respData.errorMsg || `API code: ${respData.code}`);
+    } catch (e) {
+      lastErr = e;
+      continue;
+    }
+  }
+  throw lastErr || new Error('所有 API 域名均不可用');
+}
+
+// 获取漫画信息
+async function jmGetAlbum(albumId) {
+  const { json, ts } = await jmApiRequest('/album', { id: albumId });
+  const data = jmDecryptData(json.data, ts);
+
+  let chapters = [];
+  if (data.series && data.series.length > 0) {
+    chapters = data.series.map(ch => ({
+      id: String(ch.id),
+      title: ch.name || `章节 ${ch.sort}`,
+      sort: parseInt(ch.sort) || 0,
+    }));
+    chapters.sort((a, b) => a.sort - b.sort);
+  } else {
+    chapters.push({ id: String(data.id), title: data.name || '完整版', sort: 1 });
+  }
+
+  return {
+    id: String(data.id || albumId),
+    title: data.name || `JM${albumId}`,
+    author: (data.author || []).join(', '),
+    tags: data.tags || [],
+    chapters,
+  };
+}
+
+// 获取章节图片列表 + scramble_id
+async function jmGetChapter(photoId) {
+  const { json, ts } = await jmApiRequest('/chapter', { id: photoId });
+  const data = jmDecryptData(json.data, ts);
+
+  const images = data.images || [];
+  const albumId = data.series_id || photoId;
+
+  // 获取 scramble_id（从 HTML 中提取，失败则不反混淆）
+  let scrambleId = '999999';
+  try {
+    const ts2 = Math.floor(Date.now() / 1000).toString();
+    const tokenHeaders = jmMakeToken(ts2, JM_TOKEN_SECRET_2);
+    const scrambleUrl = `https://${JM_API_DOMAINS[0]}/chapter_view_template?id=${photoId}&mode=vertical&page=0&app_img_shunt=1&express=off&v=${ts2}`;
+    let html = '';
+    if (jmNeedProxy()) {
+      const resp = await fetch(`${jmProxyBase()}/api/jm/proxy`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: scrambleUrl, headers: tokenHeaders }),
+      });
+      const result = await resp.json();
+      html = result.data || '';
+    } else {
+      // Capacitor 环境：直接请求
+      const resp = await fetch(scrambleUrl, {
+        headers: {
+          'Accept-Encoding': 'gzip, deflate',
+          'User-Agent': 'Mozilla/5.0 (Linux; Android 9) AppleWebKit/537.36',
+          'X-Requested-With': 'com.JMComic3.app',
+          ...tokenHeaders,
+        },
+      });
+      html = await resp.text();
+    }
+    const m = html.match(/var scramble_id\s*=\s*(\d+)\s*;/);
+    if (m) {
+      scrambleId = m[1];
+      console.log('[JM] scramble_id:', scrambleId);
+    }
+  } catch (e) {
+    console.log('[JM] 获取 scramble_id 失败，跳过反混淆:', e.message);
+  }
+
+  return { images, scrambleId, albumId };
+}
+
+// 下载章节图片 → 反混淆 → 生成 PDF
+async function jmDownloadChapter(albumId, title, progressCb) {
+  // 1. 获取章节信息
+  progressCb(10, '正在获取章节信息...');
+  const { json, ts } = await jmApiRequest('/album', { id: albumId });
+  const albumData = jmDecryptData(json.data, ts);
+
+  // 收集所有章节
+  const photoIds = [];
+  if (albumData.series && albumData.series.length > 0) {
+    albumData.series.forEach(ch => photoIds.push(String(ch.id)));
+  } else {
+    photoIds.push(String(albumId));
+  }
+
+  // 2. 并发下载所有章节的图片（最多 3 个章节同时）
+  const allImages = [];
+  const CONCURRENT_CHAPTERS = 3;
+  for (let pi = 0; pi < photoIds.length; pi += CONCURRENT_CHAPTERS) {
+    const batch = photoIds.slice(pi, pi + CONCURRENT_CHAPTERS);
+    progressCb(10 + (pi / photoIds.length) * 30, `正在获取章节 ${pi + 1}~${Math.min(pi + CONCURRENT_CHAPTERS, photoIds.length)}/${photoIds.length}...`);
+    const results = await Promise.all(batch.map(async pid => {
+      try { return { pid, chapter: await jmGetChapter(pid) }; }
+      catch (e) { console.log(`[JM] 章节 ${pid} 失败:`, e.message); return null; }
+    }));
+    for (const item of results) {
+      if (!item) continue;
+      const { pid, chapter } = item;
+      const cdnDomain = JM_CDN_DOMAINS[Math.floor(Math.random() * JM_CDN_DOMAINS.length)];
+      chapter.images.forEach(imgName => {
+        allImages.push({
+          url: `https://${cdnDomain}/media/photos/${pid}/${imgName}`,
+          filename: imgName,
+          photoId: pid,
+        });
+      });
+      allImages._scrambleId = chapter.scrambleId;
+      allImages._albumId = chapter.albumId;
+    }
+  }
+
+  if (allImages.length === 0) throw new Error('未找到图片');
+
+  // 3. 下载图片
+  let downloadedImages = [];
+
+  if (jmNeedProxy()) {
+    // 一次性下载 + SSE 实时进度
+    progressCb(40, `正在下载 ${allImages.length} 张图片...`);
+    const resp = await fetch(`${jmProxyBase()}/api/jm/images?stream=1`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        images: allImages,
+        scrambleId: allImages._scrambleId || '999999',
+        albumId: allImages._albumId || albumId,
+      }),
+    });
+
+    // 读取 SSE 流
+    const reader = resp.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop(); // 保留不完整的行
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const evt = JSON.parse(line.slice(6));
+          if (evt.finished) {
+            downloadedImages = evt.images || [];
+          } else {
+            const pct = 40 + Math.floor((evt.done / evt.total) * 40);
+            progressCb(pct, `下载中 ${evt.done}/${evt.total}...`);
+          }
+        } catch (e) {}
+      }
+    }
+  } else {
+    // Capacitor 环境：并发下载 + Canvas 反混淆（最多 5 路）
+    const scrambleId = allImages._scrambleId || '999999';
+    const CONCURRENT_IMAGES = 5;
+    downloadedImages = new Array(allImages.length);
+    let done = 0;
+    for (let i = 0; i < allImages.length; i += CONCURRENT_IMAGES) {
+      const batch = allImages.slice(i, i + CONCURRENT_IMAGES);
+      const results = await Promise.all(batch.map(async (img, j) => {
+        try {
+          const resp = await fetch(img.url, {
+            headers: { 'X-Requested-With': 'com.JMComic3.app', Referer: 'https://www.cdnhjk.net/' },
+          });
+          let blob = await resp.blob();
+          const nameNoExt = img.filename.replace(/\.\w+$/, '');
+          const num = jmGetScrambleNum(scrambleId, img.photoId, nameNoExt);
+          if (num > 0) blob = await jmDescrambleCanvas(blob, num);
+          return await blobToBase64(blob);
+        } catch (e) { console.log('[JM] 图片下载失败:', e.message); return null; }
+      }));
+      results.forEach((b64, j) => { if (b64) downloadedImages[i + j] = b64; });
+      done += batch.length;
+      progressCb(40 + Math.floor((done / allImages.length) * 40), `下载中 ${done}/${allImages.length}...`);
+    }
+    downloadedImages = downloadedImages.filter(Boolean);
+  }
+
+  if (downloadedImages.length === 0) throw new Error('图片下载失败');
+  progressCb(80, '正在生成 PDF...');
+
+  // 检查下载格式偏好
+  const saveImages = uiConfig.bsSaveImages !== false;
+  const savePdf = uiConfig.bsSavePdf === true;
+
+  // 生成 PDF（客户端 PDFLib，不区分平台）
+  let pdfBlob = null;
+  if (savePdf) {
+    progressCb(80, '正在生成 PDF...');
+    try {
+      if (!window.PDFLib) await ensureJMComicDeps();
+      if (!window.PDFLib) throw new Error('PDFLib 加载失败');
+      const pdfDoc = await PDFLib.PDFDocument.create();
+      for (let i = 0; i < downloadedImages.length; i++) {
+        try {
+          const imgBytes = Uint8Array.from(atob(downloadedImages[i]), c => c.charCodeAt(0));
+          const img = await pdfDoc.embedJpg(imgBytes);
+          const page = pdfDoc.addPage([img.width, img.height]);
+          page.drawImage(img, { x: 0, y: 0, width: img.width, height: img.height });
+        } catch (e) { console.log('[JM] PDF 页面跳过:', e.message); }
+        if (i % 10 === 0) progressCb(80 + Math.floor((i / downloadedImages.length) * 15), `生成 PDF ${i + 1}/${downloadedImages.length}...`);
+      }
+      const pdfBytes = await pdfDoc.save();
+      pdfBlob = new Blob([pdfBytes], { type: 'application/pdf' });
+    } catch (e) {
+      console.log('[JM] PDF 生成失败:', e.message);
+    }
+  }
+
+  // 手机端保存 PDF 文件到本地
+  let localPdfName = null;
+  if (pdfBlob && !jmNeedProxy() && window.FileHelper) {
+    try {
+      const b64 = await blobToBase64(pdfBlob);
+      const safeName = (title || 'JMComic').replace(/[\/\\:*?"<>|]/g, '_').substring(0, 60) + '.pdf';
+      window.FileHelper.saveFile(b64, safeName, 'application/pdf');
+      localPdfName = safeName;
+    } catch (e) { console.log('[JM] PDF 保存到本地失败:', e.message); }
+  }
+
+  progressCb(100, '下载完成');
+  // pdf 模式不存图片，read 模式不存 PDF，both 模式都存
+  return {
+    pdfBlob: savePdf ? pdfBlob : null,
+    pages: saveImages ? downloadedImages : null,
+    localPdfName,
+  };
+}
+
+function blobToBase64(blob) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result.split(',')[1]);
+    reader.readAsDataURL(blob);
+  });
+}
+
+// 获取封面图（第一章第一张图）
+async function jmFetchCover(albumId) {
+  try {
+    const albumData = await jmGetAlbum(albumId);
+    const firstChapterId = albumData.chapters?.[0]?.id || albumId;
+    const chapter = await jmGetChapter(firstChapterId);
+    if (!chapter.images || chapter.images.length === 0) return null;
+
+    const firstImg = chapter.images[0];
+    const cdnDomain = JM_CDN_DOMAINS[Math.floor(Math.random() * JM_CDN_DOMAINS.length)];
+    const imgUrl = `https://${cdnDomain}/media/photos/${firstChapterId}/${firstImg}`;
+
+    if (jmNeedProxy()) {
+      const resp = await fetch(`${jmProxyBase()}/api/jm/images`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          images: [{ url: imgUrl, filename: firstImg, photoId: firstChapterId }],
+          scrambleId: chapter.scrambleId || '999999',
+          albumId: chapter.albumId || albumId,
+        }),
+      });
+      const result = await resp.json();
+      if (result.images && result.images.length > 0) {
+        const b64 = result.images[0];
+        const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+        return new Blob([bytes], { type: 'image/jpeg' });
+      }
+    } else {
+      const resp = await fetch(imgUrl, {
+        headers: { 'X-Requested-With': 'com.JMComic3.app', Referer: 'https://www.cdnhjk.net/' },
+      });
+      let blob = await resp.blob();
+      const nameNoExt = firstImg.replace(/\.\w+$/, '');
+      const num = jmGetScrambleNum(chapter.scrambleId || '999999', firstChapterId, nameNoExt);
+      if (num > 0) blob = await jmDescrambleCanvas(blob, num);
+      return blob;
+    }
+  } catch (e) {
+    console.log('[JM] 获取封面失败:', e.message);
+  }
+  return null;
+}
+
+// 计算反混淆分割数（与 Python 完全一致）
+function jmGetScrambleNum(scrambleId, aid, filename) {
+  scrambleId = parseInt(scrambleId);
+  aid = parseInt(aid);
+  if (aid < scrambleId) return 0;
+  if (aid < 268850) return 10;
+  const x = aid < 421926 ? 10 : 8;
+  const s = jmMd5(aid + filename);
+  return (s.charCodeAt(s.length - 1) % x) * 2 + 2;
+}
+
+// Canvas 反混淆（手机端使用）
+async function jmDescrambleCanvas(blob, num) {
+  const img = await createImageBitmap(blob);
+  const canvas = document.createElement('canvas');
+  canvas.width = img.width;
+  canvas.height = img.height;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const over = img.height % num;
+  for (let i = 0; i < num; i++) {
+    const move = Math.floor(img.height / num);
+    let ySrc = img.height - (move * (i + 1)) - over;
+    let yDst = move * i;
+    let sliceH = move;
+    if (i === 0) sliceH += over; else yDst += over;
+    ctx.drawImage(img, 0, ySrc, img.width, sliceH, 0, yDst, img.width, sliceH);
+  }
+
+  return new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.9));
+}
+
+function parseJMCode(input) {
+  const match = input.trim().match(/(?:JM\s*[-]?\s*)?(\d+)/i);
+  return match ? match[1] : null;
+}
+
+// ──────────────────────────────────────────────
+//  JMComic 书架 IndexedDB 持久化
+// ──────────────────────────────────────────────
+
+let _jmDb = null;
+function jmDbOpen() {
+  return new Promise((resolve, reject) => {
+    if (_jmDb) { resolve(_jmDb); return; }
+    const req = indexedDB.open('jm_comics', 1);
+    req.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains('comics')) {
+        db.createObjectStore('comics', { keyPath: 'albumId' });
+      }
+    };
+    req.onsuccess = (e) => { _jmDb = e.target.result; resolve(_jmDb); };
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function jmDbSave(comic) {
+  const db = await jmDbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('comics', 'readwrite');
+    tx.objectStore('comics').put(comic);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function jmDbList() {
+  const db = await jmDbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('comics', 'readonly');
+    const req = tx.objectStore('comics').getAll();
+    req.onsuccess = () => resolve(req.result || []);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function jmDbGet(albumId) {
+  const db = await jmDbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('comics', 'readonly');
+    const req = tx.objectStore('comics').get(albumId);
+    req.onsuccess = () => resolve(req.result || null);
+    req.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function jmDbDelete(albumId) {
+  // 清理手机端本地 PDF 文件
+  try {
+    const comic = await jmDbGet(albumId);
+    if (comic && comic.localPdfName && window.FileHelper) {
+      window.FileHelper.deleteFile(comic.localPdfName);
+    }
+  } catch (e) { console.log('[JM] 清理本地文件失败:', e.message); }
+
+  const db = await jmDbOpen();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('comics', 'readwrite');
+    tx.objectStore('comics').delete(albumId);
+    tx.oncomplete = () => resolve();
+    tx.onerror = (e) => reject(e.target.error);
+  });
+}
+
+async function jmDbToggleFav(albumId) {
+  const comic = await jmDbGet(albumId);
+  if (!comic) return;
+  comic.favorite = !comic.favorite;
+  await jmDbSave(comic);
+  return comic.favorite;
+}
+
+async function jmDbUpdateTags(albumId, tags) {
+  const comic = await jmDbGet(albumId);
+  if (!comic) return;
+  comic.jmTags = tags;
+  await jmDbSave(comic);
+}
+
+// 书架状态
+let bookshelfSubPage = null; // null=主页, 'search'=搜索, 'reader'=阅读器, 'downloads'=下载管理
+let bookshelfFilter = { type: 'all' }; // {type:'all'|'favorite'|'tag', tag?:string}
+let bookshelfSelectMode = false;
+let bookshelfSelected = new Set();
+let jmDownloadingMap = {}; // {albumId: {code, title, progress, status, paused, cancelFlag}}
+let batchAbortFlag = { cancelled: false, paused: false };
+
+// ── 下载管理浮窗入口（右下角小按钮，点击进入下载页面）──
+function updateDownloadPanel() {
+  let btn = document.getElementById('jm-dl-fab');
+  const entries = Object.entries(jmDownloadingMap);
+  const hasActive = entries.length > 0;
+
+  if (!hasActive) {
+    if (btn) btn.remove();
+    return;
+  }
+
+  if (!btn) {
+    btn = document.createElement('div');
+    btn.id = 'jm-dl-fab';
+    btn.style.cssText = `
+      position:fixed;bottom:80px;right:14px;z-index:200;
+      width:50px;height:50px;border-radius:50%;
+      background:var(--accent-color,#6366f1);color:#fff;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      font-size:11px;font-weight:700;cursor:pointer;
+      box-shadow:0 3px 12px rgba(99,102,241,0.4);
+      transition:transform 0.2s;
+    `;
+    btn.addEventListener('click', () => {
+      bookshelfSubPage = 'downloads';
+      renderBookshelfTab();
+    });
+    document.body.appendChild(btn);
+  }
+
+  const totalPct = entries.reduce((s, [, v]) => s + (v.progress || 0), 0) / entries.length;
+  btn.innerHTML = `<span style="font-size:18px;">📥</span><span>${Math.round(totalPct)}%</span>`;
+
+  // 如果当前在下载管理页面，同步刷新列表
+  if (bookshelfSubPage === 'downloads') refreshDownloadList();
+}
+
+function renderBookshelfTab() {
+  const mc = document.getElementById('main-content');
+  if (bookshelfSubPage === 'search') { hideNav(); renderBookshelfSearch(mc); return; }
+  if (bookshelfSubPage === 'reader') { renderBookshelfReader(mc); return; }
+  if (bookshelfSubPage === 'downloads') { hideNav(); renderBookshelfDownloads(mc); return; }
+  showNav();
+  renderBookshelfMain(mc);
+}
+
+// ── 书架主页 ──
+async function renderBookshelfMain(mc) {
+  bookshelfSelectMode = false;
+  bookshelfSelected.clear();
+
+  mc.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;padding:16px;">
+      <!-- 顶部栏 -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+        <h2 style="margin:0;font-size:20px;">📚 ${t('tab_bookshelf')}</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button id="bs-filter-btn" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:18px;cursor:pointer;">🔽</button>
+          <button id="bs-add-btn" style="width:36px;height:36px;border-radius:50%;border:none;background:var(--accent-color,#6366f1);color:#fff;font-size:22px;cursor:pointer;line-height:1;">+</button>
+        </div>
+      </div>
+      <!-- 多选操作栏 -->
+      <div id="bs-select-bar" style="display:none;margin-bottom:12px;padding:8px 12px;border-radius:8px;background:var(--bg-secondary,#f5f5f5);align-items:center;gap:8px;">
+        <button id="bs-sel-all" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:13px;cursor:pointer;">${t('jm_select_all')}</button>
+        <span id="bs-sel-count" style="flex:1;text-align:center;font-size:14px;color:var(--text-secondary,#888);">0</span>
+        <button id="bs-sel-cancel" style="padding:4px 10px;border-radius:6px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:13px;cursor:pointer;">${t('jm_cancel')}</button>
+      </div>
+      <!-- 网格/列表 -->
+      <div id="bs-grid" style="${(!uiConfig.bsViewMode || uiConfig.bsViewMode === 'grid') ? `display:grid;grid-template-columns:repeat(${uiConfig.bsGridCols || 3},1fr);gap:10px;` : 'display:flex;flex-direction:column;gap:8px;'}"></div>
+      <!-- 底部统计 -->
+      <div id="bs-stats" style="text-align:center;padding:12px;font-size:13px;color:var(--text-secondary,#888);"></div>
+      <!-- 多选操作按钮栏 -->
+      <div id="bs-action-bar" style="display:none;position:fixed;bottom:70px;left:0;right:0;padding:10px 16px;background:var(--bg-primary,#fff);border-top:1px solid var(--border-color,#ddd);display:none;gap:8px;justify-content:center;z-index:100;">
+        <button class="bs-act-btn" data-action="fav" style="padding:8px 14px;border-radius:8px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:14px;cursor:pointer;">⭐</button>
+        <button class="bs-act-btn" data-action="tag" style="padding:8px 14px;border-radius:8px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:14px;cursor:pointer;">🏷️</button>
+        <button class="bs-act-btn" data-action="export" style="padding:8px 14px;border-radius:8px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:14px;cursor:pointer;">📋</button>
+        <button class="bs-act-btn" data-action="delete" style="padding:8px 14px;border-radius:8px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:14px;cursor:pointer;">🗑️</button>
+      </div>
+    </div>
+  `;
+
+  // 加载并渲染
+  await refreshBookshelfGrid();
+
+  // + 按钮
+  document.getElementById('bs-add-btn').addEventListener('click', showBookshelfAddMenu);
+  // 筛选按钮
+  document.getElementById('bs-filter-btn').addEventListener('click', showBookshelfFilterMenu);
+
+  // 多选操作栏事件
+  bindSelectBarEvents();
+}
+
+let _bsRefreshSeq = 0;
+let _bsCoverUrls = [];
+async function refreshBookshelfGrid() {
+  const seq = ++_bsRefreshSeq;
+  const grid = document.getElementById('bs-grid');
+  const statsEl = document.getElementById('bs-stats');
+  if (!grid) return;
+
+  // 清理上一轮的 Object URLs（防止并发泄漏）
+  _bsCoverUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch(e) {} });
+  _bsCoverUrls = [];
+
+  const isList = uiConfig.bsViewMode === 'list';
+  const cols = uiConfig.bsGridCols || 3;
+  grid.style.cssText = isList
+    ? 'display:flex;flex-direction:column;gap:8px;'
+    : `display:grid;grid-template-columns:repeat(${cols},1fr);gap:10px;`;
+
+  let comics = await jmDbList();
+  if (seq !== _bsRefreshSeq) return; // 并发保护：有更新的刷新已启动，放弃本次
+
+  // 应用筛选
+  if (bookshelfFilter.type === 'favorite') {
+    comics = comics.filter(c => c.favorite);
+  } else if (bookshelfFilter.type === 'tag' && bookshelfFilter.tag) {
+    comics = comics.filter(c => c.jmTags && c.jmTags.includes(bookshelfFilter.tag));
+  }
+
+  // 合并下载中的漫画
+  const dlEntries = Object.entries(jmDownloadingMap);
+
+  grid.innerHTML = '';
+
+  // 下载中卡片
+  dlEntries.forEach(([aid, info]) => {
+    if (comics.find(c => c.albumId === aid)) return;
+    const card = document.createElement('div');
+    const pct = Math.round(info.progress || 0);
+    if (isList) {
+      card.style.cssText = 'display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:var(--bg-secondary,#f5f5f5);';
+      card.innerHTML = `
+        <div style="width:50px;height:66px;border-radius:6px;background:var(--bg-tertiary,#e8e8e8);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <svg width="36" height="36" viewBox="0 0 60 60">
+            <circle cx="30" cy="30" r="26" fill="none" stroke="var(--border-color,#e0e0e0)" stroke-width="4"/>
+            <circle cx="30" cy="30" r="26" fill="none" stroke="var(--accent-color,#6366f1)" stroke-width="4" stroke-dasharray="${pct * 1.63} ${163 - pct * 1.63}" stroke-linecap="round" transform="rotate(-90 30 30)" style="transition:stroke-dasharray 0.3s;"/>
+            <text x="30" y="34" text-anchor="middle" font-size="12" fill="var(--text-primary,#333)">${pct}%</text>
+          </svg>
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary,#333);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${info.title || `JM${info.code}`}</div>
+          <div style="font-size:12px;color:var(--text-secondary,#888);margin-top:2px;">JM${info.code} · ${pct}%</div>
+        </div>
+      `;
+    } else {
+      card.style.cssText = 'position:relative;border-radius:10px;overflow:hidden;background:var(--bg-secondary,#f5f5f5);aspect-ratio:3/4;';
+      card.innerHTML = `
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px;">
+          <svg width="60" height="60" viewBox="0 0 60 60" style="margin-bottom:8px;">
+            <circle cx="30" cy="30" r="26" fill="none" stroke="var(--border-color,#e0e0e0)" stroke-width="4"/>
+            <circle cx="30" cy="30" r="26" fill="none" stroke="var(--accent-color,#6366f1)" stroke-width="4" stroke-dasharray="${pct * 1.63} ${163 - pct * 1.63}" stroke-linecap="round" transform="rotate(-90 30 30)" style="transition:stroke-dasharray 0.3s;"/>
+            <text x="30" y="34" text-anchor="middle" font-size="12" fill="var(--text-primary,#333)">${pct}%</text>
+          </svg>
+          <div style="font-size:16px;font-weight:700;color:var(--text-secondary,#888);">JM${info.code}</div>
+          <div style="font-size:11px;color:var(--text-secondary,#888);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%;">${info.title || ''}</div>
+        </div>
+      `;
+    }
+    grid.appendChild(card);
+  });
+
+  // 已下载卡片
+  comics.forEach(comic => {
+    const card = document.createElement('div');
+    const isSelected = bookshelfSelected.has(comic.albumId);
+    card.dataset.albumId = comic.albumId;
+    const coverUrl = comic.coverBlob ? URL.createObjectURL(comic.coverBlob) : '';
+    if (coverUrl) _bsCoverUrls.push(coverUrl);
+    const chCount = comic.chapters ? comic.chapters.length : 0;
+    const isFailed = comic.failed && !comic.pdfBlob && !(comic.pages && comic.pages.length);
+
+    if (isList) {
+      card.style.cssText = `display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:var(--bg-secondary,#f5f5f5);cursor:pointer;${isSelected ? 'outline:3px solid var(--accent-color,#6366f1);' : ''}`;
+      card.innerHTML = `
+        <div class="bs-sel-chk${bookshelfSelectMode ? '' : ' bs-sel-hidden'}${isSelected ? ' bs-selected' : ''}" style="width:22px;height:22px;border-radius:50%;border:2px solid ${isSelected ? 'var(--accent-color,#6366f1)' : 'var(--border-color,#ccc)'};background:${isSelected ? 'var(--accent-color,#6366f1)' : 'rgba(255,255,255,0.8)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">${isSelected ? '<span style="color:#fff;font-size:14px;">✓</span>' : ''}</div>
+        <div style="width:50px;height:66px;border-radius:6px;overflow:hidden;flex-shrink:0;background:var(--bg-tertiary,#e8e8e8);">
+          ${coverUrl ? `<img src="${coverUrl}" style="width:100%;height:100%;object-fit:cover;"/>` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--text-secondary,#aaa);">📖</div>`}
+        </div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:14px;font-weight:600;color:var(--text-primary,#333);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${comic.favorite ? '⭐ ' : ''}${comic.title}</div>
+          <div style="font-size:12px;color:var(--text-secondary,#888);margin-top:2px;">${isFailed ? '❌ 点击重试' : chCount + t('jm_chapter_count')}</div>
+        </div>
+      `;
+    } else {
+      card.style.cssText = `position:relative;border-radius:10px;overflow:hidden;background:var(--bg-secondary,#f5f5f5);aspect-ratio:3/4;cursor:pointer;${isSelected ? 'outline:3px solid var(--accent-color,#6366f1);' : ''}`;
+      card.innerHTML = `
+        <div class="bs-sel-chk${bookshelfSelectMode ? '' : ' bs-sel-hidden'}${isSelected ? ' bs-selected' : ''}" style="position:absolute;top:6px;left:6px;z-index:2;width:22px;height:22px;border-radius:50%;border:2px solid ${isSelected ? 'var(--accent-color,#6366f1)' : 'var(--border-color,#ccc)'};background:${isSelected ? 'var(--accent-color,#6366f1)' : 'rgba(255,255,255,0.8)'};display:flex;align-items:center;justify-content:center;">
+          ${isSelected ? '<span style="color:#fff;font-size:14px;">✓</span>' : ''}
+        </div>
+        ${comic.favorite ? '<span style="position:absolute;top:6px;right:6px;z-index:2;font-size:16px;">⭐</span>' : ''}
+        ${isFailed ? '<span style="position:absolute;top:6px;right:6px;z-index:2;font-size:14px;background:#dc3545;color:#fff;border-radius:4px;padding:1px 5px;">失败</span>' : ''}
+        ${coverUrl
+          ? `<img src="${coverUrl}" style="width:100%;height:100%;object-fit:cover;"/>`
+          : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:32px;color:${isFailed ? '#dc3545' : 'var(--text-secondary,#aaa)'};">${isFailed ? '⚠️' : '📖'}</div>`
+        }
+        <div style="position:absolute;bottom:0;left:0;right:0;padding:6px 8px;background:linear-gradient(transparent,rgba(0,0,0,0.7));">
+          <div style="font-size:12px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${comic.title}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.8);">${isFailed ? '点击重试' : chCount + t('jm_chapter_count')}</div>
+        </div>
+      `;
+    }
+
+    // 点击事件
+    let pressTimer = null;
+    card.addEventListener('touchstart', (e) => {
+      pressTimer = setTimeout(() => { pressTimer = null; enterSelectMode(comic.albumId); }, 500);
+    }, { passive: true });
+    card.addEventListener('touchend', () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } });
+    card.addEventListener('touchmove', () => { if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; } });
+    card.addEventListener('contextmenu', (e) => { e.preventDefault(); enterSelectMode(comic.albumId); });
+    card.addEventListener('click', () => {
+      if (bookshelfSelectMode) {
+        toggleSelect(comic.albumId);
+      } else if (comic.failed && !comic.pdfBlob && !(comic.pages && comic.pages.length)) {
+        retryFailedComic(comic.albumId, comic.title);
+      } else {
+        openBookshelfReader(comic.albumId);
+      }
+    });
+
+    grid.appendChild(card);
+  });
+
+  // 空状态
+  if (comics.length === 0 && dlEntries.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text-secondary,#888);">
+        <div style="font-size:48px;margin-bottom:12px;">📚</div>
+        <div style="font-size:15px;">${t('jm_no_comics')}</div>
+      </div>
+    `;
+  }
+
+  // 统计
+  const allComics = await jmDbList();
+  const favCount = allComics.filter(c => c.favorite).length;
+  if (statsEl) {
+    statsEl.textContent = t('jm_comic_count').replace('{n}', allComics.length) + (favCount ? ` / ⭐ ${favCount}` : '');
+  }
+}
+
+// ── 多选模式 ──
+function enterSelectMode(albumId) {
+  bookshelfSelectMode = true;
+  bookshelfSelected.clear();
+  if (albumId) bookshelfSelected.add(albumId);
+  // 轻量 DOM 操作：显示所有 checkbox，高亮选中项
+  document.querySelectorAll('#bs-grid .bs-sel-chk').forEach(el => el.classList.remove('bs-sel-hidden'));
+  document.querySelectorAll('#bs-grid > div[data-album-id]').forEach(card => {
+    const aid = card.dataset.albumId;
+    const chk = card.querySelector('.bs-sel-chk');
+    if (!chk) return;
+    if (bookshelfSelected.has(aid)) {
+      chk.classList.add('bs-selected');
+      chk.style.borderColor = 'var(--accent-color,#6366f1)';
+      chk.style.background = 'var(--accent-color,#6366f1)';
+      chk.innerHTML = '<span style="color:#fff;font-size:14px;">✓</span>';
+      card.style.outline = '3px solid var(--accent-color,#6366f1)';
+    } else {
+      chk.classList.remove('bs-selected');
+      chk.style.borderColor = 'var(--border-color,#ccc)';
+      chk.style.background = 'rgba(255,255,255,0.8)';
+      chk.innerHTML = '';
+      card.style.outline = '';
+    }
+  });
+  updateSelectBar();
+}
+
+function exitSelectMode() {
+  bookshelfSelectMode = false;
+  bookshelfSelected.clear();
+  // 轻量 DOM 操作：隐藏所有 checkbox，移除高亮
+  document.querySelectorAll('#bs-grid .bs-sel-chk').forEach(el => {
+    el.classList.add('bs-sel-hidden');
+    el.classList.remove('bs-selected');
+    el.style.borderColor = 'var(--border-color,#ccc)';
+    el.style.background = 'rgba(255,255,255,0.8)';
+    el.innerHTML = '';
+  });
+  document.querySelectorAll('#bs-grid > div[data-album-id]').forEach(card => {
+    card.style.outline = '';
+  });
+  updateSelectBar();
+}
+
+function toggleSelect(albumId) {
+  const card = document.querySelector(`#bs-grid > div[data-album-id="${albumId}"]`);
+  if (!card) return;
+  const chk = card.querySelector('.bs-sel-chk');
+  if (!chk) return;
+  if (bookshelfSelected.has(albumId)) {
+    bookshelfSelected.delete(albumId);
+    chk.classList.remove('bs-selected');
+    chk.style.borderColor = 'var(--border-color,#ccc)';
+    chk.style.background = 'rgba(255,255,255,0.8)';
+    chk.innerHTML = '';
+    card.style.outline = '';
+  } else {
+    bookshelfSelected.add(albumId);
+    chk.classList.add('bs-selected');
+    chk.style.borderColor = 'var(--accent-color,#6366f1)';
+    chk.style.background = 'var(--accent-color,#6366f1)';
+    chk.innerHTML = '<span style="color:#fff;font-size:14px;">✓</span>';
+    card.style.outline = '3px solid var(--accent-color,#6366f1)';
+  }
+  updateSelectBar();
+}
+
+function updateSelectBar() {
+  const bar = document.getElementById('bs-select-bar');
+  const actBar = document.getElementById('bs-action-bar');
+  const countEl = document.getElementById('bs-sel-count');
+  if (!bar) return;
+
+  if (bookshelfSelectMode) {
+    bar.style.display = 'flex';
+    if (actBar) actBar.style.display = 'flex';
+    if (countEl) countEl.textContent = `${bookshelfSelected.size} ${t('jm_select_mode')}`;
+  } else {
+    bar.style.display = 'none';
+    if (actBar) actBar.style.display = 'none';
+  }
+}
+
+function bindSelectBarEvents() {
+  const selAll = document.getElementById('bs-sel-all');
+  const selCancel = document.getElementById('bs-sel-cancel');
+  if (selAll) selAll.addEventListener('click', async () => {
+    const comics = await jmDbList();
+    comics.forEach(c => bookshelfSelected.add(c.albumId));
+    // 轻量更新所有卡片选中状态
+    document.querySelectorAll('#bs-grid > div[data-album-id]').forEach(card => {
+      const aid = card.dataset.albumId;
+      const chk = card.querySelector('.bs-sel-chk');
+      if (!chk || !bookshelfSelected.has(aid)) return;
+      chk.classList.add('bs-selected');
+      chk.style.borderColor = 'var(--accent-color,#6366f1)';
+      chk.style.background = 'var(--accent-color,#6366f1)';
+      chk.innerHTML = '<span style="color:#fff;font-size:14px;">✓</span>';
+      card.style.outline = '3px solid var(--accent-color,#6366f1)';
+    });
+    updateSelectBar();
+  });
+  if (selCancel) selCancel.addEventListener('click', exitSelectMode);
+
+  document.querySelectorAll('.bs-act-btn').forEach(btn => {
+    btn.addEventListener('click', () => handleSelectAction(btn.dataset.action));
+  });
+}
+
+async function handleSelectAction(action) {
+  const ids = [...bookshelfSelected];
+  if (ids.length === 0) return;
+
+  if (action === 'fav') {
+    for (const id of ids) await jmDbToggleFav(id);
+    exitSelectMode();
+    refreshBookshelfGrid(); // 需要更新 ⭐ 显示
+  } else if (action === 'tag') {
+    showTagPicker(ids);
+  } else if (action === 'export') {
+    const lines = [];
+    for (const id of ids) {
+      const c = await jmDbGet(id);
+      if (c) lines.push(`jm${c.albumId}${c.title}`);
+    }
+    navigator.clipboard.writeText(lines.join('\n')).then(() => {
+      alert(t('jm_export_done') + ` (${lines.length})`);
+    }).catch(() => {
+      prompt(t('jm_export_codes'), lines.join('\n'));
+    });
+  } else if (action === 'delete') {
+    if (confirm(t('jm_delete_confirm'))) {
+      for (const id of ids) await jmDbDelete(id);
+      exitSelectMode();
+      refreshBookshelfGrid(); // 需要移除已删除的卡片
+    }
+  }
+}
+
+function showTagPicker(albumIds) {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  const tagOptions = fetishes.map(f => {
+    return `<label style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:6px;background:var(--bg-tertiary,#e8e8e8);cursor:pointer;">
+      <input type="checkbox" class="jm-tag-cb" value="${f.name}" style="width:18px;height:18px;"> ${f.name}
+    </label>`;
+  }).join('');
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:400px;">
+      <div class="modal-header"><h3>${t('jm_tag_comic')}</h3><button class="modal-close">&times;</button></div>
+      <div class="modal-body" style="display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow-y:auto;">${tagOptions}</div>
+      <div style="padding:12px;display:flex;gap:8px;">
+        <button class="btn btn-secondary" id="tag-cancel" style="flex:1;">${t('jm_cancel')}</button>
+        <button class="btn btn-primary" id="tag-ok" style="flex:1;">OK</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+  document.getElementById('tag-cancel').addEventListener('click', () => modal.remove());
+  document.getElementById('tag-ok').addEventListener('click', async () => {
+    const selected = [...modal.querySelectorAll('.jm-tag-cb:checked')].map(cb => cb.value);
+    for (const id of albumIds) {
+      const comic = await jmDbGet(id);
+      if (!comic) continue;
+      const existing = new Set(comic.jmTags || []);
+      selected.forEach(t => existing.add(t));
+      await jmDbUpdateTags(id, [...existing]);
+    }
+    modal.remove();
+    exitSelectMode();
+  });
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+}
+
+// ── 筛选菜单 ──
+function showBookshelfFilterMenu() {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  const isActive = (type, tag) => bookshelfFilter.type === type && (!tag || bookshelfFilter.tag === tag);
+  let items = `
+    <button class="bs-filter-item" data-type="all" style="width:100%;padding:12px;text-align:left;border:none;background:${isActive('all') ? 'var(--bg-tertiary,#e8e8e8)' : 'transparent'};font-size:15px;cursor:pointer;border-radius:6px;">${t('jm_filter_all')}</button>
+    <button class="bs-filter-item" data-type="favorite" style="width:100%;padding:12px;text-align:left;border:none;background:${isActive('favorite') ? 'var(--bg-tertiary,#e8e8e8)' : 'transparent'};font-size:15px;cursor:pointer;border-radius:6px;">${t('jm_filter_favorite')}</button>
+  `;
+  fetishes.forEach(f => {
+    items += `<button class="bs-filter-item" data-type="tag" data-tag="${f.name}" style="width:100%;padding:12px;text-align:left;border:none;background:${isActive('tag', f.name) ? 'var(--bg-tertiary,#e8e8e8)' : 'transparent'};font-size:15px;cursor:pointer;border-radius:6px;">🏷️ ${f.name}</button>`;
+  });
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:360px;">
+      <div class="modal-header"><h3>${t('jm_filter')}</h3><button class="modal-close">&times;</button></div>
+      <div class="modal-body" style="display:flex;flex-direction:column;gap:2px;">${items}</div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+  modal.querySelectorAll('.bs-filter-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      bookshelfFilter = { type: btn.dataset.type, tag: btn.dataset.tag || undefined };
+      modal.remove();
+      refreshBookshelfGrid();
+    });
+  });
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+}
+
+// ── + 按钮菜单 ──
+function showBookshelfAddMenu() {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:360px;position:fixed;bottom:0;left:0;right:0;border-radius:16px 16px 0 0;">
+      <div style="padding:20px;display:flex;flex-direction:column;gap:12px;">
+        <button id="bs-menu-search" style="padding:14px;text-align:left;border:none;background:var(--bg-tertiary,#e8e8e8);font-size:16px;cursor:pointer;border-radius:10px;">🔍 ${t('jm_search_download')}</button>
+        <button id="bs-menu-local" style="padding:14px;text-align:left;border:none;background:var(--bg-tertiary,#e8e8e8);font-size:16px;cursor:pointer;border-radius:10px;">📁 ${t('jm_local_import')}</button>
+        <button id="bs-menu-batch" style="padding:14px;text-align:left;border:none;background:var(--bg-tertiary,#e8e8e8);font-size:16px;cursor:pointer;border-radius:10px;">📦 ${t('jm_batch_download')}</button>
+        <button id="bs-menu-cancel" style="padding:14px;text-align:center;border:none;background:transparent;font-size:15px;cursor:pointer;color:var(--text-secondary,#888);">${t('jm_cancel')}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.getElementById('bs-menu-cancel').addEventListener('click', () => modal.remove());
+  document.getElementById('bs-menu-search').addEventListener('click', () => { modal.remove(); bookshelfSubPage = 'search'; renderBookshelfTab(); });
+  document.getElementById('bs-menu-local').addEventListener('click', () => { modal.remove(); handleLocalImport(); });
+  document.getElementById('bs-menu-batch').addEventListener('click', () => { modal.remove(); showBatchDownloadModal(); });
+  modal.addEventListener('click', (e) => { if (e.target === modal) modal.remove(); });
+}
+
+// ── 重试失败的漫画 ──
+async function retryFailedComic(albumId, title) {
+  jmDownloadingMap[albumId] = { code: albumId, title: title || `JM${albumId}`, progress: 0, status: 'downloading', paused: false };
+  updateDownloadPanel();
+  try {
+    const albumInfo = await jmGetAlbum(albumId);
+    jmDownloadingMap[albumId].title = albumInfo.title;
+    updateDownloadPanel();
+
+    const dlResult = await jmDownloadChapter(albumId, albumInfo.title, (pct) => {
+      jmDownloadingMap[albumId].progress = pct;
+      updateDownloadPanel();
+    });
+
+    const cover = await jmFetchCover(albumId);
+    await jmDbSave({
+      albumId,
+      title: albumInfo.title,
+      author: albumInfo.author || '',
+      tags: albumInfo.tags || [],
+      chapters: albumInfo.chapters || [],
+      coverBlob: cover,
+      pdfBlob: dlResult.pdfBlob,
+      pages: dlResult.pages,
+      localPdfName: dlResult.localPdfName || null,
+      favorite: false,
+      jmTags: [],
+      addedAt: new Date().toISOString(),
+      source: 'jm',
+    });
+
+    delete jmDownloadingMap[albumId];
+    updateDownloadPanel();
+    renderBookshelfTab();
+  } catch (err) {
+    delete jmDownloadingMap[albumId];
+    updateDownloadPanel();
+    alert(`重试失败: ${err.message}`);
+  }
+}
+
+// ── 本地导入 ──
+function handleLocalImport() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.pdf';
+  input.multiple = true;
+  input.addEventListener('change', async () => {
+    const files = input.files;
+    if (!files || files.length === 0) return;
+
+    // 进度弹窗
+    const modal = document.createElement('div');
+    modal.className = 'modal';
+    modal.innerHTML = `
+      <div class="modal-content" style="max-width:360px;text-align:center;">
+        <div class="modal-body" style="padding:24px;">
+          <div id="import-status" style="font-size:15px;color:var(--text-primary);margin-bottom:12px;">准备导入...</div>
+          <div style="width:100%;height:6px;background:var(--border-color,#e0e0e0);border-radius:3px;overflow:hidden;">
+            <div id="import-bar" style="height:100%;width:0%;background:var(--accent-color,#6366f1);transition:width 0.3s;border-radius:3px;"></div>
+          </div>
+          <div id="import-detail" style="font-size:13px;color:var(--text-secondary,#888);margin-top:8px;"></div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+    const statusEl = document.getElementById('import-status');
+    const barEl = document.getElementById('import-bar');
+    const detailEl = document.getElementById('import-detail');
+
+    // 确保 pdf.js 已加载
+    if (!window.pdfjsLib) {
+      statusEl.textContent = 'PDF 引擎未加载，请稍后重试';
+      setTimeout(() => modal.remove(), 2000);
+      return;
+    }
+
+    for (let fi = 0; fi < files.length; fi++) {
+      const file = files[fi];
+      const title = file.name.replace(/\.pdf$/i, '');
+      statusEl.textContent = `正在导入: ${title} (${fi + 1}/${files.length})`;
+      barEl.style.width = '0%';
+
+      try {
+        const arrayBuf = await file.arrayBuffer();
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+        const totalPages = pdf.numPages;
+        const pages = [];
+        const containerWidth = window.innerWidth;
+        const dpr = window.devicePixelRatio || 1;
+
+        for (let i = 1; i <= totalPages; i++) {
+          detailEl.textContent = `正在转换第 ${i}/${totalPages} 页...`;
+          barEl.style.width = ((i / totalPages) * 100) + '%';
+
+          const page = await pdf.getPage(i);
+          const viewport = page.getViewport({ scale: 1 });
+          const scale = (containerWidth / viewport.width) * dpr;
+          const fitViewport = page.getViewport({ scale });
+          const canvas = document.createElement('canvas');
+          canvas.width = fitViewport.width;
+          canvas.height = fitViewport.height;
+          const ctx = canvas.getContext('2d');
+          await page.render({ canvasContext: ctx, viewport: fitViewport }).promise;
+          pages.push(canvas.toDataURL('image/jpeg', 0.8).split(',')[1]);
+        }
+
+        const albumId = 'local_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+        await jmDbSave({
+          albumId,
+          title,
+          author: '',
+          tags: [],
+          chapters: [{ id: albumId, title, sort: 1 }],
+          coverBlob: null,
+          pages,
+          favorite: false,
+          jmTags: [],
+          addedAt: new Date().toISOString(),
+          source: 'local',
+        });
+        detailEl.textContent = `${title} 导入完成 (${totalPages} 页)`;
+      } catch (e) {
+        console.error('[Import] PDF 转换失败:', e);
+        detailEl.textContent = `${title} 导入失败: ${e.message}`;
+      }
+    }
+
+    barEl.style.width = '100%';
+    statusEl.textContent = '全部导入完成';
+    setTimeout(() => { modal.remove(); renderBookshelfTab(); }, 1200);
+  });
+  input.click();
+}
+
+// ── 搜索子页面 ──
+function renderBookshelfSearch(mc) {
+  mc.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;padding:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <button id="jm-back-btn" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:18px;cursor:pointer;">←</button>
+        <h2 style="margin:0;font-size:18px;">🔍 ${t('jm_search_download')}</h2>
+      </div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input type="text" id="jm-code-input" placeholder="${t('jm_input_hint')}"
+          style="flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);color:var(--text-primary,#333);font-size:16px;outline:none;"/>
+        <button id="jm-search-btn"
+          style="padding:10px 20px;border-radius:8px;border:none;background:var(--accent-color,#6366f1);color:#fff;font-size:16px;cursor:pointer;white-space:nowrap;">${t('jm_search')}</button>
+      </div>
+      <div id="jm-status" style="text-align:center;padding:8px;color:var(--text-secondary,#888);font-size:14px;display:none;"></div>
+      <div id="jm-album-info" style="display:none;">
+        <div style="padding:12px;border-radius:10px;background:var(--bg-secondary,#f5f5f5);margin-bottom:12px;">
+          <div style="font-size:12px;color:var(--text-secondary,#888);margin-bottom:4px;">${t('jm_title')}</div>
+          <div id="jm-album-title" style="font-size:18px;font-weight:600;color:var(--text-primary,#333);"></div>
+        </div>
+        <div style="font-size:14px;font-weight:600;color:var(--text-secondary,#888);margin-bottom:8px;">${t('jm_chapters')}</div>
+        <div id="jm-chapters-list" style="display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow-y:auto;"></div>
+      </div>
+      <div id="jm-download-area" style="display:none;margin-top:16px;">
+        <div style="padding:12px;border-radius:10px;background:var(--bg-secondary,#f5f5f5);">
+          <div id="jm-dl-status" style="font-size:14px;margin-bottom:8px;color:var(--text-primary,#333);"></div>
+          <div style="width:100%;height:6px;background:var(--border-color,#e0e0e0);border-radius:3px;overflow:hidden;">
+            <div id="jm-dl-progress" style="height:100%;width:0%;background:var(--accent-color,#6366f1);transition:width 0.3s ease;border-radius:3px;"></div>
+          </div>
+        </div>
+      </div>
+      <div id="jm-scramble-warn" style="display:none;margin-top:12px;padding:10px;border-radius:8px;background:#fff3cd;color:#856404;font-size:13px;">⚠️ ${t('jm_scrambled_warn')}</div>
+    </div>
+  `;
+
+  document.getElementById('jm-back-btn').addEventListener('click', () => { bookshelfSubPage = null; renderBookshelfTab(); });
+  const codeInput = document.getElementById('jm-code-input');
+  const searchBtn = document.getElementById('jm-search-btn');
+  const statusEl = document.getElementById('jm-status');
+
+  function showStatus(msg, color) { statusEl.style.display = 'block'; statusEl.textContent = msg; statusEl.style.color = color || 'var(--text-secondary,#888)'; }
+  function hideStatus() { statusEl.style.display = 'none'; }
+
+  searchBtn.addEventListener('click', () => doSearch());
+  codeInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') doSearch(); });
+  setTimeout(() => codeInput.focus(), 100);
+
+  let currentAlbumId = null;
+
+  async function doSearch() {
+    const raw = codeInput.value.trim();
+    const albumId = parseJMCode(raw);
+    if (!albumId) { showStatus(t('jm_input_empty'), '#dc3545'); return; }
+
+    if (jmNeedProxy()) {
+      try {
+        const h = await fetch(`${jmProxyBase()}/api/jm/proxy`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url: `https://${JM_API_DOMAINS[0]}/album?id=1`, headers: { token: 't', tokenparam: 't' } }) });
+        const ht = await h.text();
+        if (ht.startsWith('<')) { showStatus(t('jm_server_error'), '#dc3545'); return; }
+      } catch (e) { showStatus(t('jm_server_error'), '#dc3545'); return; }
+    }
+
+    currentAlbumId = albumId;
+    hideStatus();
+    showStatus(t('jm_searching'), 'var(--text-secondary,#888)');
+    searchBtn.disabled = true;
+    searchBtn.textContent = t('jm_searching');
+    document.getElementById('jm-album-info').style.display = 'none';
+    document.getElementById('jm-download-area').style.display = 'none';
+
+    try {
+      const data = await jmGetAlbum(albumId);
+      document.getElementById('jm-album-title').textContent = data.title;
+      const chaptersList = document.getElementById('jm-chapters-list');
+      chaptersList.innerHTML = '';
+
+      if (!data.chapters || data.chapters.length === 0 || (data.chapters.length === 1 && data.chapters[0].id === albumId)) {
+        const div = document.createElement('div');
+        div.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:var(--bg-tertiary,#e8e8e8);';
+        div.innerHTML = `<span style="color:var(--text-primary,#333);font-size:14px;">📄 ${data.title}</span>
+          <button class="jm-dl-btn" data-id="${albumId}" data-title="${data.title}" style="padding:6px 16px;border-radius:6px;border:none;background:var(--accent-color,#6366f1);color:#fff;font-size:13px;cursor:pointer;">${t('jm_download')}</button>`;
+        chaptersList.appendChild(div);
+      } else {
+        data.chapters.forEach(ch => {
+          const div = document.createElement('div');
+          div.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-radius:8px;background:var(--bg-tertiary,#e8e8e8);';
+          div.innerHTML = `<span style="color:var(--text-primary,#333);font-size:14px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-right:8px;">📖 ${ch.title}</span>
+            <button class="jm-dl-btn" data-id="${ch.id}" data-title="${data.title} - ${ch.title}" style="padding:6px 16px;border-radius:6px;border:none;background:var(--accent-color,#6366f1);color:#fff;font-size:13px;cursor:pointer;white-space:nowrap;">${t('jm_download')}</button>`;
+          chaptersList.appendChild(div);
+        });
+      }
+
+      chaptersList.querySelectorAll('.jm-dl-btn').forEach(btn => {
+        btn.addEventListener('click', () => doDownload(btn.dataset.id, btn.dataset.title, btn));
+      });
+      document.getElementById('jm-album-info').style.display = 'block';
+      hideStatus();
+    } catch (err) {
+      showStatus(`${t('jm_download_failed')}: ${err.message}`, '#dc3545');
+    } finally {
+      searchBtn.disabled = false;
+      searchBtn.textContent = t('jm_search');
+    }
+  }
+
+  async function doDownload(photoId, title, btn) {
+    // 首次下载弹窗选择格式
+    if (!uiConfig.bsSaveImages && !uiConfig.bsSavePdf) { uiConfig.bsSaveImages = true; saveUIConfig(); }
+
+    const downloadArea = document.getElementById('jm-download-area');
+    const dlStatus = document.getElementById('jm-dl-status');
+    const dlProgress = document.getElementById('jm-dl-progress');
+    downloadArea.style.display = 'block';
+    btn.disabled = true;
+    btn.textContent = t('jm_downloading');
+
+    // 更新下载中状态
+    jmDownloadingMap[currentAlbumId] = { code: currentAlbumId, title, progress: 0, status: 'downloading' };
+    updateDownloadPanel();
+
+    try {
+      const dlResult = await jmDownloadChapter(currentAlbumId, title, (pct, msg) => {
+        dlProgress.style.width = pct + '%';
+        dlStatus.textContent = msg;
+        jmDownloadingMap[currentAlbumId].progress = pct;
+        updateDownloadPanel();
+      });
+
+      dlProgress.style.width = '100%';
+      dlStatus.textContent = `✅ ${t('jm_download_complete')}`;
+
+      // 保存到 IndexedDB
+      dlStatus.textContent = '正在保存...';
+      const albumInfo = await jmGetAlbum(currentAlbumId).catch(() => ({ title, chapters: [] }));
+      const cover = await jmFetchCover(currentAlbumId);
+      await jmDbSave({
+        albumId: currentAlbumId,
+        title: albumInfo.title || title,
+        author: albumInfo.author || '',
+        tags: albumInfo.tags || [],
+        chapters: albumInfo.chapters || [{ id: currentAlbumId, title, sort: 1 }],
+        coverBlob: cover,
+        pdfBlob: dlResult.pdfBlob,
+        pages: dlResult.pages,
+        localPdfName: dlResult.localPdfName || null,
+        favorite: false,
+        jmTags: [],
+        addedAt: new Date().toISOString(),
+        source: 'jm',
+      });
+
+      delete jmDownloadingMap[currentAlbumId];
+      updateDownloadPanel();
+
+      // 自动返回书架
+      bookshelfSubPage = null;
+      renderBookshelfTab();
+
+    } catch (err) {
+      dlStatus.textContent = `❌ ${t('jm_download_failed')}: ${err.message}`;
+      dlProgress.style.width = '0%';
+      delete jmDownloadingMap[currentAlbumId];
+      updateDownloadPanel();
+    } finally {
+      btn.disabled = false;
+      btn.textContent = t('jm_download');
+    }
+  }
+}
+
+// ── PDF 阅读器子页面 ──
+function openBookshelfReader(albumId) {
+  bookshelfSubPage = 'reader';
+  bookshelfReaderAlbumId = albumId;
+  renderBookshelfTab();
+}
+let bookshelfReaderAlbumId = null;
+
+// ── 下载管理页面 ──
+function renderBookshelfDownloads(mc) {
+  const entries = Object.entries(jmDownloadingMap);
+
+  mc.innerHTML = `
+    <div style="max-width:600px;margin:0 auto;padding:16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <button id="dl-back" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:18px;cursor:pointer;">←</button>
+        <h2 style="margin:0;font-size:18px;">📥 下载管理</h2>
+        <span style="flex:1;"></span>
+        <button id="dl-pause-all" style="padding:6px 12px;border-radius:6px;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:13px;cursor:pointer;">${batchAbortFlag.paused ? '▶ 继续全部' : '⏸ 暂停全部'}</button>
+        <button id="dl-cancel-all" style="padding:6px 12px;border-radius:6px;border:1px solid #dc3545;background:transparent;color:#dc3545;font-size:13px;cursor:pointer;">✕ 取消全部</button>
+      </div>
+      <div id="dl-list" style="display:flex;flex-direction:column;gap:8px;"></div>
+      <div id="dl-empty" style="text-align:center;padding:60px 20px;color:var(--text-secondary,#888);display:none;">
+        <div style="font-size:48px;margin-bottom:12px;">📥</div>
+        <div>没有正在下载的任务</div>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('dl-back').addEventListener('click', () => { bookshelfSubPage = null; renderBookshelfTab(); });
+  document.getElementById('dl-pause-all').addEventListener('click', () => {
+    batchAbortFlag.paused = !batchAbortFlag.paused;
+    renderBookshelfDownloads(mc);
+  });
+  document.getElementById('dl-cancel-all').addEventListener('click', () => {
+    if (confirm('确认取消所有下载？')) {
+      batchAbortFlag.cancelled = true;
+      // 清空下载中
+      Object.keys(jmDownloadingMap).forEach(k => delete jmDownloadingMap[k]);
+      updateDownloadPanel();
+      renderBookshelfDownloads(mc);
+    }
+  });
+
+  refreshDownloadList();
+}
+
+function refreshDownloadList() {
+  const list = document.getElementById('dl-list');
+  const empty = document.getElementById('dl-empty');
+  if (!list) return;
+
+  const entries = Object.entries(jmDownloadingMap);
+  if (entries.length === 0) {
+    list.innerHTML = '';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  if (empty) empty.style.display = 'none';
+
+  list.innerHTML = entries.map(([aid, info]) => {
+    const pct = Math.round(info.progress || 0);
+    const title = info.title || `JM${info.code}`;
+    const isWaiting = info.status === 'waiting';
+    const isPaused = info.paused || batchAbortFlag.paused;
+    const icon = isWaiting ? '⏳' : isPaused ? '⏸' : '⬇️';
+    const statusText = isWaiting ? '等待中' : isPaused ? '已暂停' : `${pct}%`;
+    const barColor = isWaiting ? 'var(--border-color,#ccc)' : isPaused ? 'var(--text-secondary,#888)' : 'var(--accent-color,#6366f1)';
+    return `
+      <div style="padding:12px;border-radius:10px;background:var(--bg-secondary,#f5f5f5);opacity:${isWaiting ? 0.6 : 1};">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span style="font-size:20px;">${icon}</span>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:14px;font-weight:600;color:var(--text-primary,#333);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${title}</div>
+            <div style="font-size:12px;color:var(--text-secondary,#888);">JM${info.code}</div>
+          </div>
+          <span style="font-size:12px;color:var(--text-secondary,#888);min-width:50px;text-align:right;">${statusText}</span>
+          <button class="dl-item-cancel" data-id="${aid}" style="width:28px;height:28px;border-radius:50%;border:1px solid #dc3545;background:transparent;color:#dc3545;font-size:13px;cursor:pointer;">✕</button>
+        </div>
+        <div style="height:5px;background:var(--border-color,#e0e0e0);border-radius:3px;overflow:hidden;">
+          <div style="height:100%;width:${isWaiting ? 0 : pct}%;background:${barColor};border-radius:3px;transition:width 0.3s;"></div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  list.querySelectorAll('.dl-item-cancel').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const id = btn.dataset.id;
+      delete jmDownloadingMap[id];
+      updateDownloadPanel();
+      refreshDownloadList();
+    });
+  });
+}
+
+async function renderBookshelfReader(mc) {
+  const comic = await jmDbGet(bookshelfReaderAlbumId);
+  if (!comic) { bookshelfSubPage = null; renderBookshelfTab(); return; }
+
+  hideNav();
+  let _readerFullscreen = false;
+
+  mc.innerHTML = `
+    <div style="display:flex;flex-direction:column;height:100%;">
+      <div id="reader-toolbar" style="display:flex;align-items:center;gap:8px;padding:10px 16px;border-bottom:1px solid var(--border-color,#ddd);flex-shrink:0;">
+        <button id="reader-back" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:18px;cursor:pointer;">←</button>
+        <span style="flex:1;font-size:15px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-primary,#333);">${comic.title}</span>
+        <span id="reader-page-info" style="font-size:13px;color:var(--text-secondary,#888);"></span>
+        <button id="reader-fullscreen" style="width:36px;height:36px;border-radius:50%;border:1px solid var(--border-color,#ddd);background:var(--bg-secondary,#fff);font-size:16px;cursor:pointer;">⛶</button>
+      </div>
+      <div id="reader-container" style="flex:1;overflow:auto;background:#525659;-webkit-overflow-scrolling:touch;"></div>
+    </div>
+  `;
+
+  const goBack = () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    bookshelfSubPage = null;
+    showNav();
+    renderBookshelfTab();
+  };
+  document.getElementById('reader-back').addEventListener('click', goBack);
+
+  const container = document.getElementById('reader-container');
+  const pageInfo = document.getElementById('reader-page-info');
+
+  // 全屏切换
+  const fsBtn = document.getElementById('reader-fullscreen');
+  const readerRoot = mc.firstElementChild;
+  fsBtn.addEventListener('click', () => {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else if (readerRoot.requestFullscreen) readerRoot.requestFullscreen().catch(() => {});
+  });
+  document.addEventListener('fullscreenchange', function onFS() {
+    _readerFullscreen = !!document.fullscreenElement;
+    fsBtn.textContent = _readerFullscreen ? '✕' : '⛶';
+    if (!_readerFullscreen && bookshelfSubPage !== 'reader') {
+      document.removeEventListener('fullscreenchange', onFS);
+    }
+  });
+
+  // ── PDF 渲染（全部渲染） ──
+  async function renderPdf(pdfBlob) {
+    if (!window.pdfjsLib) {
+      container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;font-size:16px;padding:20px;text-align:center;">PDF 引擎加载失败</div>`;
+      return;
+    }
+    const arrayBuf = await pdfBlob.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuf }).promise;
+    const totalPages = pdf.numPages;
+    pageInfo.textContent = `${totalPages} 页`;
+    const containerWidth = container.clientWidth || window.innerWidth;
+    const dpr = window.devicePixelRatio || 1;
+
+    for (let i = 1; i <= totalPages; i++) {
+      const page = await pdf.getPage(i);
+      const viewport = page.getViewport({ scale: 1 });
+      const fitScale = containerWidth / viewport.width;
+      const fitViewport = page.getViewport({ scale: fitScale * dpr });
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = fitViewport.width;
+      canvas.height = fitViewport.height;
+      canvas.style.width = containerWidth + 'px';
+      canvas.style.height = (fitViewport.height / dpr) + 'px';
+      canvas.style.display = 'block';
+      canvas.style.margin = '0 auto';
+      container.appendChild(canvas);
+      await page.render({ canvasContext: ctx, viewport: fitViewport }).promise;
+    }
+  }
+
+  // ── 图片数组渲染（兼容 pages 格式）──
+  function renderImagePages(pages) {
+    pageInfo.textContent = `${pages.length} 页`;
+    const w = (container.clientWidth || window.innerWidth) + 'px';
+    for (let i = 0; i < pages.length; i++) {
+      const img = document.createElement('img');
+      img.src = 'data:image/jpeg;base64,' + pages[i];
+      img.style.cssText = `display:block;width:${w};height:auto;margin:0 auto;`;
+      img.loading = 'lazy';
+      container.appendChild(img);
+    }
+  }
+
+  // 主逻辑
+  const pages = comic.pages;
+  const pdfBlob = comic.pdfBlob;
+  if (pages && pages.length > 0) {
+    renderImagePages(pages);
+  } else if (pdfBlob) {
+    try {
+      await renderPdf(pdfBlob);
+    } catch (e) {
+      console.error('[Reader] PDF 渲染失败:', e);
+      container.innerHTML = `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#fff;font-size:16px;padding:20px;text-align:center;gap:12px;">
+        <div>PDF 渲染失败</div>
+        <div style="font-size:13px;color:#aaa;">${e.message || '未知错误'}</div>
+      </div>`;
+    }
+  } else {
+    container.innerHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;font-size:16px;">无可用数据</div>`;
+  }
+}
+
+// ── 批量下载模态框 ──
+function showBatchDownloadModal() {
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.innerHTML = `
+    <div class="modal-content" style="max-width:500px;max-height:85vh;display:flex;flex-direction:column;">
+      <div class="modal-header"><h3>📦 ${t('jm_batch_download')}</h3><button class="modal-close">&times;</button></div>
+      <div class="modal-body" style="flex:1;overflow-y:auto;">
+        <textarea id="batch-codes" placeholder="${t('jm_batch_hint')}"
+          style="width:100%;height:180px;padding:12px;border:2px solid var(--border-color,#ddd);border-radius:10px;font-size:14px;resize:vertical;background:var(--bg-secondary,#fff);color:var(--text-primary,#333);"></textarea>
+        <div id="batch-preview" style="margin-top:12px;font-size:13px;color:var(--text-secondary,#888);"></div>
+        <div id="batch-progress-area" style="display:none;margin-top:12px;">
+          <div id="batch-status" style="font-size:14px;margin-bottom:8px;color:var(--text-primary,#333);"></div>
+          <div style="width:100%;height:6px;background:var(--border-color,#e0e0e0);border-radius:3px;overflow:hidden;">
+            <div id="batch-bar" style="height:100%;width:0%;background:var(--accent-color,#6366f1);transition:width 0.3s;border-radius:3px;"></div>
+          </div>
+        </div>
+      </div>
+      <div style="padding:12px;display:flex;gap:8px;flex-shrink:0;">
+        <button id="batch-cancel" class="btn btn-secondary" style="flex:1;">${t('jm_cancel')}</button>
+        <button id="batch-start" class="btn btn-primary" style="flex:1;">${t('jm_batch_start')}</button>
+        <button id="batch-pause" class="btn btn-secondary" style="display:none;flex:1;">${t('jm_batch_pause')}</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  modal.querySelector('.modal-close').addEventListener('click', () => { batchAbortFlag.cancelled = true; modal.remove(); });
+  document.getElementById('batch-cancel').addEventListener('click', () => { batchAbortFlag.cancelled = true; modal.remove(); });
+  modal.addEventListener('click', (e) => { if (e.target === modal) { batchAbortFlag.cancelled = true; modal.remove(); } });
+
+  const textarea = document.getElementById('batch-codes');
+  const previewEl = document.getElementById('batch-preview');
+  textarea.addEventListener('input', () => {
+    const codes = parseBatchCodes(textarea.value);
+    previewEl.textContent = codes.length ? `${codes.length} 个代码` : '';
+  });
+
+  // batchAbortFlag is global
+
+  document.getElementById('batch-start').addEventListener('click', async () => {
+    const codes = parseBatchCodes(textarea.value);
+    if (codes.length === 0) return;
+
+    // 首次下载弹窗选择格式
+    if (!uiConfig.bsSaveImages && !uiConfig.bsSavePdf) { uiConfig.bsSaveImages = true; saveUIConfig(); }
+
+    // 关闭模态框，跳转到下载管理页面
+    modal.remove();
+    bookshelfSubPage = 'downloads';
+    renderBookshelfTab();
+
+    batchAbortFlag = { cancelled: false, paused: false };
+
+    // 预填所有代码到下载列表（跳过已下载的）
+    const toDownload = [];
+    for (const code of codes) {
+      const existing = await jmDbGet(code);
+      if (existing && existing.pdfBlob) continue;
+      toDownload.push(code);
+      jmDownloadingMap[code] = { code, title: `JM${code}`, progress: 0, status: 'waiting', paused: false };
+    }
+    updateDownloadPanel();
+
+    // 后台并发下载（最多 2 本同时下载）
+    const CONCURRENT_COMICS = 2;
+    let idx = 0;
+    async function downloadNext() {
+      while (idx < toDownload.length) {
+        while (batchAbortFlag.paused && !batchAbortFlag.cancelled) {
+          await new Promise(r => setTimeout(r, 500));
+        }
+        if (batchAbortFlag.cancelled) return;
+        const code = toDownload[idx++];
+        jmDownloadingMap[code].status = 'downloading';
+        updateDownloadPanel();
+        try {
+          const albumInfo = await jmGetAlbum(code);
+          jmDownloadingMap[code].title = albumInfo.title;
+          updateDownloadPanel();
+
+          const dlResult = await jmDownloadChapter(code, albumInfo.title, (pct) => {
+            jmDownloadingMap[code].progress = pct;
+            updateDownloadPanel();
+          });
+
+          const cover = await jmFetchCover(code);
+          await jmDbSave({
+            albumId: code,
+            title: albumInfo.title,
+            author: albumInfo.author || '',
+            tags: albumInfo.tags || [],
+            chapters: albumInfo.chapters || [],
+            coverBlob: cover,
+            pdfBlob: dlResult.pdfBlob,
+            pages: dlResult.pages,
+            localPdfName: dlResult.localPdfName || null,
+            favorite: false,
+            jmTags: [],
+            addedAt: new Date().toISOString(),
+            source: 'jm',
+          });
+
+          delete jmDownloadingMap[code];
+          updateDownloadPanel();
+          refreshBookshelfGrid();
+        } catch (err) {
+          const failTitle = jmDownloadingMap[code]?.title || `JM${code}`;
+          await jmDbSave({
+            albumId: code,
+            title: failTitle,
+            author: '',
+            tags: [],
+            chapters: [],
+            coverBlob: null,
+            pdfBlob: null,
+            favorite: false,
+            jmTags: [],
+            addedAt: new Date().toISOString(),
+            source: 'jm',
+            failed: true,
+            errorMsg: err.message,
+          }).catch(() => {});
+          delete jmDownloadingMap[code];
+          updateDownloadPanel();
+          refreshBookshelfGrid();
+        }
+      }
+    }
+    const workers = Array.from({ length: Math.min(CONCURRENT_COMICS, toDownload.length) }, () => downloadNext());
+    await Promise.all(workers);
+
+    // 下载完成，刷新书架
+    updateDownloadPanel();
+    refreshBookshelfGrid();
+  });
+
+  document.getElementById('batch-pause').addEventListener('click', () => {
+    batchAbortFlag.paused = !batchAbortFlag.paused;
+    document.getElementById('batch-pause').textContent = batchAbortFlag.paused ? t('jm_batch_resume') : t('jm_batch_pause');
+  });
+}
+
+function parseBatchCodes(text) {
+  return text.split(/[\n,，\s]+/)
+    .map(s => parseJMCode(s))
+    .filter(Boolean);
+}
+
 function renderCurrentTab() {
   // 记录 tab 需要特殊布局：日历固定顶部，记录独立滚动
   if (currentTab === 'records') {
@@ -6006,6 +8018,7 @@ function renderCurrentTab() {
       break;
     case 'records':
       editingRecordId = null;
+      calendarCollapsed = statsConfig.calendarDefaultCollapsed;
       renderRecordsTab();
       break;
     case 'stats':
@@ -6017,6 +8030,10 @@ function renderCurrentTab() {
       editingFetishId = null;
       renderSettingsTab();
       break;
+    case 'tools':
+    case 'bookshelf':
+      renderBookshelfTab();
+      break;
   }
 }
 
@@ -6024,21 +8041,37 @@ function initNavigation() {
   renderNavigation();
 }
 
+// ── 导航栏显隐（子页面隐藏） ──
+function hideNav() {
+  bottomNav.style.display = 'none';
+  mainContent.style.paddingBottom = '16px';
+}
+function showNav() {
+  bottomNav.style.display = '';
+  if (uiConfig.navPosition === 'top') {
+    mainContent.style.paddingTop = '80px';
+    mainContent.style.paddingBottom = '16px';
+  } else {
+    mainContent.style.paddingTop = '16px';
+    mainContent.style.paddingBottom = '90px';
+  }
+}
+
 function renderNavigation() {
   const navIcons = {
     add: '➕',
     records: '📋',
     stats: '📊',
-    settings: '⚙️'
+    settings: '⚙️',
+    bookshelf: '📚',
+    tools: '📚'
   };
   
   let navHTML = '';
   uiConfig.navOrder.forEach((tab, index) => {
-    const customIconKey = tab + 'Icon';
-    const hasCustomIcon = uiConfig[customIconKey];
     navHTML += `
       <button class="nav-item ${currentTab === tab ? 'active' : ''}" data-tab="${tab}">
-        <span class="nav-icon">${hasCustomIcon ? `<img src="${hasCustomIcon}" style="width: 24px; height: 24px; object-fit: contain;">` : navIcons[tab]}</span>
+        <span class="nav-icon">${navIcons[tab]}</span>
         <span class="nav-label" data-i18n="tab_${tab}">${t('tab_' + tab)}</span>
       </button>
     `;

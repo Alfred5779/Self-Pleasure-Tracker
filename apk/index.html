@@ -13,14 +13,6 @@
 <body>
     <div id="app">
         <main id="main-content">
-            <div id="loading-screen" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; gap: 16px; color: #333333;">
-                <div style="font-size: 48px;">✈️</div>
-                <div style="font-size: 20px; font-weight: 600; color: #333333;">起飞助手</div>
-                <div id="loading-status" style="color: #666666; font-size: 14px;">初始化中...</div>
-                <div style="width: 200px; height: 4px; background: #e0e0e0; border-radius: 2px; overflow: hidden;">
-                    <div id="loading-progress" style="height: 100%; width: 0%; background: #6366f1; transition: width 0.3s ease;"></div>
-                </div>
-            </div>
         </main>
         
         <nav id="bottom-nav">
@@ -43,6 +35,10 @@
         </nav>
     </div>
     
-    <script src="app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js"></script>
+    <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="pdf.min.js"></script>
+    <script>if(window.pdfjsLib) pdfjsLib.GlobalWorkerOptions.workerSrc='';</script>
+    <script src="app.js?v=13"></script>
 </body>
 </html>

@@ -47,7 +47,7 @@ Self-Pleasure-Tracker/
 
 ### 2.2 Web 目录结构详解
 
-Web 目录是项目的主开发目录，包含了应用的全部源代码。`app.js` 是核心业务逻辑文件，体积较大（约 230KB），包含了所有的功能实现；`index.html` 定义了应用的基本页面结构，包含加载屏幕和底部导航栏；`styles.css` 包含完整的样式定义，使用 CSS 变量实现主题切换功能；`manifest.json` 是 PWA 的配置文件，定义了应用的名称、图标和显示模式；`sw.js` 是 Service Worker 文件，实现离线缓存功能；`server.ps1` 和 `启动Web页面.bat` 是本地开发服务器的启动脚本。
+Web 目录是项目的主开发目录，包含了应用的全部源代码。`app.js` 是核心业务逻辑文件，体积较大（约 230KB），包含了所有的功能实现；`index.html` 定义了应用的基本页面结构，包含加载屏幕和底部导航栏；`styles.css` 包含完整的样式定义，使用 CSS 变量实现主题切换功能；`manifest.json` 是 PWA 的配置文件，定义了应用的名称、图标和显示模式；`sw.js` 是 Service Worker 文件，实现离线缓存功能；`server.js` 是 Express 开发服务器，提供 JMComic 图片代理和 PDF 生成等 API；`启动Web页面.bat` 是 Windows 启动脚本。
 
 ### 2.3 APK 目录结构详解
 

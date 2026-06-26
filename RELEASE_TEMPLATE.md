@@ -1,5 +1,5 @@
-# 起飞助手 v0.91.6
-Self-Care Tracker v0.91.6
+# 起飞助手 v1.0
+Self-Care Tracker v1.0
 
 ## 📱 Android APK 版本
 
@@ -38,15 +38,13 @@ Self-Care Tracker v0.91.6
 如果直接打开 `index.html` 遇到浏览器限制，可以使用本地服务器：
 
 **Windows:**
-1. 右键点击 `server.ps1`
-2. 选择 "Run with PowerShell"
-3. 访问 http://localhost:8000
+1. 双击 `启动Web页面.bat`
+2. 访问 http://localhost:3001
 
 **其他平台:**
 ```bash
-# 使用 Python
-python -m http.server 8000
-# 然后访问 http://localhost:8000
+cd web && npm start
+# 然后访问 http://localhost:3001
 ```
 
 ---
@@ -84,9 +82,9 @@ python -m http.server 8000
 
 ### 📱 版本信息 Version Info
 
-- 版本号 Version: 0.91.6
-- 版本代码 Version Code: 11
-- 更新日期 Release Date: 2026-03-10
+- 版本号 Version: 1.0
+- 版本代码 Version Code: 12
+- 更新日期 Release Date: 2026-06-25
 
 ---
 

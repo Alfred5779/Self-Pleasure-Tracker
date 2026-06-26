@@ -1,38 +1,31 @@
-# 起飞助手
-Self-Care Tracker
-
-一个帮助你记录和管理个人习惯的移动应用。
-
-A mobile app to help you track and manage personal habits.
+# 起飞助手 v1.0
+Self-Care Tracker v1.0
 
 ---
 
-## ⚠️ 重要免责声明
-Important Disclaimer
+## 🙏 致谢 Credits
 
-### 🔞 年龄限制
-Age Restriction
+感谢「**Acheron**」在项目接近尾期 Token 烧干的时候，提供 Token 救急，让 v1.0 得以顺利发布。
+
+Special thanks to **Acheron** for providing tokens when the project was running on fumes near the finish line, making the v1.0 release possible.
+
+---
+
+## ⚠️ 重要免责声明 Important Disclaimer
+
+### 🔞 年龄限制 Age Restriction
 
 本软件**仅限年满 18 周岁的成年人**使用。未成年人严禁使用本软件。
 
 This software is **for adults aged 18 and over only**. Minors are strictly prohibited from using this software.
 
-### 📚 仅用于开源学习
-For Open-Source Learning Only
+### 📚 仅用于开源学习 For Open-Source Learning Only
 
 本项目**仅供开源学习和技术交流**使用。任何个人或组织不得将本软件用于任何商业用途或非法活动。
 
 This project is **for open-source learning and technical exchange only**. No individual or organization may use this software for any commercial purpose or illegal activity.
 
-### ⚖️ 法律责任
-Legal Liability
-
-使用本软件所产生的一切后果由使用者自行承担。开发者不对任何使用本软件所导致的直接或间接损失负责。
-
-All consequences arising from the use of this software shall be borne by the user. The developer shall not be responsible for any direct or indirect losses caused by the use of this software.
-
-### 🎭 娱乐声明
-Entertainment Statement
+### 🎭 娱乐声明 Entertainment Statement
 
 本人开发本软件纯属娱乐行为，不用于任何严肃的医疗或心理治疗用途。
 
@@ -40,204 +33,197 @@ I developed this software purely for entertainment purposes and it is not intend
 
 ---
 
-## 功能特性
-Features
+## 🆕 v1.0 — 漫画书架功能上线 JM Comic Bookshelf
 
-- 📝 **添加记录** - 计时器或手动补录，可选择媒介和性癖（支持多选）
-- **Add Records** - Timer or manual entry, select medium and fetish (supports multi-select)
+v1.0 是一个重大版本更新，新增了完整的 **JM 漫画书架系统**，从搜索、下载到阅读，全流程纯前端实现。
 
-- 📋 **记录查询** - 查看历史记录，支持编辑和删除
-- **Record Management** - View history, edit and delete
+v1.0 is a major update introducing a full **JM Comic Bookshelf** — search, download, and read, all implemented purely in the frontend.
 
-- 📊 **数据分析** - 统计总次数、平均时长、最长/最短时长、频率、最长禁欲天数、次数变化、柱状图趋势、最常用的媒介和性癖，以及媒介和性癖分布饼状图
-- **Data Analysis** - Total count, average duration, max/min duration, frequency, longest abstinence, count change, bar chart trend, most used medium and fetish, and medium/fetish distribution pie charts
+### ✨ 核心功能 Core Features
 
-- ⚙️ **设置** - 白天/夜晚模式切换、中英文语言切换、数据导出/导入（支持 JSON、CSV、Excel）、媒介管理、性癖管理、统计无记录开关
-- **Settings** - Day/night mode, Chinese/English language switch, data export/import (JSON, CSV, Excel), medium management, fetish management, include empty records toggle
+#### 📚 漫画书架 Bookshelf
 
-- 📱 **移动端优化** - 完美适配手机屏幕
-- **Mobile Optimized** - Perfect for phone screens
+- **搜索漫画** — 输入 JM 漫画代码，实时获取漫画信息（标题、作者、标签、章节列表）
+- **Search comics** — Enter JM comic codes to fetch real-time info (title, author, tags, chapters)
+- **下载漫画** — 支持单章和整本下载，自动反混淆加密图片，图片直接存储为数组格式
+- **Download comics** — Single chapter or full album download, auto-descrambles encrypted images, stores as image arrays
+- **阅读器** — 图片列表式阅读，自适应屏幕宽度，支持全屏模式和左右滑动
+- **Reader** — Image-list reader, auto-fits screen width, supports fullscreen and scrolling
+- **封面显示** — 下载完成后自动抓取第一章第一张图作为书架封面
+- **Cover display** — Auto-fetches first chapter's first image as bookshelf cover after download
+- **批量下载** — 支持多漫画并发下载（默认 2 路并发），可暂停/取消
+- **Batch download** — Concurrent multi-comic downloading (default 2 parallel), with pause/cancel
+- **宫格/列表模式** — 书架支持宫格（2/3 列可选）和列表两种显示模式
+- **Grid/List view** — Bookshelf supports grid (2 or 3 columns) and list display modes
+- **收藏与标签** — 长按进入多选模式，支持收藏、标签分类
+- **Favorites & tags** — Long-press for multi-select mode, supports favorites and tag classification
 
-- 🔒 **隐私保护** - 所有数据 100% 保存在本地，不上传任何服务器
-- **Privacy Protection** - All data stored locally 100%, never uploaded to any server
+#### 🔧 技术实现 Technical Implementation
+
+**漫画下载流程：**
+
+1. **API 请求** — 通过 JMComic API 获取漫画信息（AES-ECB 加密解密）
+2. **章节解析** — 并发获取多个章节的图片列表（最多 3 章同时）
+3. **图片下载** — 多通道并发下载（5 路），通过 CDN 域名分发
+4. **图片反混淆** — 根据 `scramble_id` + MD5 算法计算切割参数，用 Canvas 逐片还原
+5. **数据存储** — 图片 base64 数组直接存入 IndexedDB，阅读器用 `<img>` 标签渲染
+
+**Download pipeline:**
+
+1. **API request** — Fetch comic info via JMComic API (AES-ECB encrypted)
+2. **Chapter parsing** — Concurrently fetch image lists for multiple chapters (up to 3 parallel)
+3. **Image download** — Multi-channel concurrent download (5 channels), CDN-distributed
+4. **Descrambling** — Calculate slice parameters from `scramble_id` + MD5, reconstruct via Canvas
+5. **Storage** — Image base64 arrays stored in IndexedDB, reader renders with `<img>` tags
+
+**平台适配：**
+
+- **Web 端** — 通过本地 Express 服务器（`server.js`）代理 API 请求和图片下载，支持 SSE 实时进度推送
+- **Android 端** — 通过 CapacitorHttp 直接请求 JMComic API（绕过 CORS），Canvas 原生反混淆
+
+**Platform adaptation:**
+
+- **Web** — Local Express server (`server.js`) proxies API requests and image downloads, supports SSE real-time progress
+- **Android** — CapacitorHttp directly requests JMComic API (bypasses CORS), native Canvas descrambling
 
 ---
 
-## 支持平台
-Supported Platforms
+## 📥 安装 Installation
 
-- 📱 **Android** - 支持 Android 5.0+ 设备，打包成 APK 安装
-- **Android** - Supports Android 5.0+ devices, packaged as APK
+### 📱 Android APK
 
-- 💻 **Windows** - 支持 Windows 7+ 系统，提供桌面可执行程序
-- **Windows** - Supports Windows 7+, provides desktop executable
+1. 下载 `起飞助手.apk`
+2. 在手机上安装（如提示"未知来源"，请在设置中允许）
+3. 安装完成后即可使用
 
-- 🌐 **Web 浏览器** - 支持所有现代浏览器，直接在浏览器中运行
-- **Web Browser** - Supports all modern browsers, runs directly in browser
+### 🌐 Web 版本
 
----
-
-## 技术栈
-Tech Stack
-
-- 纯 HTML/CSS/JavaScript
-- PWA (Progressive Web App)
-- Capacitor - 打包成 Android APK
-- Package as Android APK
-- Electron - 打包成 Windows 桌面程序
-- Package as Windows desktop app
-- LocalStorage - 本地数据存储
-- Local data storage
-
----
-
-## 项目结构
-Project Structure
-
-```
-lululu/
-├── docs/                 # 使用指南和文档
-│   └── v0.91.6/          # v0.91.6 版本文档
-│       ├── APK使用指南.md      # Android 使用指南
-│       ├── Windows使用指南.md  # Windows 使用指南
-│       ├── Web使用指南.md      # Web 使用指南
-│       └── 开发指南.md         # 开发指南
-├── apk/                  # APK 项目目录
-│   └── android/          # Android 项目
-│       └── app/
-│           └── src/
-│               └── main/
-│                   ├── assets/public/  # 打包后的网页文件
-│                   └── res/            # Android 资源文件
-├── web/                  # 网页源代码（主目录）
-│   ├── app.js            # 主应用逻辑
-│   ├── index.html        # 主页面
-│   ├── styles.css        # 样式文件
-│   ├── manifest.json     # PWA 清单
-│   ├── sw.js             # Service Worker
-│   └── 启动Web页面.bat   # Web 服务器启动脚本
-├── dist/                 # 构建输出目录
-├── node_modules/         # 依赖包
-├── package.json          # 项目配置
-├── capacitor.config.json # Capacitor 配置
-└── README.md             # 本文档
+```bash
+cd web
+npm install    # 首次运行需要安装依赖
+npm start      # 启动本地服务器（端口 3001）
 ```
 
+然后访问 http://localhost:3001
+
+也可以直接双击 `web/启动Web页面.bat`（Windows）。
+
+### 🔧 开发构建
+
+```bash
+# 同步 Web 文件到 Android 项目
+cd web && npm run sync
+
+# 构建 Android APK
+cd apk/android && ./gradlew assembleDebug
+# 输出: apk/android/app/build/outputs/apk/debug/app-debug.apk
+
+# 构建发行版
+./gradlew assembleRelease
+```
+
 ---
 
-## 使用指南
-Usage Guides
+## 🛠️ 技术栈 Tech Stack
 
-详细的使用指南请参考对应版本的文档：
-
-For detailed usage guides, please refer to the corresponding version documents:
-
-- 📱 [APK 使用指南](docs/v0.91.6/APK使用指南.md) - Android 版本安装和使用
-- [APK Usage Guide](docs/v0.91.6/APK使用指南.md) - Android version installation and usage
-
-- 🌐 [Web 使用指南](docs/v0.91.6/Web使用指南.md) - Web 浏览器版本使用
-- [Web Usage Guide](docs/v0.91.6/Web使用指南.md) - Web browser version usage
-
-- 🔧 [开发指南](docs/v0.91.6/开发指南.md) - 开发者使用和构建指南
-- [Development Guide](docs/v0.91.6/开发指南.md) - Developer usage and build guide
+- **前端**: 纯 HTML / CSS / JavaScript（无框架、无打包）
+- **PWA**: Service Worker 离线缓存
+- **Android**: Capacitor 打包，minSdk 24，targetSdk 36
+- **服务端**: Express.js（仅开发用，提供 JMComic 代理 API）
+- **存储**: localStorage（记录数据）+ IndexedDB（漫画数据）
+- **加密**: CryptoJS（AES-ECB 解密 API 响应）
+- **CDN 依赖**: crypto-js, pdf-lib（运行时懒加载）
 
 ---
 
-## 版本历史
-Version History
+## 📁 项目结构 Project Structure
+
+```
+Self-Pleasure-Tracker/
+├── web/                        # 📦 源代码（唯一编辑目录）
+│   ├── app.js                  # 主应用逻辑（~8000 行）
+│   ├── index.html              # 入口页面
+│   ├── styles.css              # 样式（CSS 变量主题系统）
+│   ├── server.js               # Express 开发服务器（JMComic 代理）
+│   ├── manifest.json           # PWA 配置
+│   ├── sw.js                   # Service Worker
+│   └── 启动Web页面.bat         # Windows 启动脚本
+├── apk/                        # 📱 Android 项目
+│   ├── android/                # Gradle 项目（Capacitor 生成）
+│   ├── capacitor.config.json   # Capacitor 配置
+│   └── www/                    # 同步后的 Web 文件（勿手动编辑）
+├── 起飞助手.apk                # 📲 构建输出（根目录）
+├── CLAUDE.md                   # Claude Code 开发指引
+├── CODE_WIKI.md                # 技术文档
+└── README.md                   # 本文档
+```
+
+> **注意**: 编辑文件请只修改 `web/` 目录，然后通过 `npx cap sync android` 或手动复制同步到 APK。
+
+---
+
+## ⚙️ 功能特性 Features
+
+- 📝 **添加记录** — 计时器或手动补录，支持多选媒介和性癖标签
+- 📋 **记录管理** — 历史记录查看、编辑、删除，日历视图
+- 📊 **数据分析** — 总次数、平均/最长/最短时长、频率、禁欲天数、柱状图、饼状图、折线图
+- 📚 **漫画书架** — 搜索/下载/阅读 JM 漫画，支持批量并发下载
+- ⚙️ **个性化设置** — 丰富的主题自定义、中英文切换、数据导入导出
+- 🔒 **隐私保护** — 所有数据 100% 本地存储，零服务器通信
+
+---
+
+## 📝 版本历史 Version History
+
+### v1.0
+- ✨ 新增 JM 漫画书架：搜索、下载、阅读完整流程
+- ✨ 书架封面自动抓取，宫格/列表显示模式切换
+- ✨ 批量下载多漫画并发，图片多通道并发下载
+- ✨ 图片直接存储替代 PDF，兼容全平台阅读
+- ✨ 外观管理新增书架显示设置
+- 🐛 修复 Web 端 PDF 下载失败（改用客户端 PDFLib 生成）
+- 🐛 修复书架右键封面白屏/崩溃（Object URL 泄漏 + 并发竞态）
+- 🐛 修复日历收起设置锁死问题（仅首次进入生效，手动操作不重置）
+- 🐛 修复 Android 返回键直接退出（注册 @capacitor/app 插件）
+- 🔒 安全审计，加固 .gitignore 排除敏感文件
+- 🙏 感谢「Acheron」提供 Token 救急
 
 ### v0.91.8
-- ✨ 优化折线图铺开显示，在每个数据点标注时间
-- Optimized line chart with wider layout and time labels at each point
-- ✨ 修复日历和统计页面的时区偏移问题
-- Fixed timezone offset issues in calendar and stats pages
+- ✨ 优化折线图显示，修复时区偏移问题
 
 ### v0.91.7
-- ✨ 新增折线图数据可视化和满意度评分
-- Added line chart data visualization and satisfaction rating
-- ✨ 添加全部数据视图，可查看所有记录的统计分析
-- Added all data view for analyzing all records
+- ✨ 新增折线图可视化和满意度评分，添加全部数据视图
 
 ### v0.91.6
-- ✨ 将分析界面柱状图改为横向显示
-- Changed analytics bar chart to horizontal display
-- ✨ 实现外观设置整体导入导出
-- Implemented appearance settings import/export
-- ✨ 记录界面显示与上一条的时长差异
-- Show duration difference compared to previous record
+- ✨ 柱状图横向显示，外观设置导入导出，记录时长差异显示
 
 ### v0.91.5
-- ✨ 视觉风格自定义：圆角、阴影、动画、布局尺寸
-- Visual style customization: corner radius, shadow, animation, layout
-- ✨ 新增渐变色、高对比度等主题预设
-- Added gradient, high contrast and more theme presets
+- ✨ 视觉风格自定义：圆角、阴影、动画、布局
 
 ### v0.91.4
 - ✨ 高级主题自定义，支持自定义每个颜色
-- Advanced theme customization with per-color control
 
-### v0.91.3
-- ✨ 优化导出模块，设置和记录分开导出
-- Optimized export: separate settings and records export
-
-### v0.91.2
-- ✨ 高度自定义分析功能，可控制统计指标显示
-- Highly customizable analytics with controllable stats display
-- ✨ 新增分析模板保存和加载功能
-- Added analytics template save and load
-
-### v0.91.1
-- ✨ 每周起算日支持全部7天，新增分析管理功能
-- Week start day supports all 7 days, added stats management
-- ✨ 优化柱状图显示，删除Windows桌面版本
-- Optimized bar chart, removed Windows desktop version
-
-### v0.91
-- ✨ 添加性癖管理，支持多选，新增饼状图统计
-- Added fetish management with multi-select and pie charts
-- ✨ 优化柱状图和夜间模式显示
-- Optimized bar chart and dark mode display
+### v0.91 ~ v0.91.3
+- 性癖管理、饼状图、分析模板、每周起算日、导出优化
 
 ### v0.78
-- ✨ 添加媒介管理、免责声明和更新日志界面
-- Added medium management, disclaimer and changelog pages
+- 媒介管理、免责声明和更新日志
 
 ### v0.69
-- ✨ 添加数据导出导入（JSON/CSV/Excel）和截图分享
-- Added data export/import (JSON/CSV/Excel) and screenshot sharing
-- ✨ 支持中英文双语切换，所有数据本地存储
-- Added bilingual support, all data stored locally
+- 数据导出导入、截图分享、中英文双语
 
 ### v0.13
-- ✨ 初始版本：添加、记录、分析、设置四大模块
-- Initial version: Add, Records, Stats, Settings modules
+- 初始版本：添加、记录、分析、设置
 
 ---
 
-## 使用协议
-License
-
-### 自定义使用协议
-Custom License
+## 📄 使用协议 License
 
 Copyright (c) 2026
 
-本项目采用自定义使用协议：
+- ✅ 允许：个人学习、研究、修改、分享、非商业使用
+- ❌ 禁止：商业用途、非法活动
 
-This project uses a custom license:
+本软件按"原样"提供，不提供任何保证。使用后果由使用者自行承担。
 
-1. ✅ **允许** - 个人学习、研究、修改、分享
-   **Allowed** - Personal learning, research, modification, sharing
-
-2. ✅ **允许** - 非商业性质的使用和分发
-   **Allowed** - Non-commercial use and distribution
-
-3. ❌ **禁止** - 任何形式的商业用途
-   **Prohibited** - Any form of commercial use
-
-4. ❌ **禁止** - 将本软件用于任何非法活动
-   **Prohibited** - Using this software for any illegal activity
-
-**免责声明**：本软件按"原样"提供，不提供任何明示或暗示的保证。使用本软件所产生的一切后果由使用者自行承担。
-
-**Disclaimer**: This software is provided "as is" without any express or implied warranty. All consequences arising from the use of this software shall be borne by the user.
+This software is provided "as is" without warranty. All consequences are borne by the user.

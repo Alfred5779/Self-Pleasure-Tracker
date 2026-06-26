@@ -828,3 +828,54 @@ body {
 .records-panel .card {
   margin-bottom: 0;
 }
+
+/* ─── JMComic 下载器 ─── */
+#jm-code-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+#jm-code-input:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.jm-dl-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed !important;
+}
+
+#jm-chapters-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+#jm-chapters-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#jm-chapters-list::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 2px;
+}
+
+/* ─── JMComic 书架 ─── */
+#bs-grid > div {
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+#bs-grid > div:active {
+  transform: scale(0.96);
+}
+
+#bs-action-bar {
+  box-shadow: 0 -2px 12px rgba(0,0,0,0.1);
+}
+
+.bs-act-btn:active {
+  transform: scale(0.92);
+}
+
+.bs-filter-item:hover,
+.bs-filter-item:active {
+  background: var(--bg-tertiary, #e8e8e8) !important;
+}

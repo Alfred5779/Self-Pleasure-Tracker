@@ -1,6 +1,6 @@
 {
   "name": "takeoff-tracker",
-  "version": "0.91.8",
+  "version": "1.0.0",
   "description": "起飞助手 - Personal Habit Tracker",
   "main": "main.js",
   "scripts": {
@@ -17,6 +17,7 @@
   "type": "commonjs",
   "dependencies": {
     "@capacitor/android": "^8.2.0",
+    "@capacitor/app": "^8.1.0",
     "@capacitor/browser": "^8.0.2",
     "@capacitor/cli": "^8.2.0",
     "@capacitor/core": "^8.2.0"

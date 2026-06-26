@@ -1,21 +1,26 @@
 @echo off
-title Self-Care Tracker
+title Self-Care Tracker Server
+cd /d "%~dp0"
 
 echo ====================================
-echo    Self-Care Tracker - Web Version
+echo    Self-Care Tracker - Server
 echo ====================================
 echo.
 
-echo Starting app...
+if not exist "node_modules" (
+    echo Installing dependencies...
+    call npm install
+    echo.
+)
+
+start "" cmd /c "timeout /t 3 /nobreak >nul && start http://localhost:3001"
+
+echo Server: http://localhost:3001
+echo Close this window to stop
 echo.
 
-start "" "%~dp0index.html"
+node server.js
 
-echo App opened in browser!
 echo.
-echo If you need local server:
-echo 1. Right-click server.ps1
-echo 2. Select "Run with PowerShell"
-echo.
-
+echo Server stopped.
 pause

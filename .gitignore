@@ -25,6 +25,19 @@ android/local.properties
 # Large files
 *.exe
 *.apk
+*.zip
+
+# Keystore & signing
+**/keystore.properties
+*.jks
+*.keystore
+*.pem
+*.key
+*.p12
+
+# Environment
+.env*
 
 # Personal data exports
 *.csv
+selfcare-records*.json
