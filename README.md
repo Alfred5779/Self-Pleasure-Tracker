@@ -1,5 +1,5 @@
-# 起飞助手 v1.0
-Self-Care Tracker v1.0
+# 起飞助手 v1.1.1
+Self-Care Tracker v1.1.1
 
 ---
 
@@ -30,6 +30,22 @@ This project is **for open-source learning and technical exchange only**. No ind
 本人开发本软件纯属娱乐行为，不用于任何严肃的医疗或心理治疗用途。
 
 I developed this software purely for entertainment purposes and it is not intended for any serious medical or psychological treatment.
+
+---
+
+## 🆕 v1.1.1 — 分析图表与设置优化 Analytics & Settings Update
+
+v1.1.1 新增次数与平均时长双轴折线图，并统一优化分析和设置页面布局。
+
+v1.1.1 adds dual-axis line charts for count and average duration, along with a reorganized analytics and settings experience.
+
+### ✨ 更新内容 What's New
+
+- 📈 分析图表支持按月、周、日显示次数与平均时长，左右纵轴分别对应两项数据
+- 📊 默认分析视图采用按月分组，图表宽度自适应屏幕
+- ⚙️ 简化外观管理和分析管理，移除不必要的高级开关
+- 🔄 调整时间分组、数据导入导出及统计显示设置的位置
+- 📱 Web/PWA 与 Android 版本同步更新
 
 ---
 
@@ -174,6 +190,12 @@ Self-Pleasure-Tracker/
 ---
 
 ## 📝 版本历史 Version History
+
+### v1.1.1
+- ✨ 新增次数与平均时长双轴折线图，支持按月/周/日分组
+- ✨ 优化分析页面默认月分组和移动端自适应显示
+- ✨ 简化外观管理、分析管理和数据管理界面
+- 📱 同步更新 Web/PWA 与 Android 版本
 
 ### v1.0
 - ✨ 新增 JM 漫画书架：搜索、下载、阅读完整流程

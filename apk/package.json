@@ -1,6 +1,6 @@
 {
   "name": "takeoff-tracker",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "起飞助手 - Personal Habit Tracker",
   "main": "main.js",
   "scripts": {

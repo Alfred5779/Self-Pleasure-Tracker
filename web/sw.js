@@ -1,4 +1,4 @@
-const CACHE_NAME = 'selfcare-v4';
+const CACHE_NAME = 'selfcare-v9';
 const urlsToCache = [
   './',
   './index.html',
